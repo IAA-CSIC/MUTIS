@@ -1,5 +1,5 @@
 
-![image](img/mutis.png)
+![](img/mutis.png)
 
 # MUTIS
 
