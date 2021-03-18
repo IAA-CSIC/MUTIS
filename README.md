@@ -3,4 +3,4 @@
 
 # MUTIS
 
-MUltiwavelength TIme Series
+**MU**ltiwavelength **TI**me **S**eries
