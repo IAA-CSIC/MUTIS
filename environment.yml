@@ -1,0 +1,32 @@
+# Conda environment for MUTIS
+#
+# Install:    conda env create -f environment.yml
+# Update:     conda env update -f environment.yml
+# Activate:   conda activate mutis
+# Deactivate: conda deactivate
+
+name: mutis
+
+channels:
+  - conda-forge
+
+dependencies:
+  # core dependencies
+  - python
+  - astropy
+  - matplotlib
+  - numpy
+  - pandas
+  - scipy
+  # test dependencies
+  - codecov
+  - pytest
+  - pytest-cov
+  - requests
+  # extra dependencies
+  - ipython
+  - jupyter
+  - jupyterlab
+  # dev dependencies
+  - black
+  - isort
