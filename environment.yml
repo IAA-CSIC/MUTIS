@@ -29,3 +29,6 @@ dependencies:
   # dev dependencies
   - black
   - isort
+  - sphinx
+  - sphinx_rtd_theme
+  - nbsphinx
