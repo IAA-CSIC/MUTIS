@@ -1,3 +1,15 @@
+# pycharm
 .idea
+
+# macosx
 .DS_Store
+
+# packages/installer info
+*.egg
+*.egg-info
+dist
+build
+eggs
+
+# sphinx
 docs/_build
