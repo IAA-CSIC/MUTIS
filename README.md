@@ -6,6 +6,13 @@
 A Python package for analysis of light curves.
 
 ### Installation
-1. Clone this repository
-2. `pip install .`
+- Install [Anaconda](https://www.anaconda.com/download/ )
+- Clone this repository
+- Run the commands
+
+```
+conda env create  -f environment.yml
+conda activate mutis
+pip install .
+```
 
