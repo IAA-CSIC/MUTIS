@@ -16,3 +16,4 @@ conda activate mutis
 pip install .
 ```
 
+License: BSD-3
