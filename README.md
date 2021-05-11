@@ -1,6 +1,11 @@
 
 ![](img/mutis.png)
 
-# MUTIS
+# MUTIS: MUltiwavelength TIme Series
 
-**MU**ltiwavelength **TI**me **S**eries
+A Python package for analysis of light curves.
+
+### Installation
+1. Clone this repository
+2. `pip install .`
+
