@@ -1,5 +1,5 @@
 
-![](img/mutis.png)
+![](docs/_static/mutis.png)
 
 # MUTIS: MUltiwavelength TIme Series
 
@@ -16,4 +16,5 @@ conda activate mutis
 pip install .
 ```
 
+---
 License: BSD-3
