@@ -16,5 +16,8 @@ conda activate mutis
 pip install .
 ```
 
+### Documentation
+- https://bultako.github.io/MUTIS
+
 ---
 License: BSD-3
