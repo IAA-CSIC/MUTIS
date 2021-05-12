@@ -1,0 +1,1321 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Workflow of MUTIS (class version) &mdash; Python  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../../../../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../../../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../../../../../" src="../../../../../../../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../../../../../../../" id="documentation_options" src="../../../../../../../../../_static/documentation_options.js"></script>
+        <script src="../../../../../../../../../_static/jquery.js"></script>
+        <script src="../../../../../../../../../_static/underscore.js"></script>
+        <script src="../../../../../../../../../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "document", "processHtmlClass": "math|output_area"}}</script>
+    
+    <script type="text/javascript" src="../../../../../../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../../../../../index.html" class="icon icon-home"> Python
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../../../recipes/mutis_workflow.html">Workflow of MUTIS (class version)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../../../recipes/PSD_tests.html">PSD tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../../../recipes/sin_tests.html">The SIN tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../../../recipes/stochastics_tests.html">Stochastic light curves: Orstein-Uhlenbeck process.</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../../../../../index.html">Python</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Workflow of MUTIS (class version)</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../../../../../../../../../_sources/_build/html/_build/html/_build/html/.doctrees/nbsphinx/recipes/mutis_workflow.ipynb.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt a.copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="Workflow-of-MUTIS-(class-version)">
+<h1>Workflow of MUTIS (class version)<a class="headerlink" href="#Workflow-of-MUTIS-(class-version)" title="Permalink to this headline">¶</a></h1>
+<p>Here we illustrate the workflow of MUTIS (class version) to analyze correlation between two signals. The general workflow is:</p>
+<ul>
+<li><p><strong>We load the data</strong> in a suitable way.</p></li>
+<li><p><strong>We generate the synthethic light curves</strong>, which are used to calculate the confidence levels of correlations.</p>
+<p>This is an automatic process if the method used for generating them is just <strong>sampling</strong> (lc_gen_samp), or flux randomization with the same <strong>psd</strong> (lc_gen_psd). If we simulate them as an <strong>stochastic</strong> process (lc_gen_ou) as suggested for example in Tavecchio, Bonnoli and Galanti, 2020 (doi:10.1093/mnras/staa2055) we need to carefully choose the parameters for this stochastic process (currently trying to optimize it).</p>
+</li>
+<li><p><strong>We generate the correlations</strong> (the synthethic ones and the real one) and plot them together.</p>
+<p>For this we need to manually choose the time binning.</p>
+</li>
+</ul>
+<p>In an effort to make the manual tasks as easy as possible I have incorporated new methods which automatically plot the results so the process of choosing this parameters is just a matter of executing one or two lines in the notebook and varying the numbers.</p>
+<p><strong>Juan Escudero</strong></p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># I&#39;m doing a lot of changes to MUTIS while writting this, better reload automatically.</span>
+<span class="o">%</span><span class="k">load_ext</span> autoreload
+<span class="o">%</span><span class="k">autoreload</span> 2
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy</span> <span class="k">as</span> <span class="nn">sp</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s2">&quot;display.max_columns&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">astropy.time</span> <span class="kn">import</span> <span class="n">Time</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mplt</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="kn">import</span> <span class="nn">mutis</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">ImportError</span>                               Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-13-12f8bf7b09e1&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">     10</span> <span class="ansi-green-fg">import</span> matplotlib<span class="ansi-blue-fg">.</span>pyplot <span class="ansi-green-fg">as</span> plt
+<span class="ansi-green-intense-fg ansi-bold">     11</span>
+<span class="ansi-green-fg">---&gt; 12</span><span class="ansi-red-fg"> </span><span class="ansi-green-fg">from</span> <span class="ansi-blue-fg">.</span><span class="ansi-blue-fg">.</span> <span class="ansi-green-fg">import</span> mutis
+
+<span class="ansi-red-fg">ImportError</span>: attempted relative import with no known parent package
+</pre></div></div>
+</div>
+<div class="section" id="Load-data">
+<h2>Load data<a class="headerlink" href="#Load-data" title="Permalink to this headline">¶</a></h2>
+<p>Load it with pandas becase I like the way pandas prints tables. Also useful accesing vars as strings!</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;3mm&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;data/deg2-0235+164-3mm.dat&#39;</span><span class="p">,</span> <span class="n">delim_whitespace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s1">&#39;!&#39;</span><span class="p">)</span>
+<span class="n">data</span><span class="p">[</span><span class="s1">&#39;3mm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mask</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;3mm&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1000</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">data</span><span class="p">[</span><span class="s1">&#39;3mm&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>year</th>
+      <th>I</th>
+      <th>dI</th>
+      <th>pL</th>
+      <th>dpL</th>
+      <th>chi</th>
+      <th>dchi</th>
+      <th>pC</th>
+      <th>dpC</th>
+      <th>MJD</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2007.3534</td>
+      <td>3.510</td>
+      <td>0.180</td>
+      <td>2.59</td>
+      <td>0.51</td>
+      <td>255.6</td>
+      <td>4.7</td>
+      <td>-0.58</td>
+      <td>0.22</td>
+      <td>54230.2015</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2007.3671</td>
+      <td>3.920</td>
+      <td>0.200</td>
+      <td>2.61</td>
+      <td>0.47</td>
+      <td>245.2</td>
+      <td>5.0</td>
+      <td>-0.87</td>
+      <td>0.23</td>
+      <td>54234.8459</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2007.6000</td>
+      <td>1.650</td>
+      <td>0.090</td>
+      <td>3.58</td>
+      <td>0.48</td>
+      <td>242.3</td>
+      <td>3.8</td>
+      <td>-0.35</td>
+      <td>0.22</td>
+      <td>54319.5631</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2007.6356</td>
+      <td>1.380</td>
+      <td>0.070</td>
+      <td>2.49</td>
+      <td>0.54</td>
+      <td>268.5</td>
+      <td>4.5</td>
+      <td>0.31</td>
+      <td>0.22</td>
+      <td>54332.5276</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>2007.7041</td>
+      <td>0.690</td>
+      <td>0.040</td>
+      <td>3.27</td>
+      <td>0.54</td>
+      <td>250.7</td>
+      <td>4.1</td>
+      <td>-0.53</td>
+      <td>0.22</td>
+      <td>54358.4618</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>100</th>
+      <td>2020.4278</td>
+      <td>1.029</td>
+      <td>0.052</td>
+      <td>4.78</td>
+      <td>0.59</td>
+      <td>352.0</td>
+      <td>3.4</td>
+      <td>-3.80</td>
+      <td>0.42</td>
+      <td>59005.5950</td>
+    </tr>
+    <tr>
+      <th>101</th>
+      <td>2020.4542</td>
+      <td>2.216</td>
+      <td>0.111</td>
+      <td>4.38</td>
+      <td>0.58</td>
+      <td>347.6</td>
+      <td>3.2</td>
+      <td>0.33</td>
+      <td>0.31</td>
+      <td>59015.2792</td>
+    </tr>
+    <tr>
+      <th>102</th>
+      <td>2020.5063</td>
+      <td>2.226</td>
+      <td>0.111</td>
+      <td>1.21</td>
+      <td>0.47</td>
+      <td>320.0</td>
+      <td>12.2</td>
+      <td>1.00</td>
+      <td>0.31</td>
+      <td>59034.2958</td>
+    </tr>
+    <tr>
+      <th>103</th>
+      <td>2020.6671</td>
+      <td>2.234</td>
+      <td>0.112</td>
+      <td>7.18</td>
+      <td>0.67</td>
+      <td>311.8</td>
+      <td>1.8</td>
+      <td>1.35</td>
+      <td>0.33</td>
+      <td>59093.2050</td>
+    </tr>
+    <tr>
+      <th>104</th>
+      <td>2020.7438</td>
+      <td>2.266</td>
+      <td>0.113</td>
+      <td>7.71</td>
+      <td>0.61</td>
+      <td>305.3</td>
+      <td>2.0</td>
+      <td>-0.55</td>
+      <td>0.32</td>
+      <td>59121.2212</td>
+    </tr>
+  </tbody>
+</table>
+<p>105 rows × 10 columns</p>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;gamma&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;data/0235_P8c_bin7_nov20.dat&#39;</span><span class="p">,</span> <span class="n">delim_whitespace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s1">&#39;#&#39;</span><span class="p">)</span>
+
+<span class="n">data</span><span class="p">[</span><span class="s1">&#39;gamma&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;year&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">Time</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;gamma&#39;</span><span class="p">][</span><span class="s1">&#39;MDJ&#39;</span><span class="p">],</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;mjd&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">jyear</span><span class="p">)</span>
+
+<span class="n">CFlux</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">logical_or</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;gamma&#39;</span><span class="p">][</span><span class="s1">&#39;UpperLimit&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;Ignored&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;gamma&#39;</span><span class="p">][</span><span class="s1">&#39;UpperLimit&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;Error&#39;</span><span class="p">),</span>
+                         <span class="n">data</span><span class="p">[</span><span class="s1">&#39;gamma&#39;</span><span class="p">][</span><span class="s1">&#39;Flux&#39;</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;gamma&#39;</span><span class="p">][</span><span class="s1">&#39;UpperLimit&#39;</span><span class="p">])</span>
+<span class="n">data</span><span class="p">[</span><span class="s1">&#39;gamma&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;CFlux&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">CFlux</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">))</span>
+
+<span class="c1"># Remove stupid data point</span>
+<span class="n">data</span><span class="p">[</span><span class="s1">&#39;gamma&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="mi">584</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">data</span><span class="p">[</span><span class="s1">&#39;gamma&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>year</th>
+      <th>N</th>
+      <th>CFlux</th>
+      <th>MDJ</th>
+      <th>Flux</th>
+      <th>Flux_Err</th>
+      <th>alpha</th>
+      <th>beta</th>
+      <th>Eb</th>
+      <th>UpperLimit</th>
+      <th>TS_VALUE</th>
+      <th>Norm</th>
+      <th>Norm_Err</th>
+      <th>T_START</th>
+      <th>T_STOP</th>
+      <th>NPRED</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2008.605065</td>
+      <td>1</td>
+      <td>1.894027e-07</td>
+      <td>54687.5000</td>
+      <td>1.894027e-07</td>
+      <td>3.326300e-08</td>
+      <td>2.0803</td>
+      <td>0.095422</td>
+      <td>887.56</td>
+      <td>Ignored</td>
+      <td>120.40</td>
+      <td>2.714675e-11</td>
+      <td>4.769000e-12</td>
+      <td>239673599</td>
+      <td>240278399</td>
+      <td>116.30</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2008.624230</td>
+      <td>2</td>
+      <td>5.572932e-07</td>
+      <td>54694.5000</td>
+      <td>5.572932e-07</td>
+      <td>4.754800e-08</td>
+      <td>2.0803</td>
+      <td>0.095422</td>
+      <td>887.56</td>
+      <td>Ignored</td>
+      <td>675.50</td>
+      <td>7.987585e-11</td>
+      <td>6.817000e-12</td>
+      <td>240278399</td>
+      <td>240883199</td>
+      <td>334.00</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2008.643395</td>
+      <td>3</td>
+      <td>5.439230e-07</td>
+      <td>54701.5000</td>
+      <td>5.439230e-07</td>
+      <td>5.684800e-08</td>
+      <td>2.0803</td>
+      <td>0.095422</td>
+      <td>887.56</td>
+      <td>Ignored</td>
+      <td>500.00</td>
+      <td>7.795953e-11</td>
+      <td>8.150300e-12</td>
+      <td>240883199</td>
+      <td>241487999</td>
+      <td>253.10</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2008.662560</td>
+      <td>4</td>
+      <td>6.763391e-07</td>
+      <td>54708.5000</td>
+      <td>6.763391e-07</td>
+      <td>6.980500e-08</td>
+      <td>2.0803</td>
+      <td>0.095422</td>
+      <td>887.56</td>
+      <td>Ignored</td>
+      <td>623.00</td>
+      <td>9.693850e-11</td>
+      <td>1.000800e-11</td>
+      <td>241487999</td>
+      <td>242092799</td>
+      <td>260.40</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>2008.681725</td>
+      <td>5</td>
+      <td>9.020173e-07</td>
+      <td>54715.5000</td>
+      <td>9.020173e-07</td>
+      <td>7.435100e-08</td>
+      <td>2.0803</td>
+      <td>0.095422</td>
+      <td>887.56</td>
+      <td>Ignored</td>
+      <td>994.10</td>
+      <td>1.292846e-10</td>
+      <td>1.066000e-11</td>
+      <td>242092799</td>
+      <td>242697599</td>
+      <td>362.30</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>632</th>
+      <td>2020.763861</td>
+      <td>15</td>
+      <td>1.119233e-07</td>
+      <td>59128.5001</td>
+      <td>1.119233e-07</td>
+      <td>5.747500e-08</td>
+      <td>2.0803</td>
+      <td>0.095422</td>
+      <td>887.56</td>
+      <td>Ignored</td>
+      <td>14.03</td>
+      <td>1.604177e-11</td>
+      <td>8.240300e-12</td>
+      <td>623376005</td>
+      <td>623980805</td>
+      <td>23.45</td>
+    </tr>
+    <tr>
+      <th>633</th>
+      <td>2020.783026</td>
+      <td>16</td>
+      <td>9.138770e-08</td>
+      <td>59135.5001</td>
+      <td>9.138770e-08</td>
+      <td>3.188800e-08</td>
+      <td>2.0803</td>
+      <td>0.095422</td>
+      <td>887.56</td>
+      <td>Ignored</td>
+      <td>21.53</td>
+      <td>1.309844e-11</td>
+      <td>4.571800e-12</td>
+      <td>623980805</td>
+      <td>624585605</td>
+      <td>37.80</td>
+    </tr>
+    <tr>
+      <th>634</th>
+      <td>2020.802191</td>
+      <td>17</td>
+      <td>6.064478e-08</td>
+      <td>59142.5001</td>
+      <td>2.843496e-08</td>
+      <td>1.657600e-08</td>
+      <td>2.0803</td>
+      <td>0.095422</td>
+      <td>887.56</td>
+      <td>6.064478E-08</td>
+      <td>7.04</td>
+      <td>4.075533e-12</td>
+      <td>2.376500e-12</td>
+      <td>624585605</td>
+      <td>625190405</td>
+      <td>12.19</td>
+    </tr>
+    <tr>
+      <th>635</th>
+      <td>2020.821356</td>
+      <td>18</td>
+      <td>4.770228e-08</td>
+      <td>59149.5001</td>
+      <td>4.770228e-08</td>
+      <td>2.429000e-08</td>
+      <td>2.0803</td>
+      <td>0.095422</td>
+      <td>887.56</td>
+      <td>Ignored</td>
+      <td>11.23</td>
+      <td>6.837084e-12</td>
+      <td>3.482500e-12</td>
+      <td>625190405</td>
+      <td>625795205</td>
+      <td>20.28</td>
+    </tr>
+    <tr>
+      <th>636</th>
+      <td>2020.840520</td>
+      <td>19</td>
+      <td>1.733534e-07</td>
+      <td>59156.5001</td>
+      <td>1.733534e-07</td>
+      <td>3.886500e-08</td>
+      <td>2.0803</td>
+      <td>0.095422</td>
+      <td>887.56</td>
+      <td>Ignored</td>
+      <td>87.28</td>
+      <td>2.484643e-11</td>
+      <td>5.572100e-12</td>
+      <td>625795205</td>
+      <td>626400005</td>
+      <td>67.96</td>
+    </tr>
+  </tbody>
+</table>
+<p>636 rows × 16 columns</p>
+</div></div>
+</div>
+</div>
+<div class="section" id="Show-data">
+<h2>Show data<a class="headerlink" href="#Show-data" title="Permalink to this headline">¶</a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">gridspec_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;hspace&#39;</span><span class="p">:</span><span class="mf">0.00</span><span class="p">})</span>
+
+
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;gamma&#39;</span><span class="p">][</span><span class="s1">&#39;year&#39;</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;gamma&#39;</span><span class="p">][</span><span class="s1">&#39;CFlux&#39;</span><span class="p">],</span> <span class="s1">&#39;b.--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Gamma-ray flux (0.1 to 200 GeV)&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># freq?</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;$\gamma/\mathrm</span><span class="si">{cm}</span><span class="s1">^2/\mathrm</span><span class="si">{s}</span><span class="s1">?$&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="kn">import</span> <span class="nn">matplotlib.ticker</span> <span class="k">as</span> <span class="nn">mtick</span><span class="p">;</span> <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span><span class="n">mtick</span><span class="o">.</span><span class="n">FormatStrFormatter</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%.1g</span><span class="s1">&#39;</span><span class="p">))</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;3mm&#39;</span><span class="p">][</span><span class="s1">&#39;year&#39;</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;3mm&#39;</span><span class="p">][</span><span class="s1">&#39;I&#39;</span><span class="p">],</span> <span class="s1">&#39;k.--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;3.5mm (POLAMI)&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1">#data[&#39;3mm&#39;].plot(x=&#39;year&#39;, y=&#39;I&#39;)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Jy&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;AO 0235+164 Flux Density&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;years&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../../../../../../../_images/_build_html__build_html__build_html_.doctrees_nbsphinx_recipes_mutis_workflow_8_0.png" src="../../../../../../../../../_images/_build_html__build_html__build_html_.doctrees_nbsphinx_recipes_mutis_workflow_8_0.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Correlate-data">
+<h2>Correlate data<a class="headerlink" href="#Correlate-data" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="Choose-data-and-methods">
+<h3>Choose data and methods<a class="headerlink" href="#Choose-data-and-methods" title="Permalink to this headline">¶</a></h3>
+<p>Choose the signals to correlate</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">t1</span><span class="p">,</span> <span class="n">s1</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;3mm&#39;</span><span class="p">][</span><span class="s1">&#39;year&#39;</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;3mm&#39;</span><span class="p">][</span><span class="s1">&#39;I&#39;</span><span class="p">]</span>
+<span class="n">t2</span><span class="p">,</span> <span class="n">s2</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;gamma&#39;</span><span class="p">][</span><span class="s1">&#39;year&#39;</span><span class="p">],</span> <span class="mf">1e6</span><span class="o">*</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;gamma&#39;</span><span class="p">][</span><span class="s1">&#39;CFlux&#39;</span><span class="p">]</span> <span class="c1">### ¡Use sensible units!</span>
+</pre></div>
+</div>
+</div>
+<p>Create signals with the corresponding data and choose the method for generating the light curves.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">sig1</span> <span class="o">=</span> <span class="n">mutis</span><span class="o">.</span><span class="n">Signal</span><span class="p">(</span><span class="n">t1</span><span class="p">,</span> <span class="n">s1</span><span class="p">,</span> <span class="s1">&#39;lc_gen_psd&#39;</span><span class="p">)</span>
+<span class="n">sig2</span> <span class="o">=</span> <span class="n">mutis</span><span class="o">.</span><span class="n">Signal</span><span class="p">(</span><span class="n">t2</span><span class="p">,</span> <span class="n">s2</span><span class="p">,</span> <span class="s1">&#39;lc_gen_ou&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Create the correlation with the corresponding signals and choose the method for generating the correltions.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">correlation</span> <span class="o">=</span> <span class="n">mutis</span><span class="o">.</span><span class="n">Correlation</span><span class="p">(</span><span class="n">sig1</span><span class="p">,</span> <span class="n">sig2</span><span class="p">,</span> <span class="s1">&#39;welsh_ab&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Generate-synthethic-light-curves">
+<h3>Generate synthethic light curves<a class="headerlink" href="#Generate-synthethic-light-curves" title="Permalink to this headline">¶</a></h3>
+<p><strong>HUMAN INTERVENTION</strong></p>
+<p>Chose good parameters for time binning!</p>
+<p>Good parameters will have a high and similar <span class="math notranslate nohighlight">\(n_i\)</span> for all bins, with bins covering most of the time range.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">correlation</span><span class="o">.</span><span class="n">gen_times</span><span class="p">(</span><span class="n">dt0</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">correlation</span><span class="o">.</span><span class="n">plot_times</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/Users/juan/Desktop/Doctorado/work/0235+164/mutis_class.py:615: UserWarning: Matplotlib is currently using module://ipykernel.pylab.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../../../../../../../_images/_build_html__build_html__build_html_.doctrees_nbsphinx_recipes_mutis_workflow_21_1.png" src="../../../../../../../../../_images/_build_html__build_html__build_html_.doctrees_nbsphinx_recipes_mutis_workflow_21_1.png" />
+</div>
+</div>
+<p><strong>HUMAN INTERVENTION</strong></p>
+<p>If the method for generating the synthethic light curves is <strong>lc_gen_ou</strong> we need to chose a good set of parameters.</p>
+<p>In this case we have set only sig2’s method to be lc_gen_ou because lc_gen_psd is more or less okey for sig1.</p>
+<p>The Signal class includes methods to deal with this OU parameter extraction. This could be more or less an authomathic process, but for some (not a negible number of) cases degenerancy of these OU parameter makes human intervention necessary. We need: 1. To plot the histogram and check if the supposed probability density function (pdf) fits nicely (several ways: curve fitting or MLE). 2. To check if the stimates are reasonable and produce nice light curves. 3. Actually generate the light curves.</p>
+<div class="section" id="1.-Plot-the-histogram-and-get-extracted-parameters">
+<h4>1. Plot the histogram and get extracted parameters<a class="headerlink" href="#1.-Plot-the-histogram-and-get-extracted-parameters" title="Permalink to this headline">¶</a></h4>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">fits</span> <span class="o">=</span> <span class="n">sig2</span><span class="o">.</span><span class="n">OU_fit</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/Users/juan/Desktop/Doctorado/work/0235+164/mutis_class.py:411: RuntimeWarning: invalid value encountered in double_scalars
+  pdf = lambda x,l,mu: (l*mu)**(1+l)/sp.special.gamma(1+l)*np.exp(-l*mu/x)/x**(l+2)
+/Users/juan/miniconda3/lib/python3.8/site-packages/scipy/stats/_distn_infrastructure.py:1715: IntegrationWarning: The algorithm does not converge.  Roundoff error is detected
+  in the extrapolation table.  It is assumed that the requested tolerance
+  cannot be achieved, and that the returned result (if full_output = 1) is
+  the best which can be obtained.
+  return integrate.quad(self._mom_integ1, 0, 1, args=(m,)+args)[0]
+/Users/juan/Desktop/Doctorado/work/0235+164/mutis_class.py:411: RuntimeWarning: divide by zero encountered in true_divide
+  pdf = lambda x,l,mu: (l*mu)**(1+l)/sp.special.gamma(1+l)*np.exp(-l*mu/x)/x**(l+2)
+/Users/juan/Desktop/Doctorado/work/0235+164/mutis_class.py:411: RuntimeWarning: invalid value encountered in true_divide
+  pdf = lambda x,l,mu: (l*mu)**(1+l)/sp.special.gamma(1+l)*np.exp(-l*mu/x)/x**(l+2)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../../../../../../../_images/_build_html__build_html__build_html_.doctrees_nbsphinx_recipes_mutis_workflow_24_1.png" src="../../../../../../../../../_images/_build_html__build_html__build_html_.doctrees_nbsphinx_recipes_mutis_workflow_24_1.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">fits</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#39;curve_fit&#39;: (array([1.00758579, 0.12887562]),
+  array([0.17348046, 0.01219202])),
+ &#39;MLE_fit&#39;: (0.5523802491183334, 0.14125117915448523),
+ &#39;sigma_est&#39;: 5.9477164593388965,
+ &#39;th_est1&#39;: 9.770317097497758,
+ &#39;th_est2&#39;: 17.821840424447338}
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="2.-Check-if-this-parameters-generate-nice-light-curves.">
+<h4>2. Check if this parameters generate nice light curves.<a class="headerlink" href="#2.-Check-if-this-parameters-generate-nice-light-curves." title="Permalink to this headline">¶</a></h4>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1">#%matplotlib inline</span>
+<span class="n">sig2</span><span class="o">.</span><span class="n">OU_check_gen</span><span class="p">(</span><span class="mi">17</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../../../../../../../_images/_build_html__build_html__build_html_.doctrees_nbsphinx_recipes_mutis_workflow_27_0.png" src="../../../../../../../../../_images/_build_html__build_html__build_html_.doctrees_nbsphinx_recipes_mutis_workflow_27_0.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../../../../../../../_images/_build_html__build_html__build_html_.doctrees_nbsphinx_recipes_mutis_workflow_27_1.png" src="../../../../../../../../../_images/_build_html__build_html__build_html_.doctrees_nbsphinx_recipes_mutis_workflow_27_1.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../../../../../../../_images/_build_html__build_html__build_html_.doctrees_nbsphinx_recipes_mutis_workflow_27_2.png" src="../../../../../../../../../_images/_build_html__build_html__build_html_.doctrees_nbsphinx_recipes_mutis_workflow_27_2.png" />
+</div>
+</div>
+<p><strong>Set the parameters</strong></p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">sig2</span><span class="o">.</span><span class="n">OU_th</span><span class="p">,</span> <span class="n">sig2</span><span class="o">.</span><span class="n">OU_mu</span><span class="p">,</span> <span class="n">sig2</span><span class="o">.</span><span class="n">OU_sigma</span> <span class="o">=</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">6</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="3.-Actually-generate-the-synthethic-light-curves">
+<h4>3. Actually generate the synthethic light curves<a class="headerlink" href="#3.-Actually-generate-the-synthethic-light-curves" title="Permalink to this headline">¶</a></h4>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">correlation</span><span class="o">.</span><span class="n">synth_gen</span><span class="p">(</span><span class="mi">400</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/Users/juan/miniconda3/lib/python3.8/site-packages/scipy/signal/spectral.py:1961: UserWarning: nperseg = 256 is greater than input length  = 105, using nperseg = 105
+  warnings.warn(&#39;nperseg = {0:d} is greater than input length &#39;
+</pre></div></div>
+</div>
+</div>
+</div>
+<div class="section" id="Generate-and-plot-correlations">
+<h3>Generate and plot correlations<a class="headerlink" href="#Generate-and-plot-correlations" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">correlation</span><span class="o">.</span><span class="n">gen_corr</span><span class="p">();</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">correlation</span><span class="o">.</span><span class="n">plot_corr</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../../../../../../../_images/_build_html__build_html__build_html_.doctrees_nbsphinx_recipes_mutis_workflow_34_0.png" src="../../../../../../../../../_images/_build_html__build_html__build_html_.doctrees_nbsphinx_recipes_mutis_workflow_34_0.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021 MUTIS Developers.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
