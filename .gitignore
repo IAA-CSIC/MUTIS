@@ -14,5 +14,3 @@ eggs
 # compiled files
 __pycache__
 
-# sphinx
-docs/_build
