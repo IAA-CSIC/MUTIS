@@ -18,9 +18,8 @@ dependencies:
   - numpy
   - pandas
   - scipy
-  - nfft
   - pip:
-      - pytest-sphinx
+      - nfft
   # test dependencies
   - codecov
   - pytest
