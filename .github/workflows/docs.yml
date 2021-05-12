@@ -1,0 +1,32 @@
+name: builddocs
+on: workflow_dispatch
+jobs:
+  process:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -l {0}
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v2
+      - name: create and activate env
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          activate-environment: mutis
+          environment-file: environment.yml
+          auto-update-conda: true
+      - name: install mutis
+        run: |
+          pip install -e .
+          conda info
+          conda list
+      - name: doc building
+        run: |
+          make docs-sphinx
+      - name: commit changes
+        uses: stefanzweifel/git-auto-commit-action@v4.1.6
+        if: success()
+        with:
+          commit_author: GitHub Actions <actions@github.com>
+          commit_message: commit docs
+          branch: docs
