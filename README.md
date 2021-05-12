@@ -3,7 +3,7 @@
 
 # MUTIS: MUltiwavelength TIme Series
 
-A Python package for analysis of light curves.
+A Python package for the analysis of correlations of light curves and their statistical significance.
 
 ### Installation
 - Install [Anaconda](https://www.anaconda.com/download/ )
