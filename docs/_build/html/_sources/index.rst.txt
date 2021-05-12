@@ -11,3 +11,5 @@ MUTIS
    recipes/PSD_tests.ipynb
    recipes/sin_tests.ipynb
    recipes/stochastics_tests.ipynb
+
+test
