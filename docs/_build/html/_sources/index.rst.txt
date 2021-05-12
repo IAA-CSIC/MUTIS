@@ -12,4 +12,4 @@ MUTIS
    recipes/sin_tests.ipynb
    recipes/stochastics_tests.ipynb
 
-test
+test2
