@@ -17,7 +17,7 @@ pip install .
 ```
 
 ### Documentation
-- https://bultako.github.io/MUTIS
+- https://iaa-csic.github.io/MUTIS
 
 ---
 License: BSD-3
