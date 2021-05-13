@@ -13,6 +13,7 @@ channels:
 dependencies:
   # core dependencies
   - python
+  - pip
   - astropy
   - matplotlib
   - numpy

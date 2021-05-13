@@ -11,3 +11,4 @@ html_theme = "sphinx_rtd_theme"
 # directories to ignore when looking for source files.
 exclude_patterns = ["_templates", "_static", "**.ipynb_checkpoints"]
 copyright = "2021 MUTIS Developers"
+project = "MUTIS"

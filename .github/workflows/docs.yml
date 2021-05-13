@@ -10,11 +10,10 @@ jobs:
       - name: checkout repo
         uses: actions/checkout@v2
       - name: create and activate env
-        uses: conda-incubator/setup-miniconda@v2
+        uses: mamba-org/provision-with-micromamba@main
         with:
-          activate-environment: mutis
           environment-file: environment.yml
-          auto-update-conda: true
+          environment-name: mutis
       - name: install mutis
         run: |
           pip install -e .
@@ -22,6 +21,7 @@ jobs:
           conda list
       - name: doc building
         run: |
+          make clean
           make docs-sphinx
       - name: commit changes
         uses: stefanzweifel/git-auto-commit-action@v4
