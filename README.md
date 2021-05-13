@@ -19,5 +19,5 @@ pip install .
 ### Documentation
 - https://iaa-csic.github.io/MUTIS
 
----
-License: BSD-3
+[![Docs Built](https://github.com/IAA-CSIC/MUTIS/workflows/builddocs/badge.svg)](https://github.com/IAA-CSIC/MUTIS/actions)
+[![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/IAA-CSIC/MUTIS.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/IAA-CSIC/MUTIS/context:python)

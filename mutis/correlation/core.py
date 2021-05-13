@@ -102,8 +102,6 @@ class Correlation:
                 self.signal1.signs,
                 self.signal2.times,
                 self.signal2.signs,
-                self.times,
-                self.dts,
             )
 
     def plot_corr(self):
