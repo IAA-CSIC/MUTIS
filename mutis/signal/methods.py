@@ -2,10 +2,9 @@
 """Methods for synthetic generation of light curves."""
 
 import logging
+
 import numpy as np
 import scipy.signal as scipy_signal
-
-from mutis.utils.utils import get_grid
 
 __all__ = ["lc_gen_samp", "lc_gen_psd", "lc_gen_ou"]
 
@@ -32,7 +31,7 @@ def lc_gen_psd(signs):
 
 
 def lc_gen_psd_c(ts, signs, times):
-    """"Generation using interpolated PSD for light curves with similar PSD, mean and std."""
+    """Generation using interpolated PSD for light curves with similar PSD, mean and std."""
 
     f, p = scipy_signal.welch(signs, nperseg=ts.size / 2)
     fp = np.linspace(min(f), max(f), times.size // 2 + 1)

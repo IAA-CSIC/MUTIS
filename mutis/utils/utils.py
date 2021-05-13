@@ -11,7 +11,7 @@ def memoize(f):
     memo = {}
 
     def helper(a, b):
-        x = np.array([a, b], dtype='object')
+        x = np.array([a, b], dtype="object")
         y = bytes(x)
         if y not in memo:
             memo[y] = f(a, b)
@@ -24,6 +24,3 @@ def memoize(f):
 def get_grid(x, y):
     """Compute a meshgrid with memoization."""
     return np.meshgrid(x, y)
-
-
-

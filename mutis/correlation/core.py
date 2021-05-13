@@ -2,12 +2,11 @@
 """Analysis of correlation of light curves."""
 
 import logging
-import numpy as np
-import scipy as sp
+
 import matplotlib.pyplot as plt
+import numpy as np
 
 from mutis.correlation.methods import *
-
 
 __all__ = ["Correlation"]
 
@@ -49,49 +48,115 @@ class Correlation:
         mc_corr = np.empty((self.N, self.times.size))
 
         for n in range(0, self.N):
-            if self.method == 'welsh_ab':
-                mc_corr[n] = welsh_ab(self.signal1.times, self.signal1.synth[n], self.signal2.times, self.signal2.synth[n], self.times, self.dts)
-            elif self.method == 'kroedel_ab':
-                mc_corr[n] = kroedel_ab(self.signal1.times, self.signal1.synth[n], self.signal2.times, self.signal2.synth[n], self.times,
-                                        self.dts)
-            elif self.method == 'numpy':
-                mc_corr[n] = nindcf(self.signal1.times, self.signal1.synth[n], self.signal2.times, self.signal2.synth[n])
+            if self.method == "welsh_ab":
+                mc_corr[n] = welsh_ab(
+                    self.signal1.times,
+                    self.signal1.synth[n],
+                    self.signal2.times,
+                    self.signal2.synth[n],
+                    self.times,
+                    self.dts,
+                )
+            elif self.method == "kroedel_ab":
+                mc_corr[n] = kroedel_ab(
+                    self.signal1.times,
+                    self.signal1.synth[n],
+                    self.signal2.times,
+                    self.signal2.synth[n],
+                    self.times,
+                    self.dts,
+                )
+            elif self.method == "numpy":
+                mc_corr[n] = nindcf(
+                    self.signal1.times,
+                    self.signal1.synth[n],
+                    self.signal2.times,
+                    self.signal2.synth[n],
+                )
 
         self.l3s = np.percentile(mc_corr, [0.135, 99.865], axis=0)
         self.l2s = np.percentile(mc_corr, [2.28, 97.73], axis=0)
         self.l1s = np.percentile(mc_corr, [15.865, 84.135], axis=0)
 
-        if self.method == 'welsh_ab':
-            self.signs = welsh_ab(self.signal1.times, self.signal1.signs, self.signal2.times, self.signal2.signs, self.times, self.dts)
-        elif self.method == 'kroedel_ab':
-            self.signs = kroedel_ab(self.signal1.times, self.signal1.signs, self.signal2.times, self.signal2.signs, self.times, self.dts)
-        elif self.method == 'numpy':
-            self.signs = nindcf(self.signal1.times, self.signal1.signs, self.signal2.times, self.signal2.signs, self.times, self.dts)
+        if self.method == "welsh_ab":
+            self.signs = welsh_ab(
+                self.signal1.times,
+                self.signal1.signs,
+                self.signal2.times,
+                self.signal2.signs,
+                self.times,
+                self.dts,
+            )
+        elif self.method == "kroedel_ab":
+            self.signs = kroedel_ab(
+                self.signal1.times,
+                self.signal1.signs,
+                self.signal2.times,
+                self.signal2.signs,
+                self.times,
+                self.dts,
+            )
+        elif self.method == "numpy":
+            self.signs = nindcf(
+                self.signal1.times,
+                self.signal1.signs,
+                self.signal2.times,
+                self.signal2.signs,
+                self.times,
+                self.dts,
+            )
 
     def plot_corr(self):
         plt.figure()
 
-        plt.plot(self.times, self.l1s[0], 'c-.')
-        plt.plot(self.times, self.l1s[1], 'c-.', label='$1\sigma$')
-        plt.plot(self.times, self.l2s[0], 'k--')
-        plt.plot(self.times, self.l2s[1], 'k--', label='$2\sigma$')
-        plt.plot(self.times, self.l3s[0], 'r-')
-        plt.plot(self.times, self.l3s[1], 'r-', label='$3\sigma$')
-        plt.plot(self.times, self.signs, 'b.--', lw=1)
+        plt.plot(self.times, self.l1s[0], "c-.")
+        plt.plot(self.times, self.l1s[1], "c-.", label="$1\sigma$")
+        plt.plot(self.times, self.l2s[0], "k--")
+        plt.plot(self.times, self.l2s[1], "k--", label="$2\sigma$")
+        plt.plot(self.times, self.l3s[0], "r-")
+        plt.plot(self.times, self.l3s[1], "r-", label="$3\sigma$")
+        plt.plot(self.times, self.signs, "b.--", lw=1)
 
-        t1, t2 = self.signal1.times, self.signal2.times
+        dt1 = self.signal1.times.max() - self.signal1.times.min()
+        dt2 = self.signal2.times.max() - self.signal2.times.min()
 
-        # SAME LIMIT
-        plt.axvline(x=-(np.max([t1.max() - t1.min(), t2.max() - t2.min()])) / 2, ymin=-1, ymax=+1, color='black',
-                    linewidth=4, alpha=0.6)
-        plt.axvline(x=+(np.max([t1.max() - t1.min(), t2.max() - t2.min()])) / 2, ymin=-1, ymax=+1, color='black',
-                    linewidth=4, alpha=0.6)
+        # same limit
+        sl = np.max([dt1, dt2]) / 2
+        plt.axvline(
+            x=-sl,
+            ymin=-1,
+            ymax=+1,
+            color="black",
+            linewidth=4,
+            alpha=0.6,
+        )
+        plt.axvline(
+            x=+sl,
+            ymin=-1,
+            ymax=+1,
+            color="black",
+            linewidth=4,
+            alpha=0.6,
+        )
 
-        # VALID LIMIT
-        plt.axvline(x=-(np.max([t1.max() - t1.min(), t2.max() - t2.min()]) - np.min(
-            [t1.max() - t1.min(), t2.max() - t2.min()])) / 2, ymin=-1, ymax=+1, color='blue', linewidth=1, alpha=0.6)
-        plt.axvline(x=+(np.max([t1.max() - t1.min(), t2.max() - t2.min()]) - np.min(
-            [t1.max() - t1.min(), t2.max() - t2.min()])) / 2, ymin=-1, ymax=+1, color='blue', linewidth=1, alpha=0.6)
+        # valid limit
+        vl = np.max([dt1, dt2]) - np.min([dt1, dt2]) / 2
+        plt.axvline(
+            x=-vl,
+            ymin=-1,
+            ymax=+1,
+            color="blue",
+            linewidth=1,
+            alpha=0.6,
+        )
+        plt.axvline(
+            x=+vl,
+            ymin=-1,
+            ymax=+1,
+            color="blue",
+            linewidth=1,
+            alpha=0.6,
+        )
 
         plt.legend()
         plt.show()

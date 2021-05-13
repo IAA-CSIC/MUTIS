@@ -2,6 +2,7 @@
 """Methods for correlation of light curves."""
 
 import logging
+
 import numpy as np
 
 from mutis.utils.utils import get_grid
@@ -26,7 +27,7 @@ def kroedel_ab_p(t1, d1, t2, d2, t, dt):
 
 def kroedel_ab(t1, d1, t2, d2, t, dt):
     if dt.size != t.size:
-        print('Error, t and dt not the same size')
+        print("Error, t and dt not the same size")
         return -1
 
     res = np.array([])
@@ -40,7 +41,7 @@ def welsh_ab_p(t1, d1, t2, d2, t, dt):
     t1m, t2m = get_grid(t1, t2)
     d1m, d2m = np.meshgrid(d1, d2)
 
-    msk = (((t - dt / 2) < (t2m - t1m)) & ((t2m - t1m) < (t + dt / 2)))
+    msk = ((t - dt / 2) < (t2m - t1m)) & ((t2m - t1m) < (t + dt / 2))
 
     udcf = (d1m - np.mean(d1m[msk])) * (d2m - np.mean(d2m[msk])) / np.std(d1m[msk]) / np.std(d2m[msk])
 
@@ -49,13 +50,13 @@ def welsh_ab_p(t1, d1, t2, d2, t, dt):
 
 def welsh_ab(t1, d1, t2, d2, t, dt):
     if t.size != dt.size:
-        print('Error, t and dt not the same size')
+        print("Error, t and dt not the same size")
         return -1
     if t1.size != d1.size:
-        print('Error, t1 and d1 not the same size')
+        print("Error, t1 and d1 not the same size")
         return -1
     if t2.size != d2.size:
-        print('Error, t2 and d2 not the same size')
+        print("Error, t2 and d2 not the same size")
         return -1
 
     # res = np.array([])
@@ -122,7 +123,7 @@ def nindcf(t1, s1, t2, s2):
     s2i = np.interp(np.linspace(t2.min(), t2.max(), t2.size), t2, s2)
     x = (s1i - np.mean(s1i)) / np.std(s1i) / len(s1i)
     y = (s2i - np.mean(s2i)) / np.std(s2i)
-    return np.correlate(x, y, 'full')
+    return np.correlate(x, y, "full")
 
 
 #
