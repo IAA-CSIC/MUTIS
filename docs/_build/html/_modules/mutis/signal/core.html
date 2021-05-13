@@ -16,6 +16,7 @@
   <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/mutis.css" type="text/css" />
 
   
   
@@ -87,17 +88,17 @@
               
             
             
-              <ul>
+              <p class="caption"><span class="caption-text">Recipes</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../recipes/mutis_workflow.html">Workflow of MUTIS (class version)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../recipes/PSD_tests.html">PSD tests</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../recipes/sin_tests.html">The SIN tests</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../recipes/stochastics_tests.html">Stochastic light curves: Orstein-Uhlenbeck process.</a></li>
 </ul>
+<p class="caption"><span class="caption-text">Reference</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../api/mutis.correlation.core.Correlation.html">Correlation</a></li>
-</ul>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../api/mutis.signal.core.Signal.html">Signal</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/correlation.html">mutis.correlation Package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/signal.html">mutis.signal Package</a></li>
 </ul>
 
             
@@ -183,14 +184,16 @@
 <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="Signal"><a class="viewcode-back" href="../../../api/mutis.signal.core.Signal.html#mutis.signal.core.Signal">[docs]</a><span class="k">class</span> <span class="nc">Signal</span><span class="p">:</span>
+<div class="viewcode-block" id="Signal"><a class="viewcode-back" href="../../../api/mutis.signal.Signal.html#mutis.signal.Signal">[docs]</a><span class="k">class</span> <span class="nc">Signal</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Analysis and generation of a signal.</span>
+
+<span class="sd">    Description goes here.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    times : `~numpy.ndarray`</span>
+<span class="sd">    times : numpy.ndarray</span>
 <span class="sd">        Values of the time axis.</span>
-<span class="sd">    signs : `~numpy.ndarray`</span>
+<span class="sd">    signs : numpy.ndarray</span>
 <span class="sd">        Values of the signal axis.</span>
 <span class="sd">    method : str</span>
 <span class="sd">        Method used to generate the synthetic signal.</span>
@@ -205,7 +208,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">mu</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sigma</span> <span class="o">=</span> <span class="kc">None</span>
 
-<div class="viewcode-block" id="Signal.synth_gen"><a class="viewcode-back" href="../../../api/mutis.signal.core.Signal.html#mutis.signal.core.Signal.synth_gen">[docs]</a>    <span class="k">def</span> <span class="nf">synth_gen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+<div class="viewcode-block" id="Signal.synth_gen"><a class="viewcode-back" href="../../../api/mutis.signal.Signal.html#mutis.signal.Signal.synth_gen">[docs]</a>    <span class="k">def</span> <span class="nf">synth_gen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">synth</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">times</span><span class="o">.</span><span class="n">size</span><span class="p">))</span>
 
         <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
@@ -221,7 +224,7 @@
                 <span class="k">else</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">synth</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">lc_gen_ou</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mu</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sigma</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">times</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Signal.OU_fit"><a class="viewcode-back" href="../../../api/mutis.signal.core.Signal.html#mutis.signal.core.Signal.OU_fit">[docs]</a>    <span class="k">def</span> <span class="nf">OU_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Signal.OU_fit"><a class="viewcode-back" href="../../../api/mutis.signal.Signal.html#mutis.signal.Signal.OU_fit">[docs]</a>    <span class="k">def</span> <span class="nf">OU_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">signs</span>
         <span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">times</span>
 
@@ -301,7 +304,7 @@
             <span class="s2">&quot;th_est2&quot;</span><span class="p">:</span> <span class="n">th_est2</span><span class="p">,</span>
         <span class="p">}</span></div>
 
-<div class="viewcode-block" id="Signal.OU_check_gen"><a class="viewcode-back" href="../../../api/mutis.signal.core.Signal.html#mutis.signal.core.Signal.OU_check_gen">[docs]</a>    <span class="k">def</span> <span class="nf">OU_check_gen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="p">):</span>
+<div class="viewcode-block" id="Signal.OU_check_gen"><a class="viewcode-back" href="../../../api/mutis.signal.Signal.html#mutis.signal.Signal.OU_check_gen">[docs]</a>    <span class="k">def</span> <span class="nf">OU_check_gen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="p">):</span>
         <span class="n">t</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">s</span>
         <span class="n">y2</span> <span class="o">=</span> <span class="n">lc_gen_ou</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">s</span><span class="p">),</span> <span class="n">loc</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">s</span><span class="p">))</span>
 

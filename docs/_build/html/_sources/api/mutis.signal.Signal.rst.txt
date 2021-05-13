@@ -1,7 +1,7 @@
 Signal
 ======
 
-.. currentmodule:: mutis.signal.core
+.. currentmodule:: mutis.signal
 
 .. autoclass:: Signal
    :show-inheritance:

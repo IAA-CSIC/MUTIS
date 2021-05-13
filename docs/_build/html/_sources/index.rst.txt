@@ -7,20 +7,18 @@ MUTIS
 A Python package for the analysis of correlations of light curves and their statistical significance.
 
 .. toctree::
-   :maxdepth: 2
+   :caption: Recipes
+   :maxdepth: 1
 
    recipes/mutis_workflow.ipynb
    recipes/PSD_tests.ipynb
    recipes/sin_tests.ipynb
    recipes/stochastics_tests.ipynb
 
-Reference/API
-=============
 
-.. automodapi:: mutis.correlation.core
-    :no-inheritance-diagram:
-    :include-all-objects:
+.. toctree::
+   :caption: Reference
+   :maxdepth: 1
 
-.. automodapi:: mutis.signal.core
-    :no-inheritance-diagram:
-    :include-all-objects:
+   reference/correlation
+   reference/signal

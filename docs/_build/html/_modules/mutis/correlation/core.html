@@ -16,6 +16,7 @@
   <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/mutis.css" type="text/css" />
 
   
   
@@ -87,17 +88,17 @@
               
             
             
-              <ul>
+              <p class="caption"><span class="caption-text">Recipes</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../recipes/mutis_workflow.html">Workflow of MUTIS (class version)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../recipes/PSD_tests.html">PSD tests</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../recipes/sin_tests.html">The SIN tests</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../recipes/stochastics_tests.html">Stochastic light curves: Orstein-Uhlenbeck process.</a></li>
 </ul>
+<p class="caption"><span class="caption-text">Reference</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../api/mutis.correlation.core.Correlation.html">Correlation</a></li>
-</ul>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../api/mutis.signal.core.Signal.html">Signal</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/correlation.html">mutis.correlation Package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/signal.html">mutis.signal Package</a></li>
 </ul>
 
             
@@ -179,14 +180,16 @@
 <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="Correlation"><a class="viewcode-back" href="../../../api/mutis.correlation.core.Correlation.html#mutis.correlation.core.Correlation">[docs]</a><span class="k">class</span> <span class="nc">Correlation</span><span class="p">:</span>
+<div class="viewcode-block" id="Correlation"><a class="viewcode-back" href="../../../api/mutis.correlation.Correlation.html#mutis.correlation.Correlation">[docs]</a><span class="k">class</span> <span class="nc">Correlation</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Analysis of the correlation of two signals.</span>
+
+<span class="sd">    Description goes here.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    signal1 : `~numpy.ndarray`</span>
+<span class="sd">    signal1 : numpy.ndarray</span>
 <span class="sd">        Values of the time axis.</span>
-<span class="sd">    signal2 : `~numpy.ndarray`</span>
+<span class="sd">    signal2 : numpy.ndarray</span>
 <span class="sd">        Values of the signal axis.</span>
 <span class="sd">    method : str</span>
 <span class="sd">        Method used to correlate the signals.</span>
@@ -205,12 +208,16 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">l3s</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">signs</span> <span class="o">=</span> <span class="kc">None</span>
 
-<div class="viewcode-block" id="Correlation.synth_gen"><a class="viewcode-back" href="../../../api/mutis.correlation.core.Correlation.html#mutis.correlation.core.Correlation.synth_gen">[docs]</a>    <span class="k">def</span> <span class="nf">synth_gen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+<div class="viewcode-block" id="Correlation.synth_gen"><a class="viewcode-back" href="../../../api/mutis.correlation.Correlation.html#mutis.correlation.Correlation.synth_gen">[docs]</a>    <span class="k">def</span> <span class="nf">synth_gen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Description goes here.&quot;&quot;&quot;</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">=</span> <span class="n">N</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">signal1</span><span class="o">.</span><span class="n">synth_gen</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">signal2</span><span class="o">.</span><span class="n">synth_gen</span><span class="p">(</span><span class="n">N</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Correlation.gen_corr"><a class="viewcode-back" href="../../../api/mutis.correlation.core.Correlation.html#mutis.correlation.core.Correlation.gen_corr">[docs]</a>    <span class="k">def</span> <span class="nf">gen_corr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Correlation.gen_corr"><a class="viewcode-back" href="../../../api/mutis.correlation.Correlation.html#mutis.correlation.Correlation.gen_corr">[docs]</a>    <span class="k">def</span> <span class="nf">gen_corr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Description goes here.&quot;&quot;&quot;</span>
+
         <span class="n">mc_corr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">times</span><span class="o">.</span><span class="n">size</span><span class="p">))</span>
 
         <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">):</span>
@@ -270,7 +277,9 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">signal2</span><span class="o">.</span><span class="n">signs</span><span class="p">,</span>
             <span class="p">)</span></div>
 
-<div class="viewcode-block" id="Correlation.plot_corr"><a class="viewcode-back" href="../../../api/mutis.correlation.core.Correlation.html#mutis.correlation.core.Correlation.plot_corr">[docs]</a>    <span class="k">def</span> <span class="nf">plot_corr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Correlation.plot_corr"><a class="viewcode-back" href="../../../api/mutis.correlation.Correlation.html#mutis.correlation.Correlation.plot_corr">[docs]</a>    <span class="k">def</span> <span class="nf">plot_corr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Description goes here.&quot;&quot;&quot;</span>
+
         <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
 
         <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">times</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">l1s</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;c-.&quot;</span><span class="p">)</span>
@@ -325,23 +334,25 @@
         <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="Correlation.gen_times"><a class="viewcode-back" href="../../../api/mutis.correlation.core.Correlation.html#mutis.correlation.core.Correlation.gen_times">[docs]</a>    <span class="k">def</span> <span class="nf">gen_times</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ndtmax</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">nbinsmin</span><span class="o">=</span><span class="mi">121</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns times and bins to use with adaptative binning methods.</span>
+<div class="viewcode-block" id="Correlation.gen_times"><a class="viewcode-back" href="../../../api/mutis.correlation.Correlation.html#mutis.correlation.Correlation.gen_times">[docs]</a>    <span class="k">def</span> <span class="nf">gen_times</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ndtmax</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">nbinsmin</span><span class="o">=</span><span class="mi">121</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns times and bins to use with adaptative binning methods.</span>
+
 <span class="sd">        Sensible values for these parameters must be found by hand, and depend</span>
 <span class="sd">        on the characteristics of input data.</span>
 
-<span class="sd">        dt0:</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        dt0 : int</span>
 <span class="sd">            minimum bin size, also used as step in a.b.</span>
 <span class="sd">            default: dt0 = 0.25*(tmax -tmin)/np.sqrt(t1.size*t2.size+1)</span>
 <span class="sd">            (more or less a statistically reasonable binning,</span>
 <span class="sd">            to increase precision)</span>
-<span class="sd">        ndtmax:</span>
+<span class="sd">        ndtmax : float</span>
 <span class="sd">            Maximum size of bins (in units of dt0).</span>
 <span class="sd">            0 &lt; ndtmax &lt; 1: fixed dt (=dt0) (no a.b)</span>
 <span class="sd">            1 &lt; ndtmax: allow adaptative time binning</span>
 <span class="sd">            default: 0.9</span>
-<span class="sd">        nbinsmin:</span>
+<span class="sd">        nbinsmin : int</span>
 <span class="sd">            if the data has a lot of error, higher values are needed</span>
 <span class="sd">            to soften the correlation beyond spurious variability.</span>
 <span class="sd">            default: 121 (11x11)</span>

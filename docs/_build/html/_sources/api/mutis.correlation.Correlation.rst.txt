@@ -1,7 +1,7 @@
 Correlation
 ===========
 
-.. currentmodule:: mutis.correlation.core
+.. currentmodule:: mutis.correlation
 
 .. autoclass:: Correlation
    :show-inheritance:

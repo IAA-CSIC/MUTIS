@@ -16,11 +16,13 @@ log = logging.getLogger(__name__)
 class Correlation:
     """Analysis of the correlation of two signals.
 
+    Description goes here.
+
     Parameters
     ----------
-    signal1 : `~numpy.ndarray`
+    signal1 : numpy.ndarray
         Values of the time axis.
-    signal2 : `~numpy.ndarray`
+    signal2 : numpy.ndarray
         Values of the signal axis.
     method : str
         Method used to correlate the signals.
@@ -40,11 +42,15 @@ class Correlation:
         self.signs = None
 
     def synth_gen(self, N):
+        """Description goes here."""
+
         self.N = N
         self.signal1.synth_gen(N)
         self.signal2.synth_gen(N)
 
     def gen_corr(self):
+        """Description goes here."""
+
         mc_corr = np.empty((self.N, self.times.size))
 
         for n in range(0, self.N):
@@ -105,6 +111,8 @@ class Correlation:
             )
 
     def plot_corr(self):
+        """Description goes here."""
+
         plt.figure()
 
         plt.plot(self.times, self.l1s[0], "c-.")
@@ -160,22 +168,24 @@ class Correlation:
         plt.show()
 
     def gen_times(self, dt0=None, ndtmax=0.9, nbinsmin=121):
-        """
-        Returns times and bins to use with adaptative binning methods.
+        """Returns times and bins to use with adaptative binning methods.
+
         Sensible values for these parameters must be found by hand, and depend
         on the characteristics of input data.
 
-        dt0:
+        Parameters
+        ----------
+        dt0 : int
             minimum bin size, also used as step in a.b.
             default: dt0 = 0.25*(tmax -tmin)/np.sqrt(t1.size*t2.size+1)
             (more or less a statistically reasonable binning,
             to increase precision)
-        ndtmax:
+        ndtmax : float
             Maximum size of bins (in units of dt0).
             0 < ndtmax < 1: fixed dt (=dt0) (no a.b)
             1 < ndtmax: allow adaptative time binning
             default: 0.9
-        nbinsmin:
+        nbinsmin : int
             if the data has a lot of error, higher values are needed
             to soften the correlation beyond spurious variability.
             default: 121 (11x11)

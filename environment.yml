@@ -32,6 +32,7 @@ dependencies:
   # dev dependencies
   - black
   - isort
+  - numpydoc
   - sphinx
   - sphinx-automodapi
   - sphinx_rtd_theme

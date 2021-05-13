@@ -20,11 +20,13 @@ log = logging.getLogger(__name__)
 class Signal:
     """Analysis and generation of a signal.
 
+    Description goes here.
+
     Parameters
     ----------
-    times : `~numpy.ndarray`
+    times : numpy.ndarray
         Values of the time axis.
-    signs : `~numpy.ndarray`
+    signs : numpy.ndarray
         Values of the signal axis.
     method : str
         Method used to generate the synthetic signal.
