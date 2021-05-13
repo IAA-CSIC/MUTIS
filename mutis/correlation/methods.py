@@ -6,68 +6,63 @@ import numpy as np
 
 from mutis.utils.utils import get_grid
 
-__all__ = ["get_times"]
+__all__ = ["kroedel_ab", "welsh_ab", "nindcf"]
 
 log = logging.getLogger(__name__)
 
 
+#  Krolik & Edelson with adaptative bining
+def kroedel_ab_p(t1, d1, t2, d2, t, dt):
+    t1m, t2m = get_grid(t1, t2)
+    d1m, d2m = get_grid(d1, d2)
+
+    mask = ~(((t - dt / 2) < (t2m - t1m)) & ((t2m - t1m) < (t + dt / 2)))
+
+    udcf = (d1m - np.mean(d1)) * (d2m - np.mean(d2)) / np.std(d1) / np.std(d2)
+    udcf = np.ma.masked_where(mask, udcf)
+
+    return np.ma.mean(udcf)
 
 
-def get_times(t1, t2, dt0=None, ndtmax=0.9, nbinsmin=121):
-    """
-    Returns times and bins to use with adaptative binning methods.
-    Sensible values for these parameters must be found by hand, and depend
-    on the characteristics of input data.
+def kroedel_ab(t1, d1, t2, d2, t, dt):
+    if dt.size != t.size:
+        print('Error, t and dt not the same size')
+        return -1
 
-    dt0:
-        minimum bin size, also used as step in a.b.
-            default: dt0 = 0.25*(tmax -tmin)/np.sqrt(t1.size*t2.size+1)
-        (more or less a statistically reasonable binning,
-        to increase precision)
-    ndtmax:
-        Maximum size of bins (in units of dt0).
-            0 < ndtmax < 1: fixed dt (=dt0) (no a.b)
-            1 < ndtmax: allow adaptative time binning
-        default: 0.9
-    nbinsmin:
-        if the data has a lot of error, higher values are needed
-        to soften the correlation beyond spurious variability.
-            default: 121 (11x11)
-    """
+    res = np.array([])
+    for i in range(t.size):
+        res = np.append(res, kroedel_ab_p(t1, d1, t2, d2, t[i], dt[i]))
+    return res
 
-    # tmin = -(np.min([t1.max(),t2.max()]) - np.max([t1.min(),t2.min()]))
-    tmax = +(np.max([t1.max(), t2.max()]) - np.min([t1.min(), t2.min()]))
-    tmin = -tmax
 
-    if dt0 is None:
-        # dt0 = 1*(tmax-tmin)/(t1.size+t2.size-1)
-        # dt0 = 1.0*(tmax-tmin)/np.sqrt(t1.size*t2.size+1)
-        # dt0 = 30/365; ndtmax=2.9; nbinsmin=12*12
-        # dt0 = 0.25; ndtmax=10; nbinsmin=5
-        dt0 = 0.25 * (tmax - tmin) / np.sqrt(t1.size * t2.size + 1)
+# Welsh with adaptative bining
+def welsh_ab_p(t1, d1, t2, d2, t, dt):
+    t1m, t2m = get_grid(t1, t2)
+    d1m, d2m = np.meshgrid(d1, d2)
 
-    t = np.array([])
-    dt = np.array([])
-    nb = np.array([])
-    t1m, t2m = np.meshgrid(t1, t2)
-    ti = tmin
-    tf = ti + dt0
+    msk = (((t - dt / 2) < (t2m - t1m)) & ((t2m - t1m) < (t + dt / 2)))
 
-    while tf < tmax:
-        tm = (ti + tf) / 2
-        dtm = (tf - ti) / 2
-        nbins = np.sum((((tm - dtm / 2) < (t2m - t1m)) & ((t2m - t1m) < (tm + dtm / 2))))
-        if dtm < dt0 * ndtmax:
-            if nbins > nbinsmin:
-                t = np.append(t, tm)
-                dt = np.append(dt, dtm)
-                nb = np.append(nb, nbins)
-                ti, tf = tf, tf + dt0
-            else:
-                tf = tf + dt0
-        else:
-            ti, tf = tf, tf + dt0
-    return t, dt, nb
+    udcf = (d1m - np.mean(d1m[msk])) * (d2m - np.mean(d2m[msk])) / np.std(d1m[msk]) / np.std(d2m[msk])
+
+    return np.mean(udcf[msk])
+
+
+def welsh_ab(t1, d1, t2, d2, t, dt):
+    if t.size != dt.size:
+        print('Error, t and dt not the same size')
+        return -1
+    if t1.size != d1.size:
+        print('Error, t1 and d1 not the same size')
+        return -1
+    if t2.size != d2.size:
+        print('Error, t2 and d2 not the same size')
+        return -1
+
+    # res = np.array([])
+    res = np.empty(t.size)
+    for i in range(t.size):
+        res[i] = welsh_ab_p(t1, d1, t2, d2, t[i], dt[i])
+    return res
 
 
 def fkroedel(t1, d1, t2, d2, t, dt=None):
@@ -113,6 +108,21 @@ def fwelsh(t1, d1, t2, d2, t, dt=None):
 # vectorize funcions
 kroedel = np.vectorize(fkroedel, excluded=(0, 1, 2, 3, 5), otypes=[np.float])
 welsh = np.vectorize(fwelsh, excluded=(0, 1, 2, 3, 5), otypes=[np.float])
+
+
+def nindcf(t1, s1, t2, s2):
+    """Implement normalization and interpolation over numpy correlate function."""
+    # numpy correlate function is not designed for unevenly spaced data
+    # correlation C(tau), where tau goes from
+    # -( np.max([t1.max(),t2.max()]) - np.min([t1.min(),t2.min()]) )
+    # to
+    # +( np.min([t1.max(),t2.max()]) - np.max([t1.min(),t2.min()]) )
+
+    s1i = np.interp(np.linspace(t1.min(), t1.max(), t1.size), t1, s1)
+    s2i = np.interp(np.linspace(t2.min(), t2.max(), t2.size), t2, s2)
+    x = (s1i - np.mean(s1i)) / np.std(s1i) / len(s1i)
+    y = (s2i - np.mean(s2i)) / np.std(s2i)
+    return np.correlate(x, y, 'full')
 
 
 #
