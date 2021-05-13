@@ -167,18 +167,18 @@ class Correlation:
 
         dt0:
             minimum bin size, also used as step in a.b.
-                default: dt0 = 0.25*(tmax -tmin)/np.sqrt(t1.size*t2.size+1)
+            default: dt0 = 0.25*(tmax -tmin)/np.sqrt(t1.size*t2.size+1)
             (more or less a statistically reasonable binning,
             to increase precision)
         ndtmax:
             Maximum size of bins (in units of dt0).
-                0 < ndtmax < 1: fixed dt (=dt0) (no a.b)
-                1 < ndtmax: allow adaptative time binning
+            0 < ndtmax < 1: fixed dt (=dt0) (no a.b)
+            1 < ndtmax: allow adaptative time binning
             default: 0.9
         nbinsmin:
             if the data has a lot of error, higher values are needed
             to soften the correlation beyond spurious variability.
-                default: 121 (11x11)
+            default: 121 (11x11)
         """
 
         t1 = self.signal1.times

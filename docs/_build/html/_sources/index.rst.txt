@@ -13,3 +13,14 @@ A Python package for the analysis of correlations of light curves and their stat
    recipes/PSD_tests.ipynb
    recipes/sin_tests.ipynb
    recipes/stochastics_tests.ipynb
+
+Reference/API
+=============
+
+.. automodapi:: mutis.correlation.core
+    :no-inheritance-diagram:
+    :include-all-objects:
+
+.. automodapi:: mutis.signal.core
+    :no-inheritance-diagram:
+    :include-all-objects:
