@@ -1,0 +1,427 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>mutis.correlation.core &mdash; MUTIS  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> MUTIS
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../recipes/mutis_workflow.html">Workflow of MUTIS (class version)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../recipes/PSD_tests.html">PSD tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../recipes/sin_tests.html">The SIN tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../recipes/stochastics_tests.html">Stochastic light curves: Orstein-Uhlenbeck process.</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/mutis.correlation.core.Correlation.html">Correlation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/mutis.signal.core.Signal.html">Signal</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">MUTIS</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>mutis.correlation.core</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for mutis.correlation.core</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Licensed under a 3-clause BSD style license - see LICENSE</span>
+<span class="sd">&quot;&quot;&quot;Analysis of correlation of light curves.&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">mutis.correlation.methods</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Correlation&quot;</span><span class="p">]</span>
+
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="Correlation"><a class="viewcode-back" href="../../../api/mutis.correlation.core.Correlation.html#mutis.correlation.core.Correlation">[docs]</a><span class="k">class</span> <span class="nc">Correlation</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Analysis of the correlation of two signals.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    signal1 : `~numpy.ndarray`</span>
+<span class="sd">        Values of the time axis.</span>
+<span class="sd">    signal2 : `~numpy.ndarray`</span>
+<span class="sd">        Values of the signal axis.</span>
+<span class="sd">    method : str</span>
+<span class="sd">        Method used to correlate the signals.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signal1</span><span class="p">,</span> <span class="n">signal2</span><span class="p">,</span> <span class="n">method</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">signal1</span> <span class="o">=</span> <span class="n">signal1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">signal2</span> <span class="o">=</span> <span class="n">signal2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="n">method</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nb</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">l1s</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">l2s</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">l3s</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">signs</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="Correlation.synth_gen"><a class="viewcode-back" href="../../../api/mutis.correlation.core.Correlation.html#mutis.correlation.core.Correlation.synth_gen">[docs]</a>    <span class="k">def</span> <span class="nf">synth_gen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">=</span> <span class="n">N</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">signal1</span><span class="o">.</span><span class="n">synth_gen</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">signal2</span><span class="o">.</span><span class="n">synth_gen</span><span class="p">(</span><span class="n">N</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Correlation.gen_corr"><a class="viewcode-back" href="../../../api/mutis.correlation.core.Correlation.html#mutis.correlation.core.Correlation.gen_corr">[docs]</a>    <span class="k">def</span> <span class="nf">gen_corr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">mc_corr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">times</span><span class="o">.</span><span class="n">size</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;welsh_ab&quot;</span><span class="p">:</span>
+                <span class="n">mc_corr</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">welsh_ab</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">signal1</span><span class="o">.</span><span class="n">times</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">signal1</span><span class="o">.</span><span class="n">synth</span><span class="p">[</span><span class="n">n</span><span class="p">],</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">signal2</span><span class="o">.</span><span class="n">times</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">signal2</span><span class="o">.</span><span class="n">synth</span><span class="p">[</span><span class="n">n</span><span class="p">],</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">times</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">dts</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;kroedel_ab&quot;</span><span class="p">:</span>
+                <span class="n">mc_corr</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">kroedel_ab</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">signal1</span><span class="o">.</span><span class="n">times</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">signal1</span><span class="o">.</span><span class="n">synth</span><span class="p">[</span><span class="n">n</span><span class="p">],</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">signal2</span><span class="o">.</span><span class="n">times</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">signal2</span><span class="o">.</span><span class="n">synth</span><span class="p">[</span><span class="n">n</span><span class="p">],</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">times</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">dts</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;numpy&quot;</span><span class="p">:</span>
+                <span class="n">mc_corr</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">nindcf</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">signal1</span><span class="o">.</span><span class="n">times</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">signal1</span><span class="o">.</span><span class="n">synth</span><span class="p">[</span><span class="n">n</span><span class="p">],</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">signal2</span><span class="o">.</span><span class="n">times</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">signal2</span><span class="o">.</span><span class="n">synth</span><span class="p">[</span><span class="n">n</span><span class="p">],</span>
+                <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">l3s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">mc_corr</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.135</span><span class="p">,</span> <span class="mf">99.865</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">l2s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">mc_corr</span><span class="p">,</span> <span class="p">[</span><span class="mf">2.28</span><span class="p">,</span> <span class="mf">97.73</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">l1s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">mc_corr</span><span class="p">,</span> <span class="p">[</span><span class="mf">15.865</span><span class="p">,</span> <span class="mf">84.135</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;welsh_ab&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">signs</span> <span class="o">=</span> <span class="n">welsh_ab</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">signal1</span><span class="o">.</span><span class="n">times</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">signal1</span><span class="o">.</span><span class="n">signs</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">signal2</span><span class="o">.</span><span class="n">times</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">signal2</span><span class="o">.</span><span class="n">signs</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">times</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dts</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;kroedel_ab&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">signs</span> <span class="o">=</span> <span class="n">kroedel_ab</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">signal1</span><span class="o">.</span><span class="n">times</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">signal1</span><span class="o">.</span><span class="n">signs</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">signal2</span><span class="o">.</span><span class="n">times</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">signal2</span><span class="o">.</span><span class="n">signs</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">times</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dts</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;numpy&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">signs</span> <span class="o">=</span> <span class="n">nindcf</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">signal1</span><span class="o">.</span><span class="n">times</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">signal1</span><span class="o">.</span><span class="n">signs</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">signal2</span><span class="o">.</span><span class="n">times</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">signal2</span><span class="o">.</span><span class="n">signs</span><span class="p">,</span>
+            <span class="p">)</span></div>
+
+<div class="viewcode-block" id="Correlation.plot_corr"><a class="viewcode-back" href="../../../api/mutis.correlation.core.Correlation.html#mutis.correlation.core.Correlation.plot_corr">[docs]</a>    <span class="k">def</span> <span class="nf">plot_corr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">times</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">l1s</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;c-.&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">times</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">l1s</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;c-.&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;$1\sigma$&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">times</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">l2s</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;k--&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">times</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">l2s</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;k--&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;$2\sigma$&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">times</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">l3s</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;r-&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">times</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">l3s</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;r-&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;$3\sigma$&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">times</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">signs</span><span class="p">,</span> <span class="s2">&quot;b.--&quot;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">dt1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">signal1</span><span class="o">.</span><span class="n">times</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">signal1</span><span class="o">.</span><span class="n">times</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+        <span class="n">dt2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">signal2</span><span class="o">.</span><span class="n">times</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">signal2</span><span class="o">.</span><span class="n">times</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+
+        <span class="c1"># same limit</span>
+        <span class="n">sl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">([</span><span class="n">dt1</span><span class="p">,</span> <span class="n">dt2</span><span class="p">])</span> <span class="o">/</span> <span class="mi">2</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span>
+            <span class="n">x</span><span class="o">=-</span><span class="n">sl</span><span class="p">,</span>
+            <span class="n">ymin</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">ymax</span><span class="o">=+</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span>
+            <span class="n">linewidth</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+            <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span>
+            <span class="n">x</span><span class="o">=+</span><span class="n">sl</span><span class="p">,</span>
+            <span class="n">ymin</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">ymax</span><span class="o">=+</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span>
+            <span class="n">linewidth</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+            <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># valid limit</span>
+        <span class="n">vl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">([</span><span class="n">dt1</span><span class="p">,</span> <span class="n">dt2</span><span class="p">])</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">([</span><span class="n">dt1</span><span class="p">,</span> <span class="n">dt2</span><span class="p">])</span> <span class="o">/</span> <span class="mi">2</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span>
+            <span class="n">x</span><span class="o">=-</span><span class="n">vl</span><span class="p">,</span>
+            <span class="n">ymin</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">ymax</span><span class="o">=+</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span>
+            <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span>
+            <span class="n">x</span><span class="o">=+</span><span class="n">vl</span><span class="p">,</span>
+            <span class="n">ymin</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">ymax</span><span class="o">=+</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span>
+            <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Correlation.gen_times"><a class="viewcode-back" href="../../../api/mutis.correlation.core.Correlation.html#mutis.correlation.core.Correlation.gen_times">[docs]</a>    <span class="k">def</span> <span class="nf">gen_times</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ndtmax</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">nbinsmin</span><span class="o">=</span><span class="mi">121</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns times and bins to use with adaptative binning methods.</span>
+<span class="sd">        Sensible values for these parameters must be found by hand, and depend</span>
+<span class="sd">        on the characteristics of input data.</span>
+
+<span class="sd">        dt0:</span>
+<span class="sd">            minimum bin size, also used as step in a.b.</span>
+<span class="sd">            default: dt0 = 0.25*(tmax -tmin)/np.sqrt(t1.size*t2.size+1)</span>
+<span class="sd">            (more or less a statistically reasonable binning,</span>
+<span class="sd">            to increase precision)</span>
+<span class="sd">        ndtmax:</span>
+<span class="sd">            Maximum size of bins (in units of dt0).</span>
+<span class="sd">            0 &lt; ndtmax &lt; 1: fixed dt (=dt0) (no a.b)</span>
+<span class="sd">            1 &lt; ndtmax: allow adaptative time binning</span>
+<span class="sd">            default: 0.9</span>
+<span class="sd">        nbinsmin:</span>
+<span class="sd">            if the data has a lot of error, higher values are needed</span>
+<span class="sd">            to soften the correlation beyond spurious variability.</span>
+<span class="sd">            default: 121 (11x11)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">t1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">signal1</span><span class="o">.</span><span class="n">times</span>
+        <span class="n">t2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">signal2</span><span class="o">.</span><span class="n">times</span>
+
+        <span class="c1"># tmin = -(np.min([t1.max(),t2.max()]) - np.max([t1.min(),t2.min()]))</span>
+        <span class="n">tmax</span> <span class="o">=</span> <span class="o">+</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">([</span><span class="n">t1</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="n">t2</span><span class="o">.</span><span class="n">max</span><span class="p">()])</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">([</span><span class="n">t1</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">t2</span><span class="o">.</span><span class="n">min</span><span class="p">()]))</span>
+        <span class="n">tmin</span> <span class="o">=</span> <span class="o">-</span><span class="n">tmax</span>
+
+        <span class="k">if</span> <span class="n">dt0</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># dt0 = 1*(tmax-tmin)/(t1.size+t2.size-1)</span>
+            <span class="c1"># dt0 = 1.0*(tmax-tmin)/np.sqrt(t1.size*t2.size+1)</span>
+            <span class="c1"># dt0 = 30/365; ndtmax=2.9; nbinsmin=12*12</span>
+            <span class="c1"># dt0 = 0.25; ndtmax=10; nbinsmin=5</span>
+            <span class="n">dt0</span> <span class="o">=</span> <span class="mf">0.25</span> <span class="o">*</span> <span class="p">(</span><span class="n">tmax</span> <span class="o">-</span> <span class="n">tmin</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">t1</span><span class="o">.</span><span class="n">size</span> <span class="o">*</span> <span class="n">t2</span><span class="o">.</span><span class="n">size</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">t1m</span><span class="p">,</span> <span class="n">t2m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">t1</span><span class="p">,</span> <span class="n">t2</span><span class="p">)</span>
+        <span class="n">ti</span> <span class="o">=</span> <span class="n">tmin</span>
+        <span class="n">tf</span> <span class="o">=</span> <span class="n">ti</span> <span class="o">+</span> <span class="n">dt0</span>
+
+        <span class="k">while</span> <span class="n">tf</span> <span class="o">&lt;</span> <span class="n">tmax</span><span class="p">:</span>
+            <span class="n">tm</span> <span class="o">=</span> <span class="p">(</span><span class="n">ti</span> <span class="o">+</span> <span class="n">tf</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+            <span class="n">dtm</span> <span class="o">=</span> <span class="p">(</span><span class="n">tf</span> <span class="o">-</span> <span class="n">ti</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+            <span class="n">nbins</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((((</span><span class="n">tm</span> <span class="o">-</span> <span class="n">dtm</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">&lt;</span> <span class="p">(</span><span class="n">t2m</span> <span class="o">-</span> <span class="n">t1m</span><span class="p">))</span> <span class="o">&amp;</span> <span class="p">((</span><span class="n">t2m</span> <span class="o">-</span> <span class="n">t1m</span><span class="p">)</span> <span class="o">&lt;</span> <span class="p">(</span><span class="n">tm</span> <span class="o">+</span> <span class="n">dtm</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))))</span>
+            <span class="k">if</span> <span class="n">dtm</span> <span class="o">&lt;</span> <span class="n">dt0</span> <span class="o">*</span> <span class="n">ndtmax</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">nbins</span> <span class="o">&gt;</span> <span class="n">nbinsmin</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">times</span><span class="p">,</span> <span class="n">tm</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">dts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dts</span><span class="p">,</span> <span class="n">dtm</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">nb</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nb</span><span class="p">,</span> <span class="n">nbins</span><span class="p">)</span>
+                    <span class="n">ti</span><span class="p">,</span> <span class="n">tf</span> <span class="o">=</span> <span class="n">tf</span><span class="p">,</span> <span class="n">tf</span> <span class="o">+</span> <span class="n">dt0</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">tf</span> <span class="o">=</span> <span class="n">tf</span> <span class="o">+</span> <span class="n">dt0</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ti</span><span class="p">,</span> <span class="n">tf</span> <span class="o">=</span> <span class="n">tf</span><span class="p">,</span> <span class="n">tf</span> <span class="o">+</span> <span class="n">dt0</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021 MUTIS Developers.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

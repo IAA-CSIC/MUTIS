@@ -5,6 +5,7 @@ extensions = [
     "sphinx_rtd_theme",
     "sphinx.ext.mathjax",
     "sphinx_automodapi.automodapi",
+    "sphinx.ext.viewcode",
 ]
 
 html_theme = "sphinx_rtd_theme"
