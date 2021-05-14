@@ -5,7 +5,12 @@ from . import correlation
 from . import signal
 from . import utils
 
-__all__ = ["__version__"]
+__all__ = [
+    "correlation",
+    "signal",
+    "utils",
+    "__version__",
+]
 
 import pkg_resources
 
