@@ -44,7 +44,7 @@ class Signal:
     def synth_gen(self, N):
         self.synth = np.empty((N, self.times.size))
 
-        for n in range(0, N):
+        for n in range(N):
             if self.method == "lc_gen_samp":
                 self.synth[n] = lc_gen_samp(self.signs)
 
@@ -138,7 +138,7 @@ class Signal:
         }
 
     def OU_check_gen(self, theta, mu, sigma):
-        t, y = self.t, self.s
+        t, y = self.times, self.signs
         y2 = lc_gen_ou(theta, mu, sigma, self.t, scale=np.std(self.s), loc=np.mean(self.s))
 
         # Plot the two signals
