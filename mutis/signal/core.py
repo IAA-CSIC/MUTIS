@@ -44,7 +44,7 @@ class Signal:
     def synth_gen(self, N):
         self.synth = np.empty((N, self.times.size))
 
-        for n in range(0, N):
+        for n in range(N):
             if self.method == "lc_gen_samp":
                 self.synth[n] = lc_gen_samp(self.signs)
 

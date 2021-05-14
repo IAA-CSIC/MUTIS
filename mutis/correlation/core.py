@@ -53,7 +53,7 @@ class Correlation:
 
         mc_corr = np.empty((self.N, self.times.size))
 
-        for n in range(0, self.N):
+        for n in range(self.N):
             if self.method == "welsh_ab":
                 mc_corr[n] = welsh_ab(
                     self.signal1.times,
