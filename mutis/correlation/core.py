@@ -167,6 +167,21 @@ class Correlation:
         plt.legend()
         plt.show()
 
+    def plot_times(self):
+        fig, ax = plt.subplots(nrows=2, ncols=1, sharex=True)
+
+        fig.suptitle('Total bins: {:d}'.format(self.times.size))
+        ax[0].plot(self.times, self.nb, '.')
+        ax[0].errorbar(self.times, y=self.nb, xerr=self.dts / 2, fmt='none')
+        ax[0].set_ylabel('$n_i$')
+        ax[0].grid()
+
+        ax[1].plot(self.times, self.dts, '.')
+        ax[1].set_ylabel('$dt_i$')
+        ax[1].grid()
+
+        fig.show()
+
     def gen_times(self, dt0=None, ndtmax=0.9, nbinsmin=121):
         """Returns times and bins to use with adaptative binning methods.
 
