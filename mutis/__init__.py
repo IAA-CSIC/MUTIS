@@ -1,7 +1,16 @@
 # Licensed under a 3-clause BSD style license - see LICENSE
 """MUTIS: A Python package for muti-wavelength time series analysis."""
 
-__all__ = ["__version__"]
+from . import correlation
+from . import signal
+from . import utils
+
+__all__ = [
+    "correlation",
+    "signal",
+    "utils",
+    "__version__",
+]
 
 import pkg_resources
 
@@ -10,3 +19,5 @@ try:
 except pkg_resources.DistributionNotFound:
     # package is not installed
     pass
+
+
