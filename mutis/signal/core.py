@@ -24,11 +24,11 @@ class Signal:
 
     Parameters
     ----------
-    times : numpy.ndarray
+    times : :np:class:`~numpy.ndarray`
         Values of the time axis.
-    signs : numpy.ndarray
+    signs : :np:class:`~numpy.ndarray`
         Values of the signal axis.
-    method : str
+    method : :py:class:`str`
         Method used to generate the synthetic signal.
     """
 

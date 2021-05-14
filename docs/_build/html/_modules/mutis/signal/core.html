@@ -191,11 +191,11 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    times : numpy.ndarray</span>
+<span class="sd">    times : :np:class:`~numpy.ndarray`</span>
 <span class="sd">        Values of the time axis.</span>
-<span class="sd">    signs : numpy.ndarray</span>
+<span class="sd">    signs : :np:class:`~numpy.ndarray`</span>
 <span class="sd">        Values of the signal axis.</span>
-<span class="sd">    method : str</span>
+<span class="sd">    method : :py:class:`str`</span>
 <span class="sd">        Method used to generate the synthetic signal.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -211,7 +211,7 @@
 <div class="viewcode-block" id="Signal.synth_gen"><a class="viewcode-back" href="../../../api/mutis.signal.Signal.html#mutis.signal.Signal.synth_gen">[docs]</a>    <span class="k">def</span> <span class="nf">synth_gen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">synth</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">times</span><span class="o">.</span><span class="n">size</span><span class="p">))</span>
 
-        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;lc_gen_samp&quot;</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">synth</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">lc_gen_samp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">signs</span><span class="p">)</span>
 

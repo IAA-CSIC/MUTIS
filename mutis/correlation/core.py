@@ -20,11 +20,11 @@ class Correlation:
 
     Parameters
     ----------
-    signal1 : numpy.ndarray
+    signal1 : :class:`~mutis.signal.Signal`
         Values of the time axis.
-    signal2 : numpy.ndarray
+    signal2 : :class:`~mutis.signal.Signal`
         Values of the signal axis.
-    method : str
+    method : :py:class:`str`
         Method used to correlate the signals.
     """
 
