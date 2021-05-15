@@ -33,8 +33,8 @@ class Signal:
     """
 
     def __init__(self, times, signs, method):
-        self.times = times
-        self.signs = signs
+        self.times = np.array(times)
+        self.signs = np.array(signs)
         self.method = method
         self.synth = None
         self.theta = None

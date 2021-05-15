@@ -480,8 +480,8 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -496,24 +496,10 @@ div.rendered_html tbody tr:hover {
 <span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mplt</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 
-<span class="kn">import</span> <span class="nn">mutis</span>
+<span class="kn">from</span> <span class="nn">mutis.signal</span> <span class="kn">import</span> <span class="n">Signal</span>
+<span class="kn">from</span> <span class="nn">mutis.correlation</span> <span class="kn">import</span> <span class="n">Correlation</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">ImportError</span>                               Traceback (most recent call last)
-<span class="ansi-green-fg">&lt;ipython-input-13-12f8bf7b09e1&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-intense-fg ansi-bold">     10</span> <span class="ansi-green-fg">import</span> matplotlib<span class="ansi-blue-fg">.</span>pyplot <span class="ansi-green-fg">as</span> plt
-<span class="ansi-green-intense-fg ansi-bold">     11</span>
-<span class="ansi-green-fg">---&gt; 12</span><span class="ansi-red-fg"> </span><span class="ansi-green-fg">from</span> <span class="ansi-blue-fg">.</span><span class="ansi-blue-fg">.</span> <span class="ansi-green-fg">import</span> mutis
-
-<span class="ansi-red-fg">ImportError</span>: attempted relative import with no known parent package
-</pre></div></div>
 </div>
 <div class="section" id="Load-data">
 <h2>Load data<a class="headerlink" href="#Load-data" title="Permalink to this headline">¶</a></h2>
@@ -742,6 +728,16 @@ div.rendered_html tbody tr:hover {
 <span class="n">data</span><span class="p">[</span><span class="s1">&#39;gamma&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+&lt;ipython-input-5-b0fdef31e033&gt;:7: DeprecationWarning: `np.float` is a deprecated alias for the builtin `float`. To silence this warning, use `float` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.float64` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  data[&#39;gamma&#39;].insert(2, &#39;CFlux&#39;, value=np.asarray(CFlux, dtype=np.float))
+</pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
@@ -1034,15 +1030,6 @@ div.rendered_html tbody tr:hover {
 <img alt="../_images/recipes_mutis_workflow_8_0.png" src="../_images/recipes_mutis_workflow_8_0.png" />
 </div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
-</pre></div>
-</div>
-</div>
 </div>
 <div class="section" id="Correlate-data">
 <h2>Correlate data<a class="headerlink" href="#Correlate-data" title="Permalink to this headline">¶</a></h2>
@@ -1065,8 +1052,8 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">sig1</span> <span class="o">=</span> <span class="n">mutis</span><span class="o">.</span><span class="n">Signal</span><span class="p">(</span><span class="n">t1</span><span class="p">,</span> <span class="n">s1</span><span class="p">,</span> <span class="s1">&#39;lc_gen_psd&#39;</span><span class="p">)</span>
-<span class="n">sig2</span> <span class="o">=</span> <span class="n">mutis</span><span class="o">.</span><span class="n">Signal</span><span class="p">(</span><span class="n">t2</span><span class="p">,</span> <span class="n">s2</span><span class="p">,</span> <span class="s1">&#39;lc_gen_ou&#39;</span><span class="p">)</span>
+<span></span><span class="n">sig1</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="n">t1</span><span class="p">,</span> <span class="n">s1</span><span class="p">,</span> <span class="s1">&#39;lc_gen_psd&#39;</span><span class="p">)</span>
+<span class="n">sig2</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="n">t2</span><span class="p">,</span> <span class="n">s2</span><span class="p">,</span> <span class="s1">&#39;lc_gen_ou&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1076,7 +1063,7 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">correlation</span> <span class="o">=</span> <span class="n">mutis</span><span class="o">.</span><span class="n">Correlation</span><span class="p">(</span><span class="n">sig1</span><span class="p">,</span> <span class="n">sig2</span><span class="p">,</span> <span class="s1">&#39;welsh_ab&#39;</span><span class="p">)</span>
+<span></span><span class="n">correlation</span> <span class="o">=</span> <span class="n">Correlation</span><span class="p">(</span><span class="n">sig1</span><span class="p">,</span> <span class="n">sig2</span><span class="p">,</span> <span class="s1">&#39;welsh_ab&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1109,7 +1096,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-/Users/juan/Desktop/Doctorado/work/0235+164/mutis_class.py:615: UserWarning: Matplotlib is currently using module://ipykernel.pylab.backend_inline, which is a non-GUI backend, so cannot show the figure.
+/Users/jer/git/MUTIS/mutis/correlation/core.py:182: UserWarning: Matplotlib is currently using module://ipykernel.pylab.backend_inline, which is a non-GUI backend, so cannot show the figure.
   fig.show()
 </pre></div></div>
 </div>
@@ -1117,7 +1104,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/recipes_mutis_workflow_21_1.png" src="../_images/recipes_mutis_workflow_21_1.png" />
+<img alt="../_images/recipes_mutis_workflow_20_1.png" src="../_images/recipes_mutis_workflow_20_1.png" />
 </div>
 </div>
 <p><strong>HUMAN INTERVENTION</strong></p>
@@ -1131,7 +1118,8 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">fits</span> <span class="o">=</span> <span class="n">sig2</span><span class="o">.</span><span class="n">OU_fit</span><span class="p">()</span>
+<span></span><span class="o">%%time</span>
+<span class="n">fits</span> <span class="o">=</span> <span class="n">sig2</span><span class="o">.</span><span class="n">OU_fit</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -1140,25 +1128,34 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-/Users/juan/Desktop/Doctorado/work/0235+164/mutis_class.py:411: RuntimeWarning: invalid value encountered in double_scalars
-  pdf = lambda x,l,mu: (l*mu)**(1+l)/sp.special.gamma(1+l)*np.exp(-l*mu/x)/x**(l+2)
-/Users/juan/miniconda3/lib/python3.8/site-packages/scipy/stats/_distn_infrastructure.py:1715: IntegrationWarning: The algorithm does not converge.  Roundoff error is detected
+/Users/jer/git/MUTIS/mutis/signal/core.py:165: RuntimeWarning: invalid value encountered in double_scalars
+  return (ll * mu) ** (1 + ll) / scipy_special.gamma(1 + ll) * np.exp(-ll * mu / xx) / xx ** (ll + 2)
+/opt/miniconda3/envs/mutis/lib/python3.9/site-packages/scipy/stats/_distn_infrastructure.py:1790: IntegrationWarning: The algorithm does not converge.  Roundoff error is detected
   in the extrapolation table.  It is assumed that the requested tolerance
   cannot be achieved, and that the returned result (if full_output = 1) is
   the best which can be obtained.
   return integrate.quad(self._mom_integ1, 0, 1, args=(m,)+args)[0]
-/Users/juan/Desktop/Doctorado/work/0235+164/mutis_class.py:411: RuntimeWarning: divide by zero encountered in true_divide
-  pdf = lambda x,l,mu: (l*mu)**(1+l)/sp.special.gamma(1+l)*np.exp(-l*mu/x)/x**(l+2)
-/Users/juan/Desktop/Doctorado/work/0235+164/mutis_class.py:411: RuntimeWarning: invalid value encountered in true_divide
-  pdf = lambda x,l,mu: (l*mu)**(1+l)/sp.special.gamma(1+l)*np.exp(-l*mu/x)/x**(l+2)
+/Users/jer/git/MUTIS/mutis/signal/core.py:165: RuntimeWarning: divide by zero encountered in true_divide
+  return (ll * mu) ** (1 + ll) / scipy_special.gamma(1 + ll) * np.exp(-ll * mu / xx) / xx ** (ll + 2)
+/Users/jer/git/MUTIS/mutis/signal/core.py:165: RuntimeWarning: invalid value encountered in true_divide
+  return (ll * mu) ** (1 + ll) / scipy_special.gamma(1 + ll) * np.exp(-ll * mu / xx) / xx ** (ll + 2)
 </pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/recipes_mutis_workflow_23_1.png" src="../_images/recipes_mutis_workflow_23_1.png" />
+</div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/recipes_mutis_workflow_24_1.png" src="../_images/recipes_mutis_workflow_24_1.png" />
-</div>
+<div class="highlight"><pre>
+CPU times: user 28.7 s, sys: 413 ms, total: 29.1 s
+Wall time: 29.2 s
+</pre></div></div>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
@@ -1200,21 +1197,21 @@ div.rendered_html tbody tr:hover {
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/recipes_mutis_workflow_27_0.png" src="../_images/recipes_mutis_workflow_27_0.png" />
+<img alt="../_images/recipes_mutis_workflow_26_0.png" src="../_images/recipes_mutis_workflow_26_0.png" />
 </div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/recipes_mutis_workflow_27_1.png" src="../_images/recipes_mutis_workflow_27_1.png" />
+<img alt="../_images/recipes_mutis_workflow_26_1.png" src="../_images/recipes_mutis_workflow_26_1.png" />
 </div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/recipes_mutis_workflow_27_2.png" src="../_images/recipes_mutis_workflow_27_2.png" />
+<img alt="../_images/recipes_mutis_workflow_26_2.png" src="../_images/recipes_mutis_workflow_26_2.png" />
 </div>
 </div>
 <p><strong>Set the parameters</strong></p>
@@ -1223,7 +1220,7 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">sig2</span><span class="o">.</span><span class="n">OU_th</span><span class="p">,</span> <span class="n">sig2</span><span class="o">.</span><span class="n">OU_mu</span><span class="p">,</span> <span class="n">sig2</span><span class="o">.</span><span class="n">OU_sigma</span> <span class="o">=</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">6</span>
+<span></span><span class="n">sig2</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span> <span class="n">sig2</span><span class="o">.</span><span class="n">mu</span><span class="p">,</span> <span class="n">sig2</span><span class="o">.</span><span class="n">sigma</span> <span class="o">=</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">6</span>
 </pre></div>
 </div>
 </div>
@@ -1235,31 +1232,42 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">correlation</span><span class="o">.</span><span class="n">synth_gen</span><span class="p">(</span><span class="mi">400</span><span class="p">)</span>
+<span></span><span class="o">%%time</span>
+<span class="n">correlation</span><span class="o">.</span><span class="n">synth_gen</span><span class="p">(</span><span class="mi">400</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
-<div class="output_area stderr docutils container">
+<div class="output_area docutils container">
 <div class="highlight"><pre>
-/Users/juan/miniconda3/lib/python3.8/site-packages/scipy/signal/spectral.py:1961: UserWarning: nperseg = 256 is greater than input length  = 105, using nperseg = 105
-  warnings.warn(&#39;nperseg = {0:d} is greater than input length &#39;
+CPU times: user 1min 8s, sys: 349 ms, total: 1min 8s
+Wall time: 1min 9s
 </pre></div></div>
 </div>
 </div>
 </div>
 <div class="section" id="Generate-and-plot-correlations">
 <h3>Generate and plot correlations<a class="headerlink" href="#Generate-and-plot-correlations" title="Permalink to this headline">¶</a></h3>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">correlation</span><span class="o">.</span><span class="n">gen_corr</span><span class="p">();</span>
+<span></span><span class="o">%%time</span>
+<span class="n">correlation</span><span class="o">.</span><span class="n">gen_corr</span><span class="p">();</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+CPU times: user 18.3 s, sys: 250 ms, total: 18.5 s
+Wall time: 18.7 s
+</pre></div></div>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
@@ -1274,16 +1282,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/recipes_mutis_workflow_34_0.png" src="../_images/recipes_mutis_workflow_34_0.png" />
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
-</pre></div>
+<img alt="../_images/recipes_mutis_workflow_33_0.png" src="../_images/recipes_mutis_workflow_33_0.png" />
 </div>
 </div>
 <div class="nbinput nblast docutils container">

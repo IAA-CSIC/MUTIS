@@ -14,3 +14,5 @@ eggs
 # compiled files
 __pycache__
 
+docs/recipes/data
+docs/recipes/.ipynb_checkpoints

@@ -7,7 +7,14 @@ import numpy as np
 import scipy.signal as scipy_signal
 import nfft
 
-__all__ = ["lc_gen_samp", "lc_gen_psd_std", "lc_gen_psd_nft", "lc_gen_ou"]
+__all__ = [
+    "lc_gen_samp",
+    "lc_gen_psd_std",
+    "lc_gen_psd_nft",
+    "lc_gen_ou",
+    "lc_gen_psd_lombscargle",
+    "lc_gen_psd_fft",
+]
 
 log = logging.getLogger(__name__)
 

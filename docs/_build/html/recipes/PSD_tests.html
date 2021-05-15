@@ -474,7 +474,8 @@ div.rendered_html tbody tr:hover {
 <span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mplt</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 
-<span class="kn">import</span> <span class="nn">mutis</span>
+<span class="kn">from</span> <span class="nn">mutis.signal.methods</span> <span class="kn">import</span> <span class="o">*</span>
+
 <span class="kn">import</span> <span class="nn">nfft</span> <span class="c1"># non uniform fourier transform</span>
 
 <span class="kn">import</span> <span class="nn">traceback</span>
@@ -501,7 +502,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[&lt;matplotlib.lines.Line2D at 0x7fa070637910&gt;]
+[&lt;matplotlib.lines.Line2D at 0x158fe2790&gt;]
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -530,15 +531,6 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <img alt="../_images/recipes_PSD_tests_5_0.png" src="../_images/recipes_PSD_tests_5_0.png" />
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
-</pre></div>
 </div>
 </div>
 <div class="nbinput nblast docutils container">
@@ -620,13 +612,13 @@ div.rendered_html tbody tr:hover {
 <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">s</span><span class="p">,</span><span class="s1">&#39;b-&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;orig&#39;</span><span class="p">)</span>
 
 <span class="c1">#try:</span>
-<span class="n">s2</span> <span class="o">=</span> <span class="n">mutis</span><span class="o">.</span><span class="n">lc_gen_psd_lombscargle</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">s</span><span class="p">,</span><span class="kc">None</span><span class="p">)</span>
+<span class="n">s2</span> <span class="o">=</span> <span class="n">lc_gen_psd_lombscargle</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">s</span><span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">s2</span><span class="p">,</span> <span class="s1">&#39;r-&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;nufft LS&#39;</span><span class="p">)</span>
 
-<span class="n">s4</span> <span class="o">=</span> <span class="n">mutis</span><span class="o">.</span><span class="n">lc_gen_psd_nft</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">s</span><span class="p">,</span><span class="kc">None</span><span class="p">)</span>
+<span class="n">s4</span> <span class="o">=</span> <span class="n">lc_gen_psd_nft</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">s</span><span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">s4</span><span class="p">,</span> <span class="s1">&#39;k-&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;nufft nfft&#39;</span><span class="p">)</span>
 
-<span class="n">s3</span> <span class="o">=</span> <span class="n">mutis</span><span class="o">.</span><span class="n">lc_gen_psd_fft</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span><span class="n">s</span><span class="p">,</span><span class="kc">None</span><span class="p">)</span>
+<span class="n">s3</span> <span class="o">=</span> <span class="n">lc_gen_psd_fft</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">s3</span><span class="p">,</span> <span class="s1">&#39;m-&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;fft&#39;</span><span class="p">)</span>
 
 <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
@@ -644,7 +636,7 @@ div.rendered_html tbody tr:hover {
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 0.9258046721637005
-(0.9258046721637007-3.469446951953614e-20j)
+(0.9258046721637004+5.204170427930421e-19j)
 0
 </pre></div></div>
 </div>
@@ -653,11 +645,11 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-/Users/juan/miniconda3/lib/python3.8/site-packages/numpy/core/_asarray.py:102: ComplexWarning: Casting complex values to real discards the imaginary part
+/opt/miniconda3/envs/mutis/lib/python3.9/site-packages/numpy/core/_asarray.py:102: ComplexWarning: Casting complex values to real discards the imaginary part
   return array(a, dtype, copy=False, order=order)
-/Users/juan/miniconda3/lib/python3.8/site-packages/scipy/signal/spectral.py:1961: UserWarning: nperseg = 256 is greater than input length  = 100, using nperseg = 100
+/opt/miniconda3/envs/mutis/lib/python3.9/site-packages/scipy/signal/spectral.py:1961: UserWarning: nperseg = 256 is greater than input length  = 100, using nperseg = 100
   warnings.warn(&#39;nperseg = {0:d} is greater than input length &#39;
-&lt;ipython-input-6-c869ed589a23&gt;:16: UserWarning: Matplotlib is currently using module://ipykernel.pylab.backend_inline, which is a non-GUI backend, so cannot show the figure.
+&lt;ipython-input-6-0664289ce7d7&gt;:16: UserWarning: Matplotlib is currently using module://ipykernel.pylab.backend_inline, which is a non-GUI backend, so cannot show the figure.
   fig.show()
 </pre></div></div>
 </div>
@@ -665,7 +657,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/recipes_PSD_tests_8_2.png" src="../_images/recipes_PSD_tests_8_2.png" />
+<img alt="../_images/recipes_PSD_tests_7_2.png" src="../_images/recipes_PSD_tests_7_2.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
@@ -729,7 +721,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-/Users/juan/miniconda3/lib/python3.8/site-packages/numpy/core/_asarray.py:102: ComplexWarning: Casting complex values to real discards the imaginary part
+/opt/miniconda3/envs/mutis/lib/python3.9/site-packages/numpy/core/_asarray.py:102: ComplexWarning: Casting complex values to real discards the imaginary part
   return array(a, dtype, copy=False, order=order)
 &lt;ipython-input-7-e35e392ead9c&gt;:10: UserWarning: Matplotlib is currently using module://ipykernel.pylab.backend_inline, which is a non-GUI backend, so cannot show the figure.
   fig.show()
@@ -741,32 +733,14 @@ div.rendered_html tbody tr:hover {
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/recipes_PSD_tests_9_1.png" src="../_images/recipes_PSD_tests_9_1.png" />
+<img alt="../_images/recipes_PSD_tests_8_1.png" src="../_images/recipes_PSD_tests_8_1.png" />
 </div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/recipes_PSD_tests_9_2.png" src="../_images/recipes_PSD_tests_9_2.png" />
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
-</pre></div>
+<img alt="../_images/recipes_PSD_tests_8_2.png" src="../_images/recipes_PSD_tests_8_2.png" />
 </div>
 </div>
 <div class="section" id="FT-and-iFT-with-NDFT">
@@ -803,7 +777,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/recipes_PSD_tests_13_1.png" src="../_images/recipes_PSD_tests_13_1.png" />
+<img alt="../_images/recipes_PSD_tests_10_1.png" src="../_images/recipes_PSD_tests_10_1.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
@@ -824,9 +798,9 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-/Users/juan/miniconda3/lib/python3.8/site-packages/numpy/core/_asarray.py:102: ComplexWarning: Casting complex values to real discards the imaginary part
+/opt/miniconda3/envs/mutis/lib/python3.9/site-packages/numpy/core/_asarray.py:102: ComplexWarning: Casting complex values to real discards the imaginary part
   return array(a, dtype, copy=False, order=order)
-/Users/juan/miniconda3/lib/python3.8/site-packages/numpy/core/_asarray.py:102: ComplexWarning: Casting complex values to real discards the imaginary part
+/opt/miniconda3/envs/mutis/lib/python3.9/site-packages/numpy/core/_asarray.py:102: ComplexWarning: Casting complex values to real discards the imaginary part
   return array(a, dtype, copy=False, order=order)
 </pre></div></div>
 </div>
@@ -836,14 +810,14 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[&lt;matplotlib.lines.Line2D at 0x7fa071729fa0&gt;]
+[&lt;matplotlib.lines.Line2D at 0x1592d9040&gt;]
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/recipes_PSD_tests_14_2.png" src="../_images/recipes_PSD_tests_14_2.png" />
+<img alt="../_images/recipes_PSD_tests_11_2.png" src="../_images/recipes_PSD_tests_11_2.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
@@ -866,34 +840,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/recipes_PSD_tests_15_0.png" src="../_images/recipes_PSD_tests_15_0.png" />
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
-</pre></div>
+<img alt="../_images/recipes_PSD_tests_12_0.png" src="../_images/recipes_PSD_tests_12_0.png" />
 </div>
 </div>
 </div>

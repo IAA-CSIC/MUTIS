@@ -495,7 +495,7 @@ div.rendered_html tbody tr:hover {
 <h2>Set up parameters<a class="headerlink" href="#Set-up-parameters" title="Permalink to this headline">¶</a></h2>
 <p>Define the parameters of the process and its precision on integration.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -513,7 +513,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -549,8 +549,8 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-CPU times: user 14.2 s, sys: 77.4 ms, total: 14.3 s
-Wall time: 14.3 s
+CPU times: user 14.3 s, sys: 114 ms, total: 14.5 s
+Wall time: 14.5 s
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -576,7 +576,7 @@ Wall time: 14.3 s
 <div class="section" id="Just-integrate-the-fuck-out-of-it">
 <h3>Just integrate the fuck out of it<a class="headerlink" href="#Just-integrate-the-fuck-out-of-it" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -597,12 +597,12 @@ Wall time: 14.3 s
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-CPU times: user 42.9 ms, sys: 2.38 ms, total: 45.3 ms
-Wall time: 44.6 ms
+CPU times: user 33.1 ms, sys: 1.96 ms, total: 35 ms
+Wall time: 34.4 ms
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -653,11 +653,24 @@ Wall time: 44.6 ms
 </pre></div>
 </div>
 </div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+&lt;ipython-input-7-9df2e7904adf&gt;:1: DeprecationWarning: `np.int` is a deprecated alias for the builtin `int`. To silence this warning, use `int` by itself. Doing this will not modify any behavior and is safe. When replacing `np.int`, you may wish to use e.g. `np.int64` or `np.int32` to specify the precision. If you wish to review your current use, check the release note link for additional information.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  bins = np.int(y.size**0.5/1.5) #bins=&#39;auto&#39;
+&lt;ipython-input-7-9df2e7904adf&gt;:12: DeprecationWarning: `np.int` is a deprecated alias for the builtin `int`. To silence this warning, use `int` by itself. Doing this will not modify any behavior and is safe. When replacing `np.int`, you may wish to use e.g. `np.int64` or `np.int32` to specify the precision. If you wish to review your current use, check the release note link for additional information.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  bins = np.int(y2.size**0.5/1.5) #bins=&#39;auto&#39;
+</pre></div></div>
+</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/recipes_stochastics_tests_12_0.png" src="../_images/recipes_stochastics_tests_12_0.png" />
+<img alt="../_images/recipes_stochastics_tests_12_1.png" src="../_images/recipes_stochastics_tests_12_1.png" />
 </div>
 </div>
 </div>
@@ -666,7 +679,7 @@ Wall time: 44.6 ms
 <h2>Statistical analysis of the generated curve<a class="headerlink" href="#Statistical-analysis-of-the-generated-curve" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="Plot-distribution-and-fit-psd-curve">
 <h3>Plot distribution and fit psd curve<a class="headerlink" href="#Plot-distribution-and-fit-psd-curve" title="Permalink to this headline">¶</a></h3>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
@@ -678,6 +691,16 @@ Wall time: 44.6 ms
 <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="mf">2.0</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+&lt;ipython-input-8-7ed976a91696&gt;:1: DeprecationWarning: `np.int` is a deprecated alias for the builtin `int`. To silence this warning, use `int` by itself. Doing this will not modify any behavior and is safe. When replacing `np.int`, you may wish to use e.g. `np.int64` or `np.int32` to specify the precision. If you wish to review your current use, check the release note link for additional information.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  bins = np.int(y.size**0.5/2) #bins=&#39;auto&#39;
+</pre></div></div>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
@@ -730,11 +753,11 @@ Wall time: 44.6 ms
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 popt:
-[0.19209029 0.88696641]
+[0.29686848 0.69051166]
 pcov:
-[0.02082977 0.08293122]
+[0.03890713 0.07284093]
 sig_est: (método chusco)
-1.2749961700166188
+1.8780511680161935
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -759,8 +782,8 @@ sig_est: (método chusco)
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-CPU times: user 191 ms, sys: 16.8 ms, total: 207 ms
-Wall time: 207 ms
+CPU times: user 192 ms, sys: 10.5 ms, total: 202 ms
+Wall time: 199 ms
 </pre></div></div>
 </div>
 </div>
@@ -783,7 +806,7 @@ Wall time: 207 ms
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-0.8041078100983965
+0.8016453824716624
 </pre></div></div>
 </div>
 <div class="section" id="Fit-data-to-distribution-with-MLE">
@@ -826,22 +849,10 @@ Wall time: 207 ms
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-/Users/juan/miniconda3/lib/python3.8/site-packages/scipy/stats/_distn_infrastructure.py:1715: IntegrationWarning: The algorithm does not converge.  Roundoff error is detected
-  in the extrapolation table.  It is assumed that the requested tolerance
-  cannot be achieved, and that the returned result (if full_output = 1) is
-  the best which can be obtained.
-  return integrate.quad(self._mom_integ1, 0, 1, args=(m,)+args)[0]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 fit:
-(0.3163106020357258, 0.5377619215782958, 0, 1)
+(0.25048131916095373, 0.7288896759887213, 0, 1)
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -857,7 +868,7 @@ fit:
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/recipes_stochastics_tests_20_3.png" src="../_images/recipes_stochastics_tests_20_3.png" />
+<img alt="../_images/recipes_stochastics_tests_20_2.png" src="../_images/recipes_stochastics_tests_20_2.png" />
 </div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -865,8 +876,8 @@ fit:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-CPU times: user 42.3 s, sys: 369 ms, total: 42.7 s
-Wall time: 42.8 s
+CPU times: user 38.2 s, sys: 408 ms, total: 38.6 s
+Wall time: 39 s
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -884,7 +895,7 @@ Wall time: 42.8 s
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-0.10226153648861665
+0.0804840712510947
 </pre></div></div>
 </div>
 </div>
@@ -1011,9 +1022,9 @@ Wall time: 42.8 s
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 popt:
-[2.27397035e+00 8.41815968e-05 1.62364698e-02]
+[2.68995982e+00 6.49374557e-05 2.26410743e-02]
 pcov:
-[2.45056271e-02 9.85243014e-06 4.09723776e-03]
+[2.84611406e-02 8.87326408e-06 2.01931851e-02]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1030,60 +1041,6 @@ pcov:
 </div>
 <div class="output_area docutils container">
 <img alt="../_images/recipes_stochastics_tests_27_2.png" src="../_images/recipes_stochastics_tests_27_2.png" />
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
-</pre></div>
 </div>
 </div>
 </div>
