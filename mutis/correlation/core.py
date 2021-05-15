@@ -175,7 +175,6 @@ class Correlation:
         ax[0].errorbar(self.times, y=self.nb, xerr=self.dts / 2, fmt='none')
         ax[0].set_ylabel('$n_i$')
         ax[0].grid()
-
         ax[1].plot(self.times, self.dts, '.')
         ax[1].set_ylabel('$dt_i$')
         ax[1].grid()

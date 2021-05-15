@@ -49,7 +49,7 @@ class Signal:
                 self.synth[n] = lc_gen_samp(self.signs)
 
             if self.method == "lc_gen_psd":
-                self.synth[n] = lc_gen_psd(self.signs)
+                self.synth[n] = lc_gen_psd_nft(self.signs, self.times)
 
             if self.method == "lc_gen_ou":
                 if self.theta is None or self.mu is None or self.sigma is None:
@@ -63,13 +63,11 @@ class Signal:
 
         bins = np.int(y.size ** 0.5 / 1.5)  # bins='auto'
         rang = (np.percentile(y, 0), np.percentile(y, 99))
-
         p, x = np.histogram(y, density=True, bins=bins, range=rang)  # bins='sqrt')
         x = (x + np.roll(x, -1))[:-1] / 2.0
 
         # plot histogram
         plt.subplots()
-
         plt.hist(y, density=True, alpha=0.75, bins=bins, range=rang)
         plt.plot(x, p, "r-", alpha=0.5)
 
@@ -83,12 +81,8 @@ class Signal:
         )
         plt.gca().add_artist(anchored_text)
 
-        # fit pdf as a curve
-        pdf = lambda x, l, mu: (l * mu) ** (1 + l) / scipy_special.gamma(1 + l) * np.exp(-l * mu / x) / x ** (l + 2)
-
         try:
-            popt, pcov = scipy_optimize.curve_fit(f=pdf, xdata=x, ydata=p)
-
+            popt, pcov = scipy_optimize.curve_fit(f=self.pdf, xdata=x, ydata=p)
             # print('curve_fit: (l, mu)')
             # print('popt: ')
             # print(popt)
@@ -96,10 +90,11 @@ class Signal:
             # print(np.sqrt(np.diag(pcov)))
 
             x_c = np.linspace(1e-5, 1.1 * np.max(x), 1000)
-            plt.plot(x_c, pdf(x_c, *popt), "k-", label="curve_fit", alpha=0.8)
+            plt.plot(x_c, self.pdf(x_c, *popt), "k-", label="curve_fit", alpha=0.8)
         except Exception as e:
-            print("Some error fitting with curve_fit:")
-            print(e)
+            log.error("Some error fitting with curve_fit")
+            log.error(e)
+            raise e
 
         # fit pdf with MLE
         class OU(scipy_stats.rv_continuous):
@@ -108,24 +103,22 @@ class Signal:
 
         try:
             fit = OU(a=1e-5, b=100 * np.percentile(y, 100)).fit(y, 1, 1, floc=0, fscale=1)
-
             # print('MLE fit: (l, mu)')
             # print(fit)
 
             x_c = np.linspace(0, 1.1 * np.max(x), 1000)
-            plt.plot(x_c, pdf(x_c, fit[0], fit[1]), "k-.", label="MLE", alpha=0.8)
+            plt.plot(x_c, self.pdf(x_c, fit[0], fit[1]), "k-.", label="MLE", alpha=0.8)
         except Exception as e:
-            print("Some error fitting with MLW:")
-            print(e)
+            log.error("Some error fitting with MLW")
+            log.error(e)
+            raise e
 
         plt.legend(loc="lower right")
-
         plt.show()
 
         dy = np.diff(y)
         dt = np.diff(t)
         sigma_est = (np.mean(dy ** 2 / y[:-1] ** 2 / dt)) ** 0.5
-
         th_est1 = fit[0] * sigma_est ** 2 / 2
         th_est2 = popt[0] * sigma_est ** 2 / 2
 
@@ -139,38 +132,34 @@ class Signal:
 
     def OU_check_gen(self, theta, mu, sigma):
         t, y = self.times, self.signs
-        y2 = lc_gen_ou(theta, mu, sigma, self.t, scale=np.std(self.s), loc=np.mean(self.s))
+        y2 = lc_gen_ou(theta, mu, sigma, self.times, scale=np.std(self.signs), loc=np.mean(self.signs))
 
-        # Plot the two signals
+        # plot the two signals
         fig, ax = plt.subplots()
-
         ax.plot(t, y, "b-", label="orig", lw=0.5, alpha=0.8)
-
         ax2 = ax.twinx()
         ax2.plot(t, y2, "r-", label="gen", lw=0.5, alpha=0.8)
-
         plt.show()
 
-        # Plot their histogram
+        # plot their histogram
         fig, ax = plt.subplots()
-
         bins = "auto"  # bins = np.int(y.size**0.5/1.5) #
         rang = (np.percentile(y, 0), np.percentile(y, 99))
         ax.hist(y, density=True, color="b", alpha=0.4, bins=bins, range=rang)
-
         ax2 = ax.twinx()
         bins = "auto"  # bins = np.int(y.size**0.5/1.5) #
         rang = (np.percentile(y2, 0), np.percentile(y2, 99))
         ax2.hist(y2, density=True, color="r", alpha=0.4, bins=bins, range=rang)
-
         plt.show()
 
-        # Plot their PSD
+        # plot their PSD
         fig, ax = plt.subplots()
-
         ax.psd(y, color="b", lw=1, alpha=0.5)
-
         ax2 = ax.twinx()
         ax2.psd(y2, color="r", lw=1, alpha=0.5)
-
         plt.show()
+
+    @staticmethod
+    def pdf(xx, ll, mu):
+        """Fit pdf as a curve."""
+        return (ll * mu) ** (1 + ll) / scipy_special.gamma(1 + ll) * np.exp(-ll * mu / xx) / xx ** (ll + 2)

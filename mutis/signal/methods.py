@@ -7,7 +7,7 @@ import numpy as np
 import scipy.signal as scipy_signal
 import nfft
 
-__all__ = ["lc_gen_samp", "lc_gen_psd", "lc_gen_ou"]
+__all__ = ["lc_gen_samp", "lc_gen_psd_std", "lc_gen_psd_nft", "lc_gen_ou"]
 
 log = logging.getLogger(__name__)
 
@@ -23,20 +23,20 @@ def lc_gen_ou(theta, mu, sigma, times, scale=None, loc=None):
 
     width = 100 * times.size
     dt = (max(times) - min(times)) / width
-    yv = np.empty(times.size)
-    yv[0] = mu  # should get it from OU.rvs()!!!!
+    s2 = np.empty(times.size)
+    s2[0] = mu  # should get it from OU.rvs()!!!!
     for i in range(1, times.size):
         ti = times[i - 1]
-        y = yv[i - 1]
+        y = s2[i - 1]
         while ti < times[i]:
             y = y + dt * (theta * (mu - y) + sigma * y * np.random.randn() / np.sqrt(dt))
             ti = ti + dt
-        yv[i] = y
+        s2[i] = y
     if scale is not None:
-        yv = scale * yv / np.std(yv)
+        s2 = scale * s2 / np.std(s2)
     if loc is not None:
-        yv = yv - np.mean(yv) + loc
-    return yv
+        s2 = s2 - np.mean(s2) + loc
+    return s2
 
 
 def lc_gen_psd_std(signs):
@@ -129,8 +129,3 @@ def lc_gen_psd_nft(times, signs):
     s2 = a * s2 + b
 
     return s2
-
-
-# Set lc_gen_psd to the best version !!!
-lc_gen_psd = lc_gen_psd_std
-lc_gen_psd = lc_gen_psd_nft
