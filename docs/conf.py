@@ -6,8 +6,16 @@ extensions = [
     "sphinx.ext.mathjax",
     "sphinx_automodapi.automodapi",
     "sphinx.ext.viewcode",
+    "sphinx.ext.intersphinx",
 ]
 
+intersphinx_mapping = {
+    "astropy": ("http://docs.astropy.org/en/latest/", None),
+    "matplotlib": ("https://matplotlib.org/", None),
+    "numpy": ("https://numpy.org/doc/stable/", None),
+    "pandas": ("https://pandas.pydata.org/pandas-docs/stable/", None),
+    "py": ("https://docs.python.org/3/", None),
+}
 
 numpydoc_show_class_members = False
 
@@ -15,7 +23,6 @@ html_theme = "sphinx_rtd_theme"
 html_static_path = ["_static"]
 
 
-# Theme style
 # html_style = ''
 def setup(app):
     app.add_css_file("mutis.css")

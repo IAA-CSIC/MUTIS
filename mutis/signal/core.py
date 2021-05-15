@@ -28,7 +28,7 @@ class Signal:
         Values of the time axis.
     signs : :np:class:`~numpy.ndarray`
         Values of the signal axis.
-    method : :py:class:`str`
+    method : :py:class:`~str`
         Method used to generate the synthetic signal.
     """
 

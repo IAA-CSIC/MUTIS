@@ -174,7 +174,7 @@
 <span class="kn">import</span> <span class="nn">scipy.signal</span> <span class="k">as</span> <span class="nn">scipy_signal</span>
 <span class="kn">import</span> <span class="nn">nfft</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;lc_gen_samp&quot;</span><span class="p">,</span> <span class="s2">&quot;lc_gen_psd&quot;</span><span class="p">,</span> <span class="s2">&quot;lc_gen_ou&quot;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;lc_gen_samp&quot;</span><span class="p">,</span> <span class="s2">&quot;lc_gen_psd_std&quot;</span><span class="p">,</span> <span class="s2">&quot;lc_gen_psd_nft&quot;</span><span class="p">,</span> <span class="s2">&quot;lc_gen_ou&quot;</span><span class="p">]</span>
 
 <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
@@ -190,23 +190,23 @@
 
     <span class="n">width</span> <span class="o">=</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">times</span><span class="o">.</span><span class="n">size</span>
     <span class="n">dt</span> <span class="o">=</span> <span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">times</span><span class="p">)</span> <span class="o">-</span> <span class="nb">min</span><span class="p">(</span><span class="n">times</span><span class="p">))</span> <span class="o">/</span> <span class="n">width</span>
-    <span class="n">yv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">times</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
-    <span class="n">yv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">mu</span>  <span class="c1"># should get it from OU.rvs()!!!!</span>
+    <span class="n">s2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">times</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+    <span class="n">s2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">mu</span>  <span class="c1"># should get it from OU.rvs()!!!!</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">times</span><span class="o">.</span><span class="n">size</span><span class="p">):</span>
         <span class="n">ti</span> <span class="o">=</span> <span class="n">times</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
-        <span class="n">y</span> <span class="o">=</span> <span class="n">yv</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">s2</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
         <span class="k">while</span> <span class="n">ti</span> <span class="o">&lt;</span> <span class="n">times</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
             <span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="n">dt</span> <span class="o">*</span> <span class="p">(</span><span class="n">theta</span> <span class="o">*</span> <span class="p">(</span><span class="n">mu</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span> <span class="o">+</span> <span class="n">sigma</span> <span class="o">*</span> <span class="n">y</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">()</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">dt</span><span class="p">))</span>
             <span class="n">ti</span> <span class="o">=</span> <span class="n">ti</span> <span class="o">+</span> <span class="n">dt</span>
-        <span class="n">yv</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span>
+        <span class="n">s2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span>
     <span class="k">if</span> <span class="n">scale</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">yv</span> <span class="o">=</span> <span class="n">scale</span> <span class="o">*</span> <span class="n">yv</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">yv</span><span class="p">)</span>
+        <span class="n">s2</span> <span class="o">=</span> <span class="n">scale</span> <span class="o">*</span> <span class="n">s2</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">s2</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">loc</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">yv</span> <span class="o">=</span> <span class="n">yv</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">yv</span><span class="p">)</span> <span class="o">+</span> <span class="n">loc</span>
-    <span class="k">return</span> <span class="n">yv</span></div>
+        <span class="n">s2</span> <span class="o">=</span> <span class="n">s2</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">s2</span><span class="p">)</span> <span class="o">+</span> <span class="n">loc</span>
+    <span class="k">return</span> <span class="n">s2</span></div>
 
 
-<span class="k">def</span> <span class="nf">lc_gen_psd_std</span><span class="p">(</span><span class="n">signs</span><span class="p">):</span>
+<div class="viewcode-block" id="lc_gen_psd_std"><a class="viewcode-back" href="../../../api/mutis.signal.lc_gen_psd_std.html#mutis.signal.lc_gen_psd_std">[docs]</a><span class="k">def</span> <span class="nf">lc_gen_psd_std</span><span class="p">(</span><span class="n">signs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Generation using input PSD for light curves with similar PSD, mean and std.&quot;&quot;&quot;</span>
 
     <span class="n">f</span><span class="p">,</span> <span class="n">pxx</span> <span class="o">=</span> <span class="n">scipy_signal</span><span class="o">.</span><span class="n">welch</span><span class="p">(</span><span class="n">signs</span><span class="p">)</span>
@@ -216,7 +216,7 @@
     <span class="n">a</span> <span class="o">=</span> <span class="n">signs</span><span class="o">.</span><span class="n">std</span><span class="p">()</span> <span class="o">/</span> <span class="n">s2</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
     <span class="n">b</span> <span class="o">=</span> <span class="n">signs</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">-</span> <span class="n">a</span> <span class="o">*</span> <span class="n">s2</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
     <span class="n">s2</span> <span class="o">=</span> <span class="n">a</span> <span class="o">*</span> <span class="n">s2</span> <span class="o">+</span> <span class="n">b</span>
-    <span class="k">return</span> <span class="n">s2</span>
+    <span class="k">return</span> <span class="n">s2</span></div>
 
 
 <span class="k">def</span> <span class="nf">lc_gen_psd_c</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="n">signs</span><span class="p">,</span> <span class="n">times</span><span class="p">):</span>
@@ -276,7 +276,7 @@
     <span class="k">return</span> <span class="n">s2</span>
 
 
-<span class="k">def</span> <span class="nf">lc_gen_psd_nft</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="n">signs</span><span class="p">):</span>
+<div class="viewcode-block" id="lc_gen_psd_nft"><a class="viewcode-back" href="../../../api/mutis.signal.lc_gen_psd_nft.html#mutis.signal.lc_gen_psd_nft">[docs]</a><span class="k">def</span> <span class="nf">lc_gen_psd_nft</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="n">signs</span><span class="p">):</span>
     <span class="n">k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="n">times</span><span class="o">.</span><span class="n">size</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span> <span class="n">times</span><span class="o">.</span><span class="n">size</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
     <span class="n">N</span> <span class="o">=</span> <span class="n">k</span><span class="o">.</span><span class="n">size</span>
 
@@ -295,12 +295,7 @@
     <span class="n">b</span> <span class="o">=</span> <span class="n">signs</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">-</span> <span class="n">a</span> <span class="o">*</span> <span class="n">s2</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
     <span class="n">s2</span> <span class="o">=</span> <span class="n">a</span> <span class="o">*</span> <span class="n">s2</span> <span class="o">+</span> <span class="n">b</span>
 
-    <span class="k">return</span> <span class="n">s2</span>
-
-
-<span class="c1"># Set lc_gen_psd to the best version !!!</span>
-<span class="n">lc_gen_psd</span> <span class="o">=</span> <span class="n">lc_gen_psd_std</span>
-<span class="n">lc_gen_psd</span> <span class="o">=</span> <span class="n">lc_gen_psd_nft</span>
+    <span class="k">return</span> <span class="n">s2</span></div>
 </pre></div>
 
            </div>

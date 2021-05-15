@@ -12,10 +12,12 @@ Signal
 
       ~Signal.OU_check_gen
       ~Signal.OU_fit
+      ~Signal.pdf
       ~Signal.synth_gen
 
    .. rubric:: Methods Documentation
 
    .. automethod:: OU_check_gen
    .. automethod:: OU_fit
+   .. automethod:: pdf
    .. automethod:: synth_gen

@@ -24,7 +24,7 @@ class Correlation:
         Values of the time axis.
     signal2 : :class:`~mutis.signal.Signal`
         Values of the signal axis.
-    method : :py:class:`str`
+    method : :py:class:`~str`
         Method used to correlate the signals.
     """
 
