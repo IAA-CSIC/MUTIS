@@ -11,15 +11,17 @@ Correlation
    .. autosummary::
 
       ~Correlation.gen_corr
+      ~Correlation.gen_synth
       ~Correlation.gen_times
       ~Correlation.plot_corr
+      ~Correlation.plot_signals
       ~Correlation.plot_times
-      ~Correlation.synth_gen
 
    .. rubric:: Methods Documentation
 
    .. automethod:: gen_corr
+   .. automethod:: gen_synth
    .. automethod:: gen_times
    .. automethod:: plot_corr
+   .. automethod:: plot_signals
    .. automethod:: plot_times
-   .. automethod:: synth_gen

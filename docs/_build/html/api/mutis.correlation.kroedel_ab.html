@@ -37,6 +37,7 @@
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/copybutton.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
@@ -45,7 +46,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="nindcf" href="mutis.correlation.nindcf.html" />
-    <link rel="prev" title="mutis.correlation Package" href="../reference/correlation.html" /> 
+    <link rel="prev" title="gen_times_uniform" href="mutis.correlation.gen_times_uniform.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -101,6 +102,9 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../reference/correlation.html">mutis.correlation Package</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../reference/correlation.html#functions">Functions</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="mutis.correlation.gen_times_canopy.html">gen_times_canopy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mutis.correlation.gen_times_rawab.html">gen_times_rawab</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mutis.correlation.gen_times_uniform.html">gen_times_uniform</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">kroedel_ab</a></li>
 <li class="toctree-l3"><a class="reference internal" href="mutis.correlation.nindcf.html">nindcf</a></li>
 <li class="toctree-l3"><a class="reference internal" href="mutis.correlation.welsh_ab.html">welsh_ab</a></li>
@@ -207,8 +211,44 @@
 <h1>kroedel_ab<a class="headerlink" href="#kroedel-ab" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="mutis.correlation.kroedel_ab">
-<span class="sig-prename descclassname"><span class="pre">mutis.correlation.</span></span><span class="sig-name descname"><span class="pre">kroedel_ab</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mutis/correlation/methods.html#kroedel_ab"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mutis.correlation.kroedel_ab" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<span class="sig-prename descclassname"><span class="pre">mutis.correlation.</span></span><span class="sig-name descname"><span class="pre">kroedel_ab</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mutis/correlation/functions.html#kroedel_ab"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mutis.correlation.kroedel_ab" title="Permalink to this definition">¶</a></dt>
+<dd><p>Krolik &amp; Edelson with adaptative binning.</p>
+<p>Description goes here.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>t1</strong><span class="classifier"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span></dt><dd><p>Parameter description.</p>
+</dd>
+<dt><strong>d1</strong><span class="classifier"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span></dt><dd><p>Parameter description.</p>
+</dd>
+<dt><strong>t2</strong><span class="classifier"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span></dt><dd><p>Parameter description.</p>
+</dd>
+<dt><strong>d2</strong><span class="classifier"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span></dt><dd><p>Parameter description.</p>
+</dd>
+<dt><strong>t</strong><span class="classifier"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span></dt><dd><p>Parameter description.</p>
+</dd>
+<dt><strong>dt</strong><span class="classifier"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span></dt><dd><p>Parameter description.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>udcf</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>Description here.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Provide examples as below because they could be tested:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">mutis.correlation.functions</span> <span class="kn">import</span> <span class="n">kroedel_ab</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">);</span> <span class="n">s1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">t1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">);</span> <span class="n">s2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">t2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">);</span>  <span class="n">dt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="n">t2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">kroedel_ab_p</span><span class="p">(</span><span class="n">t1</span><span class="p">,</span> <span class="n">d1</span><span class="p">,</span> <span class="n">t2</span><span class="p">,</span> <span class="n">d2</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
 
 </div>
 
@@ -219,7 +259,7 @@
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
         <a href="mutis.correlation.nindcf.html" class="btn btn-neutral float-right" title="nindcf" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-        <a href="../reference/correlation.html" class="btn btn-neutral float-left" title="mutis.correlation Package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="mutis.correlation.gen_times_uniform.html" class="btn btn-neutral float-left" title="gen_times_uniform" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>

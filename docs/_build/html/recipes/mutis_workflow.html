@@ -37,6 +37,7 @@
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/copybutton.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "document", "processHtmlClass": "math|output_area"}}</script>
@@ -1078,7 +1079,7 @@ Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdo
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">correlation</span><span class="o">.</span><span class="n">gen_times</span><span class="p">(</span><span class="n">dt0</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
+<span></span><span class="n">correlation</span><span class="o">.</span><span class="n">gen_times</span><span class="p">(</span><span class="n">dtmin</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1091,20 +1092,11 @@ Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdo
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-/Users/jer/git/MUTIS/mutis/correlation/core.py:182: UserWarning: Matplotlib is currently using module://ipykernel.pylab.backend_inline, which is a non-GUI backend, so cannot show the figure.
-  fig.show()
-</pre></div></div>
-</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/recipes_mutis_workflow_20_1.png" src="../_images/recipes_mutis_workflow_20_1.png" />
+<img alt="../_images/recipes_mutis_workflow_20_0.png" src="../_images/recipes_mutis_workflow_20_0.png" />
 </div>
 </div>
 <p><strong>HUMAN INTERVENTION</strong></p>
@@ -1128,16 +1120,11 @@ Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdo
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-/Users/jer/git/MUTIS/mutis/signal/core.py:165: RuntimeWarning: invalid value encountered in double_scalars
+/Users/jer/git/MUTIS/mutis/signal/core.py:202: RuntimeWarning: invalid value encountered in double_scalars
   return (ll * mu) ** (1 + ll) / scipy_special.gamma(1 + ll) * np.exp(-ll * mu / xx) / xx ** (ll + 2)
-/opt/miniconda3/envs/mutis/lib/python3.9/site-packages/scipy/stats/_distn_infrastructure.py:1790: IntegrationWarning: The algorithm does not converge.  Roundoff error is detected
-  in the extrapolation table.  It is assumed that the requested tolerance
-  cannot be achieved, and that the returned result (if full_output = 1) is
-  the best which can be obtained.
-  return integrate.quad(self._mom_integ1, 0, 1, args=(m,)+args)[0]
-/Users/jer/git/MUTIS/mutis/signal/core.py:165: RuntimeWarning: divide by zero encountered in true_divide
+/Users/jer/git/MUTIS/mutis/signal/core.py:202: RuntimeWarning: divide by zero encountered in true_divide
   return (ll * mu) ** (1 + ll) / scipy_special.gamma(1 + ll) * np.exp(-ll * mu / xx) / xx ** (ll + 2)
-/Users/jer/git/MUTIS/mutis/signal/core.py:165: RuntimeWarning: invalid value encountered in true_divide
+/Users/jer/git/MUTIS/mutis/signal/core.py:202: RuntimeWarning: invalid value encountered in true_divide
   return (ll * mu) ** (1 + ll) / scipy_special.gamma(1 + ll) * np.exp(-ll * mu / xx) / xx ** (ll + 2)
 </pre></div></div>
 </div>
@@ -1153,8 +1140,8 @@ Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdo
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-CPU times: user 28.7 s, sys: 413 ms, total: 29.1 s
-Wall time: 29.2 s
+CPU times: user 17.5 s, sys: 282 ms, total: 17.7 s
+Wall time: 17.6 s
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1172,10 +1159,10 @@ Wall time: 29.2 s
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-{&#39;curve_fit&#39;: (array([1.00758579, 0.12887562]),
+{&#39;sigma_est&#39;: 5.9477164593388965,
+ &#39;curve_fit&#39;: (array([1.00758579, 0.12887562]),
   array([0.17348046, 0.01219202])),
  &#39;MLE_fit&#39;: (0.5523802491183334, 0.14125117915448523),
- &#39;sigma_est&#39;: 5.9477164593388965,
  &#39;th_est1&#39;: 9.770317097497758,
  &#39;th_est2&#39;: 17.821840424447338}
 </pre></div></div>
@@ -1233,7 +1220,7 @@ Wall time: 29.2 s
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="o">%%time</span>
-<span class="n">correlation</span><span class="o">.</span><span class="n">synth_gen</span><span class="p">(</span><span class="mi">400</span><span class="p">)</span>
+<span class="n">correlation</span><span class="o">.</span><span class="n">gen_synth</span><span class="p">(</span><span class="mi">400</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1242,8 +1229,8 @@ Wall time: 29.2 s
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-CPU times: user 1min 8s, sys: 349 ms, total: 1min 8s
-Wall time: 1min 9s
+CPU times: user 1min 5s, sys: 257 ms, total: 1min 5s
+Wall time: 1min 6s
 </pre></div></div>
 </div>
 </div>
@@ -1265,8 +1252,8 @@ Wall time: 1min 9s
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-CPU times: user 18.3 s, sys: 250 ms, total: 18.5 s
-Wall time: 18.7 s
+CPU times: user 17 s, sys: 285 ms, total: 17.3 s
+Wall time: 17.6 s
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1278,20 +1265,20 @@ Wall time: 18.7 s
 </pre></div>
 </div>
 </div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;AxesSubplot:&gt;
+</pre></div></div>
+</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/recipes_mutis_workflow_33_0.png" src="../_images/recipes_mutis_workflow_33_0.png" />
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
-</pre></div>
+<img alt="../_images/recipes_mutis_workflow_33_1.png" src="../_images/recipes_mutis_workflow_33_1.png" />
 </div>
 </div>
 </div>
