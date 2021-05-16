@@ -2,4 +2,4 @@
 """Correlation analysis."""
 
 from .core import *
-from .methods import *
+from .functions import *

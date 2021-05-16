@@ -3,9 +3,9 @@
 
 import logging
 
+import nfft
 import numpy as np
 import scipy.signal as scipy_signal
-import nfft
 
 __all__ = [
     "lc_gen_samp",
@@ -88,6 +88,8 @@ def lc_gen_psd_fft(signs):
 
 
 def lc_gen_psd_lombscargle(times, signs):
+    """Description goes here."""
+
     if signs.size % 2 != 0:
         sigp = signs[:-1]
         tp = times[:-1]
@@ -109,7 +111,7 @@ def lc_gen_psd_lombscargle(times, signs):
     s2 = nfft.nfft((times - (times.max() + times.min()) / 2) / np.ptp(times), fft2, N, use_fft=True) / N
 
     # fix small deviations
-    a = (signs.std() / s2.std())
+    a = signs.std() / s2.std()
     b = signs.mean() - a * s2.mean()
     s2 = a * s2 + b
 
@@ -122,7 +124,7 @@ def lc_gen_psd_nft(times, signs):
 
     nft = nfft.nfft_adjoint((times - (times.max() + times.min()) / 2) / np.ptp(times), signs, N, use_fft=True)
 
-    # build random phase to get real signal:
+    # build random phase to get real signal
     phase = np.random.random(N // 2)
     phase = np.concatenate((-np.flip(phase), [0], phase[:-1]))
 
@@ -131,7 +133,7 @@ def lc_gen_psd_nft(times, signs):
     s2 = np.real(s2)  # np.real to fix small imaginary part from numerical error
 
     # fix small mean, std difference from numerical error
-    a = (signs.std() / s2.std())
+    a = signs.std() / s2.std()
     b = signs.mean() - a * s2.mean()
     s2 = a * s2 + b
 
