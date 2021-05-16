@@ -37,6 +37,7 @@
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/copybutton.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
@@ -208,7 +209,6 @@
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">mutis.correlation.</span></span><span class="sig-name descname"><span class="pre">Correlation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">signal2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mutis/correlation/core.html#Correlation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mutis.correlation.Correlation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Analysis of the correlation of two signals.</p>
-<p>Description goes here.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl>
@@ -231,16 +231,19 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#mutis.correlation.Correlation.gen_corr" title="mutis.correlation.Correlation.gen_corr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gen_corr</span></code></a>()</p></td>
 <td><p>Description goes here.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#mutis.correlation.Correlation.gen_times" title="mutis.correlation.Correlation.gen_times"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gen_times</span></code></a>([dt0, ndtmax, nbinsmin])</p></td>
-<td><p>Returns times and bins to use with adaptative binning methods.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#mutis.correlation.Correlation.plot_corr" title="mutis.correlation.Correlation.plot_corr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_corr</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#mutis.correlation.Correlation.gen_synth" title="mutis.correlation.Correlation.gen_synth"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gen_synth</span></code></a>(N)</p></td>
 <td><p>Description goes here.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#mutis.correlation.Correlation.plot_times" title="mutis.correlation.Correlation.plot_times"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_times</span></code></a>()</p></td>
-<td><p></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mutis.correlation.Correlation.gen_times" title="mutis.correlation.Correlation.gen_times"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gen_times</span></code></a>([ftimes])</p></td>
+<td><p>Sets times and bins using the method defined by ftimes parameter.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#mutis.correlation.Correlation.synth_gen" title="mutis.correlation.Correlation.synth_gen"><code class="xref py py-obj docutils literal notranslate"><span class="pre">synth_gen</span></code></a>(N)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#mutis.correlation.Correlation.plot_corr" title="mutis.correlation.Correlation.plot_corr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_corr</span></code></a>([ax, legend])</p></td>
+<td><p>Description goes here.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mutis.correlation.Correlation.plot_signals" title="mutis.correlation.Correlation.plot_signals"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_signals</span></code></a>([ax])</p></td>
+<td><p>Description goes here.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#mutis.correlation.Correlation.plot_times" title="mutis.correlation.Correlation.plot_times"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_times</span></code></a>([rug])</p></td>
 <td><p>Description goes here.</p></td>
 </tr>
 </tbody>
@@ -253,27 +256,35 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="mutis.correlation.Correlation.gen_times">
-<span class="sig-name descname"><span class="pre">gen_times</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dt0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ndtmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nbinsmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">121</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mutis/correlation/core.html#Correlation.gen_times"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mutis.correlation.Correlation.gen_times" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns times and bins to use with adaptative binning methods.</p>
-<p>Sensible values for these parameters must be found by hand, and depend
-on the characteristics of input data.</p>
-<dl class="field-list simple">
+<dt class="sig sig-object py" id="mutis.correlation.Correlation.gen_synth">
+<span class="sig-name descname"><span class="pre">gen_synth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mutis/correlation/core.html#Correlation.gen_synth"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mutis.correlation.Correlation.gen_synth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Description goes here.</p>
+<dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>dt0</strong><span class="classifier">int</span></dt><dd><p>minimum bin size, also used as step in a.b.
-default: dt0 = 0.25*(tmax -tmin)/np.sqrt(t1.size*t2.size+1)
-(more or less a statistically reasonable binning,
-to increase precision)</p>
+<dd class="field-odd"><dl>
+<dt><strong>N</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>Parameter description.</p>
 </dd>
-<dt><strong>ndtmax</strong><span class="classifier">float</span></dt><dd><p>Maximum size of bins (in units of dt0).
-0 &lt; ndtmax &lt; 1: fixed dt (=dt0) (no a.b)
-1 &lt; ndtmax: allow adaptative time binning
-default: 0.9</p>
+</dl>
 </dd>
-<dt><strong>nbinsmin</strong><span class="classifier">int</span></dt><dd><p>if the data has a lot of error, higher values are needed
-to soften the correlation beyond spurious variability.
-default: 121 (11x11)</p>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mutis.correlation.Correlation.gen_times">
+<span class="sig-name descname"><span class="pre">gen_times</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ftimes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'canopy'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mutis/correlation/core.html#Correlation.gen_times"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mutis.correlation.Correlation.gen_times" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets times and bins using the method defined by ftimes parameter.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>ftimes</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></dt><dd><dl class="simple">
+<dt>Method used to bin the time interval of the correlation. Possible values are:</dt><dd><ul class="simple">
+<li><p>“canopy”: Computes a binning as dense as possible, with variable bin width and (with a minimum and a maximum resolution) and a minimum statistic.</p></li>
+<li><p>“rawab”: Computes a binning with variable bin width, a given step, maximum bin size and a minimum statistic.</p></li>
+<li><p>“uniform”: Computes a binning with uniform bin width and a minimum statistic.</p></li>
+<li><p>“numpy”: Computes a binning suitable for method=’numpy’.</p></li>
+</ul>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd>
@@ -282,18 +293,19 @@ default: 121 (11x11)</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mutis.correlation.Correlation.plot_corr">
-<span class="sig-name descname"><span class="pre">plot_corr</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mutis/correlation/core.html#Correlation.plot_corr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mutis.correlation.Correlation.plot_corr" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">plot_corr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mutis/correlation/core.html#Correlation.plot_corr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mutis.correlation.Correlation.plot_corr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Description goes here.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mutis.correlation.Correlation.plot_signals">
+<span class="sig-name descname"><span class="pre">plot_signals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mutis/correlation/core.html#Correlation.plot_signals"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mutis.correlation.Correlation.plot_signals" title="Permalink to this definition">¶</a></dt>
 <dd><p>Description goes here.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mutis.correlation.Correlation.plot_times">
-<span class="sig-name descname"><span class="pre">plot_times</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mutis/correlation/core.html#Correlation.plot_times"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mutis.correlation.Correlation.plot_times" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="mutis.correlation.Correlation.synth_gen">
-<span class="sig-name descname"><span class="pre">synth_gen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mutis/correlation/core.html#Correlation.synth_gen"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mutis.correlation.Correlation.synth_gen" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">plot_times</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mutis/correlation/core.html#Correlation.plot_times"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mutis.correlation.Correlation.plot_times" title="Permalink to this definition">¶</a></dt>
 <dd><p>Description goes here.</p>
 </dd></dl>
 

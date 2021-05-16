@@ -37,6 +37,7 @@
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/copybutton.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
@@ -44,7 +45,7 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="kroedel_ab" href="../api/mutis.correlation.kroedel_ab.html" />
+    <link rel="next" title="gen_times_canopy" href="../api/mutis.correlation.gen_times_canopy.html" />
     <link rel="prev" title="Stochastic light curves: Orstein-Uhlenbeck process." href="../recipes/stochastics_tests.html" /> 
 </head>
 
@@ -101,6 +102,9 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">mutis.correlation Package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#functions">Functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/mutis.correlation.gen_times_canopy.html">gen_times_canopy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/mutis.correlation.gen_times_rawab.html">gen_times_rawab</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/mutis.correlation.gen_times_uniform.html">gen_times_uniform</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api/mutis.correlation.kroedel_ab.html">kroedel_ab</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api/mutis.correlation.nindcf.html">nindcf</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api/mutis.correlation.welsh_ab.html">welsh_ab</a></li>
@@ -215,14 +219,23 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="../api/mutis.correlation.kroedel_ab.html#mutis.correlation.kroedel_ab" title="mutis.correlation.kroedel_ab"><code class="xref py py-obj docutils literal notranslate"><span class="pre">kroedel_ab</span></code></a>(t1, d1, t2, d2, t, dt)</p></td>
-<td><p></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/mutis.correlation.gen_times_canopy.html#mutis.correlation.gen_times_canopy" title="mutis.correlation.gen_times_canopy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gen_times_canopy</span></code></a>(t1, t2[, dtmin, dtmax, …])</p></td>
+<td><p>Description goes here.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../api/mutis.correlation.nindcf.html#mutis.correlation.nindcf" title="mutis.correlation.nindcf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">nindcf</span></code></a>(t1, s1, t2, s2)</p></td>
-<td><p>Implement normalization and interpolation over numpy correlate function.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/mutis.correlation.gen_times_rawab.html#mutis.correlation.gen_times_rawab" title="mutis.correlation.gen_times_rawab"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gen_times_rawab</span></code></a>(t1, t2[, dt0, ndtmax, …])</p></td>
+<td><p>Returns t, dt for use with adaptative binning methods.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../api/mutis.correlation.welsh_ab.html#mutis.correlation.welsh_ab" title="mutis.correlation.welsh_ab"><code class="xref py py-obj docutils literal notranslate"><span class="pre">welsh_ab</span></code></a>(t1, d1, t2, d2, t, dt)</p></td>
-<td><p></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/mutis.correlation.gen_times_uniform.html#mutis.correlation.gen_times_uniform" title="mutis.correlation.gen_times_uniform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gen_times_uniform</span></code></a>(t1, t2[, tmin, tmax, …])</p></td>
+<td><p>Description goes here.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/mutis.correlation.kroedel_ab.html#mutis.correlation.kroedel_ab" title="mutis.correlation.kroedel_ab"><code class="xref py py-obj docutils literal notranslate"><span class="pre">kroedel_ab</span></code></a>(t1, d1, t2, d2, t, dt)</p></td>
+<td><p>Krolik &amp; Edelson with adaptative binning.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/mutis.correlation.nindcf.html#mutis.correlation.nindcf" title="mutis.correlation.nindcf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">nindcf</span></code></a>(t1, s1, t2, s2)</p></td>
+<td><p>Description goes here.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../api/mutis.correlation.welsh_ab.html#mutis.correlation.welsh_ab" title="mutis.correlation.welsh_ab"><code class="xref py py-obj docutils literal notranslate"><span class="pre">welsh_ab</span></code></a>(t1, d1, t2, d2, t, dt)</p></td>
+<td><p>Description goes here.</p></td>
 </tr>
 </tbody>
 </table>
@@ -249,7 +262,7 @@
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="../api/mutis.correlation.kroedel_ab.html" class="btn btn-neutral float-right" title="kroedel_ab" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../api/mutis.correlation.gen_times_canopy.html" class="btn btn-neutral float-right" title="gen_times_canopy" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
         <a href="../recipes/stochastics_tests.html" class="btn btn-neutral float-left" title="Stochastic light curves: Orstein-Uhlenbeck process." accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 

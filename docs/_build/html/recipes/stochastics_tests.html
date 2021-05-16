@@ -37,6 +37,7 @@
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/copybutton.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "document", "processHtmlClass": "math|output_area"}}</script>
@@ -549,8 +550,8 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-CPU times: user 14.3 s, sys: 114 ms, total: 14.5 s
-Wall time: 14.5 s
+CPU times: user 13.8 s, sys: 150 ms, total: 13.9 s
+Wall time: 14 s
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -597,8 +598,8 @@ Wall time: 14.5 s
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-CPU times: user 33.1 ms, sys: 1.96 ms, total: 35 ms
-Wall time: 34.4 ms
+CPU times: user 35.9 ms, sys: 1.53 ms, total: 37.5 ms
+Wall time: 36.2 ms
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -753,11 +754,11 @@ Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdo
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 popt:
-[0.29686848 0.69051166]
+[0.61313638 0.27235715]
 pcov:
-[0.03890713 0.07284093]
+[0.03559051 0.01120313]
 sig_est: (método chusco)
-1.8780511680161935
+4.301335057059811
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -782,8 +783,8 @@ sig_est: (método chusco)
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-CPU times: user 192 ms, sys: 10.5 ms, total: 202 ms
-Wall time: 199 ms
+CPU times: user 188 ms, sys: 11.5 ms, total: 199 ms
+Wall time: 194 ms
 </pre></div></div>
 </div>
 </div>
@@ -806,7 +807,7 @@ Wall time: 199 ms
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-0.8016453824716624
+0.7946161168743257
 </pre></div></div>
 </div>
 <div class="section" id="Fit-data-to-distribution-with-MLE">
@@ -849,10 +850,22 @@ Wall time: 199 ms
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/opt/miniconda3/envs/mutis/lib/python3.9/site-packages/scipy/stats/_distn_infrastructure.py:1790: IntegrationWarning: The algorithm does not converge.  Roundoff error is detected
+  in the extrapolation table.  It is assumed that the requested tolerance
+  cannot be achieved, and that the returned result (if full_output = 1) is
+  the best which can be obtained.
+  return integrate.quad(self._mom_integ1, 0, 1, args=(m,)+args)[0]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 fit:
-(0.25048131916095373, 0.7288896759887213, 0, 1)
+(0.4323114326919699, 0.34487639881048215, 0, 1)
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -868,7 +881,7 @@ fit:
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/recipes_stochastics_tests_20_2.png" src="../_images/recipes_stochastics_tests_20_2.png" />
+<img alt="../_images/recipes_stochastics_tests_20_3.png" src="../_images/recipes_stochastics_tests_20_3.png" />
 </div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -876,8 +889,8 @@ fit:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-CPU times: user 38.2 s, sys: 408 ms, total: 38.6 s
-Wall time: 39 s
+CPU times: user 32.4 s, sys: 315 ms, total: 32.7 s
+Wall time: 32.9 s
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -895,7 +908,7 @@ Wall time: 39 s
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-0.0804840712510947
+0.13648391261171236
 </pre></div></div>
 </div>
 </div>
@@ -1022,9 +1035,9 @@ Wall time: 39 s
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 popt:
-[2.68995982e+00 6.49374557e-05 2.26410743e-02]
+[2.71082014e+00 5.65738447e-06 1.25419147e-02]
 pcov:
-[2.84611406e-02 8.87326408e-06 2.01931851e-02]
+[5.60205515e-02 1.52202037e-06 3.77697271e-03]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
