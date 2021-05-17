@@ -1,0 +1,12 @@
+sphinx
+nbsphinx
+numpydoc
+sphinx-automodapi
+sphinx_rtd_theme
+ipython
+matplotlib
+scipy
+astropy
+numpy
+pandas
+nfft
