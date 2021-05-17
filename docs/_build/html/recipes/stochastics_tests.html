@@ -47,7 +47,7 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="mutis.correlation Package" href="../reference/correlation.html" />
+    <link rel="next" title="mutis.correlation Module" href="../reference/correlation.html" />
     <link rel="prev" title="The SIN tests" href="sin_tests.html" /> 
 </head>
 
@@ -120,8 +120,8 @@
 </ul>
 <p class="caption"><span class="caption-text">Reference</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../reference/correlation.html">mutis.correlation Package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../reference/signal.html">mutis.signal Package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/correlation.html">mutis.correlation Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/signal.html">mutis.signal Module</a></li>
 </ul>
 
             
@@ -550,7 +550,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-CPU times: user 13.8 s, sys: 150 ms, total: 13.9 s
+CPU times: user 13.9 s, sys: 70.2 ms, total: 13.9 s
 Wall time: 14 s
 </pre></div></div>
 </div>
@@ -598,8 +598,8 @@ Wall time: 14 s
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-CPU times: user 35.9 ms, sys: 1.53 ms, total: 37.5 ms
-Wall time: 36.2 ms
+CPU times: user 30 ms, sys: 993 µs, total: 31 ms
+Wall time: 30.2 ms
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -754,11 +754,11 @@ Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdo
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 popt:
-[0.61313638 0.27235715]
+[0.1961064  0.65609088]
 pcov:
-[0.03559051 0.01120313]
+[0.02685447 0.07444965]
 sig_est: (método chusco)
-4.301335057059811
+2.1928083131124665
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -783,8 +783,8 @@ sig_est: (método chusco)
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-CPU times: user 188 ms, sys: 11.5 ms, total: 199 ms
-Wall time: 194 ms
+CPU times: user 153 ms, sys: 6.54 ms, total: 159 ms
+Wall time: 157 ms
 </pre></div></div>
 </div>
 </div>
@@ -807,7 +807,7 @@ Wall time: 194 ms
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-0.7946161168743257
+0.8034059373283648
 </pre></div></div>
 </div>
 <div class="section" id="Fit-data-to-distribution-with-MLE">
@@ -852,7 +852,7 @@ Wall time: 194 ms
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-/opt/miniconda3/envs/mutis/lib/python3.9/site-packages/scipy/stats/_distn_infrastructure.py:1790: IntegrationWarning: The algorithm does not converge.  Roundoff error is detected
+/Users/juan/miniconda3/envs/mutis/lib/python3.9/site-packages/scipy/stats/_distn_infrastructure.py:1790: IntegrationWarning: The algorithm does not converge.  Roundoff error is detected
   in the extrapolation table.  It is assumed that the requested tolerance
   cannot be achieved, and that the returned result (if full_output = 1) is
   the best which can be obtained.
@@ -865,7 +865,7 @@ Wall time: 194 ms
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 fit:
-(0.4323114326919699, 0.34487639881048215, 0, 1)
+(0.29244336919814273, 0.4427953347456376, 0, 1)
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -889,8 +889,8 @@ fit:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-CPU times: user 32.4 s, sys: 315 ms, total: 32.7 s
-Wall time: 32.9 s
+CPU times: user 39.7 s, sys: 273 ms, total: 40 s
+Wall time: 39.9 s
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -908,7 +908,7 @@ Wall time: 32.9 s
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-0.13648391261171236
+0.09438040940483189
 </pre></div></div>
 </div>
 </div>
@@ -1035,9 +1035,9 @@ Wall time: 32.9 s
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 popt:
-[2.71082014e+00 5.65738447e-06 1.25419147e-02]
+[1.83241970e+00 3.89118154e-04 1.03740256e-02]
 pcov:
-[5.60205515e-02 1.52202037e-06 3.77697271e-03]
+[0.07626832 0.0001406  0.01049175]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1056,6 +1056,15 @@ pcov:
 <img alt="../_images/recipes_stochastics_tests_27_2.png" src="../_images/recipes_stochastics_tests_27_2.png" />
 </div>
 </div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>
+</pre></div>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -1066,7 +1075,7 @@ pcov:
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="../reference/correlation.html" class="btn btn-neutral float-right" title="mutis.correlation Package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../reference/correlation.html" class="btn btn-neutral float-right" title="mutis.correlation Module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
         <a href="sin_tests.html" class="btn btn-neutral float-left" title="The SIN tests" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 

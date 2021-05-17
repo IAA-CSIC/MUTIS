@@ -117,8 +117,8 @@
 </ul>
 <p class="caption"><span class="caption-text">Reference</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../reference/correlation.html">mutis.correlation Package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../reference/signal.html">mutis.signal Package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/correlation.html">mutis.correlation Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/signal.html">mutis.signal Module</a></li>
 </ul>
 
             
@@ -470,8 +470,8 @@ div.rendered_html tbody tr:hover {
 </ul>
 <p>In an effort to make the manual tasks as easy as possible I have incorporated new methods which automatically plot the results so the process of choosing this parameters is just a matter of executing one or two lines in the notebook and varying the numbers.</p>
 <p><strong>Juan Escudero</strong></p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -481,8 +481,17 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+The autoreload extension is already loaded. To reload it, use:
+  %reload_ext autoreload
+</pre></div></div>
+</div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -497,8 +506,7 @@ div.rendered_html tbody tr:hover {
 <span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mplt</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 
-<span class="kn">from</span> <span class="nn">mutis.signal</span> <span class="kn">import</span> <span class="n">Signal</span>
-<span class="kn">from</span> <span class="nn">mutis.correlation</span> <span class="kn">import</span> <span class="n">Correlation</span>
+<span class="kn">import</span> <span class="nn">mutis</span>
 </pre></div>
 </div>
 </div>
@@ -506,7 +514,7 @@ div.rendered_html tbody tr:hover {
 <h2>Load data<a class="headerlink" href="#Load-data" title="Permalink to this headline">¶</a></h2>
 <p>Load it with pandas becase I like the way pandas prints tables. Also useful accesing vars as strings!</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -515,7 +523,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -527,7 +535,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -711,7 +719,7 @@ div.rendered_html tbody tr:hover {
 </div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -735,13 +743,13 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-&lt;ipython-input-5-b0fdef31e033&gt;:7: DeprecationWarning: `np.float` is a deprecated alias for the builtin `float`. To silence this warning, use `float` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.float64` here.
+&lt;ipython-input-10-b0fdef31e033&gt;:7: DeprecationWarning: `np.float` is a deprecated alias for the builtin `float`. To silence this warning, use `float` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.float64` here.
 Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
   data[&#39;gamma&#39;].insert(2, &#39;CFlux&#39;, value=np.asarray(CFlux, dtype=np.float))
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1000,7 +1008,7 @@ Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdo
 <div class="section" id="Show-data">
 <h2>Show data<a class="headerlink" href="#Show-data" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1038,7 +1046,7 @@ Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdo
 <h3>Choose data and methods<a class="headerlink" href="#Choose-data-and-methods" title="Permalink to this headline">¶</a></h3>
 <p>Choose the signals to correlate</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1049,22 +1057,22 @@ Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdo
 </div>
 <p>Create signals with the corresponding data and choose the method for generating the light curves.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">sig1</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="n">t1</span><span class="p">,</span> <span class="n">s1</span><span class="p">,</span> <span class="s1">&#39;lc_gen_psd&#39;</span><span class="p">)</span>
-<span class="n">sig2</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="n">t2</span><span class="p">,</span> <span class="n">s2</span><span class="p">,</span> <span class="s1">&#39;lc_gen_ou&#39;</span><span class="p">)</span>
+<span></span><span class="n">sig1</span> <span class="o">=</span> <span class="n">mutis</span><span class="o">.</span><span class="n">Signal</span><span class="p">(</span><span class="n">t1</span><span class="p">,</span> <span class="n">s1</span><span class="p">,</span> <span class="s1">&#39;lc_gen_psd&#39;</span><span class="p">)</span>
+<span class="n">sig2</span> <span class="o">=</span> <span class="n">mutis</span><span class="o">.</span><span class="n">Signal</span><span class="p">(</span><span class="n">t2</span><span class="p">,</span> <span class="n">s2</span><span class="p">,</span> <span class="s1">&#39;lc_gen_ou&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <p>Create the correlation with the corresponding signals and choose the method for generating the correltions.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">correlation</span> <span class="o">=</span> <span class="n">Correlation</span><span class="p">(</span><span class="n">sig1</span><span class="p">,</span> <span class="n">sig2</span><span class="p">,</span> <span class="s1">&#39;welsh_ab&#39;</span><span class="p">)</span>
+<span></span><span class="n">correlation</span> <span class="o">=</span> <span class="n">mutis</span><span class="o">.</span><span class="n">Correlation</span><span class="p">(</span><span class="n">sig1</span><span class="p">,</span> <span class="n">sig2</span><span class="p">,</span> <span class="s1">&#39;welsh_ab&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1075,7 +1083,7 @@ Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdo
 <p>Chose good parameters for time binning!</p>
 <p>Good parameters will have a high and similar <span class="math notranslate nohighlight">\(n_i\)</span> for all bins, with bins covering most of the time range.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1084,7 +1092,7 @@ Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdo
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1106,7 +1114,7 @@ Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdo
 <div class="section" id="1.-Plot-the-histogram-and-get-extracted-parameters">
 <h4>1. Plot the histogram and get extracted parameters<a class="headerlink" href="#1.-Plot-the-histogram-and-get-extracted-parameters" title="Permalink to this headline">¶</a></h4>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1120,11 +1128,11 @@ Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdo
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-/Users/jer/git/MUTIS/mutis/signal/core.py:202: RuntimeWarning: invalid value encountered in double_scalars
+/Users/juan/Desktop/Doctorado/work/0235+164/MUTIS/mutis/signal.py:202: RuntimeWarning: invalid value encountered in double_scalars
   return (ll * mu) ** (1 + ll) / scipy_special.gamma(1 + ll) * np.exp(-ll * mu / xx) / xx ** (ll + 2)
-/Users/jer/git/MUTIS/mutis/signal/core.py:202: RuntimeWarning: divide by zero encountered in true_divide
+/Users/juan/Desktop/Doctorado/work/0235+164/MUTIS/mutis/signal.py:202: RuntimeWarning: divide by zero encountered in true_divide
   return (ll * mu) ** (1 + ll) / scipy_special.gamma(1 + ll) * np.exp(-ll * mu / xx) / xx ** (ll + 2)
-/Users/jer/git/MUTIS/mutis/signal/core.py:202: RuntimeWarning: invalid value encountered in true_divide
+/Users/juan/Desktop/Doctorado/work/0235+164/MUTIS/mutis/signal.py:202: RuntimeWarning: invalid value encountered in true_divide
   return (ll * mu) ** (1 + ll) / scipy_special.gamma(1 + ll) * np.exp(-ll * mu / xx) / xx ** (ll + 2)
 </pre></div></div>
 </div>
@@ -1140,12 +1148,12 @@ Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdo
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-CPU times: user 17.5 s, sys: 282 ms, total: 17.7 s
-Wall time: 17.6 s
+CPU times: user 18.5 s, sys: 171 ms, total: 18.7 s
+Wall time: 18.6 s
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1154,7 +1162,7 @@ Wall time: 17.6 s
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1171,7 +1179,7 @@ Wall time: 17.6 s
 <div class="section" id="2.-Check-if-this-parameters-generate-nice-light-curves.">
 <h4>2. Check if this parameters generate nice light curves.<a class="headerlink" href="#2.-Check-if-this-parameters-generate-nice-light-curves." title="Permalink to this headline">¶</a></h4>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1203,7 +1211,7 @@ Wall time: 17.6 s
 </div>
 <p><strong>Set the parameters</strong></p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1215,7 +1223,7 @@ Wall time: 17.6 s
 <div class="section" id="3.-Actually-generate-the-synthethic-light-curves">
 <h4>3. Actually generate the synthethic light curves<a class="headerlink" href="#3.-Actually-generate-the-synthethic-light-curves" title="Permalink to this headline">¶</a></h4>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1229,8 +1237,8 @@ Wall time: 17.6 s
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-CPU times: user 1min 5s, sys: 257 ms, total: 1min 5s
-Wall time: 1min 6s
+CPU times: user 1min 12s, sys: 123 ms, total: 1min 12s
+Wall time: 1min 12s
 </pre></div></div>
 </div>
 </div>
@@ -1238,7 +1246,7 @@ Wall time: 1min 6s
 <div class="section" id="Generate-and-plot-correlations">
 <h3>Generate and plot correlations<a class="headerlink" href="#Generate-and-plot-correlations" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1252,12 +1260,12 @@ Wall time: 1min 6s
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-CPU times: user 17 s, sys: 285 ms, total: 17.3 s
-Wall time: 17.6 s
+CPU times: user 15.8 s, sys: 141 ms, total: 15.9 s
+Wall time: 15.9 s
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1266,7 +1274,7 @@ Wall time: 17.6 s
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1279,6 +1287,15 @@ Wall time: 17.6 s
 </div>
 <div class="output_area docutils container">
 <img alt="../_images/recipes_mutis_workflow_33_1.png" src="../_images/recipes_mutis_workflow_33_1.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>
+</pre></div>
 </div>
 </div>
 </div>

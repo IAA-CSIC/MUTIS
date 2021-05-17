@@ -45,7 +45,7 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="prev" title="lc_gen_samp" href="mutis.signal.lc_gen_samp.html" /> 
+    <link rel="prev" title="mutis.signal Module" href="../reference/signal.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -99,9 +99,8 @@
 </ul>
 <p class="caption"><span class="caption-text">Reference</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../reference/correlation.html">mutis.correlation Package</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="../reference/signal.html">mutis.signal Package</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../reference/signal.html#functions">Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/correlation.html">mutis.correlation Module</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../reference/signal.html">mutis.signal Module</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../reference/signal.html#classes">Classes</a><ul class="current">
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Signal</a></li>
 </ul>
@@ -156,7 +155,7 @@
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
-          <li><a href="../reference/signal.html">mutis.signal Package</a> &raquo;</li>
+          <li><a href="../reference/signal.html">mutis.signal Module</a> &raquo;</li>
         
       <li>Signal</li>
     
@@ -205,7 +204,7 @@
 <h1>Signal<a class="headerlink" href="#signal" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="mutis.signal.Signal">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">mutis.signal.</span></span><span class="sig-name descname"><span class="pre">Signal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">times</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">signs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mutis/signal/core.html#Signal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mutis.signal.Signal" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">mutis.signal.</span></span><span class="sig-name descname"><span class="pre">Signal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">times</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">signs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mutis/signal.html#Signal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mutis.signal.Signal" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Analysis and generation of a signal.</p>
 <p>Description goes here.</p>
@@ -248,31 +247,31 @@
 <p class="rubric">Methods Documentation</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="mutis.signal.Signal.OU_check_gen">
-<span class="sig-name descname"><span class="pre">OU_check_gen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mutis/signal/core.html#Signal.OU_check_gen"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mutis.signal.Signal.OU_check_gen" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">OU_check_gen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mutis/signal.html#Signal.OU_check_gen"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mutis.signal.Signal.OU_check_gen" title="Permalink to this definition">¶</a></dt>
 <dd><p>Description goes here.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mutis.signal.Signal.OU_fit">
-<span class="sig-name descname"><span class="pre">OU_fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rang</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mutis/signal/core.html#Signal.OU_fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mutis.signal.Signal.OU_fit" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">OU_fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rang</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mutis/signal.html#Signal.OU_fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mutis.signal.Signal.OU_fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Description goes here.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mutis.signal.Signal.PSD_check_gen">
-<span class="sig-name descname"><span class="pre">PSD_check_gen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fgen</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mutis/signal/core.html#Signal.PSD_check_gen"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mutis.signal.Signal.PSD_check_gen" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">PSD_check_gen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fgen</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mutis/signal.html#Signal.PSD_check_gen"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mutis.signal.Signal.PSD_check_gen" title="Permalink to this definition">¶</a></dt>
 <dd><p>Description goes here.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mutis.signal.Signal.gen_synth">
-<span class="sig-name descname"><span class="pre">gen_synth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mutis/signal/core.html#Signal.gen_synth"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mutis.signal.Signal.gen_synth" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">gen_synth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mutis/signal.html#Signal.gen_synth"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mutis.signal.Signal.gen_synth" title="Permalink to this definition">¶</a></dt>
 <dd><p>Description goes here.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mutis.signal.Signal.pdf">
-<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">pdf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ll</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mutis/signal/core.html#Signal.pdf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mutis.signal.Signal.pdf" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">pdf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ll</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mutis/signal.html#Signal.pdf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mutis.signal.Signal.pdf" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fit pdf as a curve.</p>
 </dd></dl>
 
@@ -286,7 +285,7 @@
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="mutis.signal.lc_gen_samp.html" class="btn btn-neutral float-left" title="lc_gen_samp" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../reference/signal.html" class="btn btn-neutral float-left" title="mutis.signal Module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>

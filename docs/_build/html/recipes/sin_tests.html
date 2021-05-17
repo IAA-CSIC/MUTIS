@@ -107,8 +107,8 @@
 </ul>
 <p class="caption"><span class="caption-text">Reference</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../reference/correlation.html">mutis.correlation Package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../reference/signal.html">mutis.signal Package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/correlation.html">mutis.correlation Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/signal.html">mutis.signal Module</a></li>
 </ul>
 
             
@@ -647,6 +647,10 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
+/Users/juan/Desktop/Doctorado/work/0235+164/MUTIS/mutis/lib/correlation.py:76: RuntimeWarning: divide by zero encountered in true_divide
+  udcf = (d1m - np.mean(d1m[msk])) * (d2m - np.mean(d2m[msk])) / np.std(d1m[msk]) / np.std(d2m[msk])
+/Users/juan/Desktop/Doctorado/work/0235+164/MUTIS/mutis/lib/correlation.py:76: RuntimeWarning: invalid value encountered in true_divide
+  udcf = (d1m - np.mean(d1m[msk])) * (d2m - np.mean(d2m[msk])) / np.std(d1m[msk]) / np.std(d2m[msk])
 &lt;ipython-input-11-7204bb7078d0&gt;:8: UserWarning: Matplotlib is currently using module://ipykernel.pylab.backend_inline, which is a non-GUI backend, so cannot show the figure.
   fig.show()
 </pre></div></div>
@@ -1025,6 +1029,15 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <p>Which is as expected, but uglier.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>
+</pre></div>
+</div>
+</div>
 </div>
 </div>
 
