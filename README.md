@@ -17,7 +17,6 @@ pip install .
 ```
 
 ### Documentation
-- https://iaa-csic.github.io/MUTIS
+- https://mutis.readthedocs.io/
 
-[comment]: <> ([![Docs Built]&#40;https://github.com/IAA-CSIC/MUTIS/workflows/builddocs/badge.svg&#41;]&#40;https://github.com/IAA-CSIC/MUTIS/actions&#41;)
 [![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/IAA-CSIC/MUTIS.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/IAA-CSIC/MUTIS/context:python)
