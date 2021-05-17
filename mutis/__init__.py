@@ -10,3 +10,6 @@ try:
 except pkg_resources.DistributionNotFound:
     # package is not installed
     pass
+
+from .correlation import Correlation
+from .signal import Signal
