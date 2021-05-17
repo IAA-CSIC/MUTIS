@@ -11,5 +11,5 @@ except pkg_resources.DistributionNotFound:
     # package is not installed
     pass
 
-from .correlation import Correlation
-from .signal import Signal
+from mutis.signal import Signal
+from mutis.correlation import Correlation
