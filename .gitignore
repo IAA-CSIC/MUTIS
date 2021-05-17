@@ -16,6 +16,7 @@ __pycache__
 
 
 # docs
+docs/api
 docs/_build
 docs/recipes/data
 docs/recipes/.ipynb_checkpoints

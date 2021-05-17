@@ -22,3 +22,4 @@ A Python package for the analysis of correlations of light curves and their stat
 
    reference/correlation
    reference/signal
+   reference/lib
