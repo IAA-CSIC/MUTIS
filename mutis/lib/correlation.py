@@ -53,7 +53,7 @@ def kroedel_ab(t1, d1, t2, d2, t, dt):
     Provide examples as below because they could be tested:
 
     >>> import numpy as np
-    >>> from mutis.correlation.functions import kroedel_ab
+    >>> from mutis.lib.correlation import kroedel_ab
     >>> t1 = np.linspace(1, 10, 100); s1 = np.sin(t1)
     >>> t2 = np.linspace(1, 10, 100); s2 = np.cos(t2)
     >>> t = np.linspace(1, 10, 100);  dt = np.tan(t2)
