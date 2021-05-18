@@ -196,7 +196,7 @@ class Signal:
         ax.plot(self.times, s2, "r-", label="gen", lw=0.5, alpha=0.8)
         ax.legend()
 
-    @staticfgen
+    @staticmethod
     def pdf(xx, ll, mu):
         """Fit pdf as a curve."""
         return (ll * mu) ** (1 + ll) / scipy_special.gamma(1 + ll) * np.exp(-ll * mu / xx) / xx ** (ll + 2)
