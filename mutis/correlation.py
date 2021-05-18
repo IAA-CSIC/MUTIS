@@ -22,14 +22,14 @@ class Correlation:
         Values of the time axis.
     signal2 : :class:`~mutis.signal.Signal`
         Values of the signal axis.
-    method : :py:class:`~str`
+    fcorr : :py:class:`~str`
         Method used to correlate the signals.
     """
 
-    def __init__(self, signal1, signal2, method):
+    def __init__(self, signal1, signal2, fcorr):
         self.signal1 = signal1
         self.signal2 = signal2
-        self.method = method
+        self.fcorr = fcorr
         self.times = np.array([])
         self.dts = np.array([])
         self.nb = np.array([])
@@ -39,7 +39,7 @@ class Correlation:
         self.l1s = None
         self.l2s = None
         self.l3s = None
-        self.signs = None
+        self.values = None
 
         t1, t2 = self.signal1.times, self.signal2.times
         self.tmin_full = t2.min() - t1.max()
@@ -74,7 +74,7 @@ class Correlation:
 
         # TODO: refactor if/elif with an helper function
         mc_corr = np.empty((self.N, self.times.size))
-        if self.method == "welsh_ab":
+        if self.fcorr == "welsh_ab":
             for n in range(self.N):
                 mc_corr[n] = welsh_ab(
                     self.signal1.times,
@@ -84,15 +84,15 @@ class Correlation:
                     self.times,
                     self.dts,
                 )
-            self.signs = welsh_ab(
+            self.values = welsh_ab(
                 self.signal1.times,
-                self.signal1.signs,
+                self.signal1.values,
                 self.signal2.times,
-                self.signal2.signs,
+                self.signal2.values,
                 self.times,
                 self.dts,
             )
-        elif self.method == "kroedel_ab":
+        elif self.fcorr == "kroedel_ab":
             for n in range(self.N):
                 mc_corr[n] = kroedel_ab(
                     self.signal1.times,
@@ -102,15 +102,15 @@ class Correlation:
                     self.times,
                     self.dts,
                 )
-                self.signs = kroedel_ab(
+                self.values = kroedel_ab(
                     self.signal1.times,
-                    self.signal1.signs,
+                    self.signal1.values,
                     self.signal2.times,
-                    self.signal2.signs,
+                    self.signal2.values,
                     self.times,
                     self.dts,
                 )
-        elif self.method == "numpy":
+        elif self.fcorr == "numpy":
             for n in range(self.N):
                 mc_corr[n] = nindcf(
                     self.signal1.times,
@@ -118,14 +118,14 @@ class Correlation:
                     self.signal2.times,
                     self.signal2.synth[n],
                 )
-            self.signs = nindcf(
+            self.values = nindcf(
                 self.signal1.times,
-                self.signal1.signs,
+                self.signal1.values,
                 self.signal2.times,
-                self.signal2.signs,
+                self.signal2.values,
             )
         else:
-            raise Exception("Unknown method " + self.method + " for correlation.")
+            raise Exception("Unknown method " + self.fcorr + " for correlation.")
 
         self.l3s = np.percentile(mc_corr, [0.135, 99.865], axis=0)
         self.l2s = np.percentile(mc_corr, [2.28, 97.73], axis=0)
@@ -176,7 +176,7 @@ class Correlation:
         ax.plot(self.times, self.l2s[1], "k--", label="$2\sigma$")
         ax.plot(self.times, self.l3s[0], "r-")
         ax.plot(self.times, self.l3s[1], "r-", label="$3\sigma$")
-        ax.plot(self.times, self.signs, "b.--", lw=1)
+        ax.plot(self.times, self.values, "b.--", lw=1)
 
         # full limit
         ax.axvline(x=self.tmin_full, ymin=-1, ymax=+1, color="red", linewidth=4, alpha=0.5)
@@ -243,11 +243,11 @@ class Correlation:
         if ax is None:
             ax = plt.gca()
 
-        ax.plot(self.signal1.times, self.signal1.signs, "b.-", lw=1, alpha=0.4)
+        ax.plot(self.signal1.times, self.signal1.values, "b.-", lw=1, alpha=0.4)
         ax.tick_params(axis="y", labelcolor="b")
         ax.set_ylabel("sig 1", color="b")
 
         ax2 = ax.twinx()
-        ax2.plot(self.signal2.times, self.signal2.signs, "r.-", lw=1, alpha=0.4)
+        ax2.plot(self.signal2.times, self.signal2.values, "r.-", lw=1, alpha=0.4)
         ax2.tick_params(axis="y", labelcolor="r")
         ax2.set_ylabel("sig 2", color="r")
