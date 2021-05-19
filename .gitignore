@@ -14,11 +14,12 @@ eggs
 # compiled files
 __pycache__
 
-# checkpoints
-.ipynb_checkpoints
-
 # docs
 docs/api
 docs/_build
 docs/recipes/data
 docs/recipes/.ipynb_checkpoints
+
+# tests coverage
+htmlcov
+.coverage
