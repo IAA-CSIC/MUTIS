@@ -184,9 +184,7 @@ class Signal:
         if ax is None:
             ax = plt.gca()
 
-        if fgen == "lc_gen_psd":
-            s2 = lc_gen_psd(self.times, self.values)
-        elif fgen == "lc_gen_psd_nft":
+        if fgen == "lc_gen_psd_nft":
             s2 = lc_gen_psd_nft(self.times, self.values)
         elif fgen == "lc_gen_psd_lombscargle":
             s2 = lc_gen_psd_lombscargle(self.times, self.values)
