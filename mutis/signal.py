@@ -62,7 +62,7 @@ class Signal:
                     raise Exception("You need to set the parameters for the signal")
                 self.synth[n] = lc_gen_ou(self.theta, self.mu, self.sigma, self.times)
             else:
-                raise(f'Unknown fgen method {self.fgen}')
+                raise Exception(f'Unknown fgen method {self.fgen}')
 
     def OU_fit(self, bins=None, rang=None, a=1e-5, b=100):
         """Description goes here."""
