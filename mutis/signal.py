@@ -153,8 +153,7 @@ class Signal:
             log.error(f"Some error fitting with MLE {e}")
 
         plt.legend(loc="lower right")
-
-        plt.show()
+        # plt.show()
 
         # estimate theta (from curve_fit)
         try:
