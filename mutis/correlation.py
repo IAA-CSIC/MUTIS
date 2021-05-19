@@ -35,7 +35,7 @@ class Correlation:
         self.nb = np.array([])
 
         # TODO: have a much smaller set of attributes
-        self.N = None
+        self.samples = None
         self.l1s = None
         self.l2s = None
         self.l3s = None
@@ -50,18 +50,18 @@ class Correlation:
         self.tmin_valid = -(np.max([t1.max() - t1.min(), t2.max() - t2.min()]) - np.min([t1.max() - t1.min(), t2.max() - t2.min()]))/ 2 + self.t0_full
         self.tmax_valid = +(np.max([t1.max() - t1.min(), t2.max() - t2.min()]) - np.min([t1.max() - t1.min(), t2.max() - t2.min()]))/ 2 + self.t0_full
 
-    def gen_synth(self, N):
+    def gen_synth(self, samples):
         """Description goes here.
 
         Parameters
         ----------
-        N : :py:class:`~int`
+        samples : :py:class:`~int`
             Parameter description.
         """
 
-        self.N = N
-        self.signal1.gen_synth(N)
-        self.signal2.gen_synth(N)
+        self.samples = samples
+        self.signal1.gen_synth(samples)
+        self.signal2.gen_synth(samples)
 
     def gen_corr(self):
         """Description goes here."""
@@ -73,9 +73,9 @@ class Correlation:
             )
 
         # TODO: refactor if/elif with an helper function
-        mc_corr = np.empty((self.N, self.times.size))
+        mc_corr = np.empty((self.samples, self.times.size))
         if self.fcorr == "welsh_ab":
-            for n in range(self.N):
+            for n in range(self.samples):
                 mc_corr[n] = welsh_ab(
                     self.signal1.times,
                     self.signal1.synth[n],
@@ -93,7 +93,7 @@ class Correlation:
                 self.dts,
             )
         elif self.fcorr == "kroedel_ab":
-            for n in range(self.N):
+            for n in range(self.samples):
                 mc_corr[n] = kroedel_ab(
                     self.signal1.times,
                     self.signal1.synth[n],
@@ -111,7 +111,7 @@ class Correlation:
                     self.dts,
                 )
         elif self.fcorr == "numpy":
-            for n in range(self.N):
+            for n in range(self.samples):
                 mc_corr[n] = nindcf(
                     self.signal1.times,
                     self.signal1.synth[n],

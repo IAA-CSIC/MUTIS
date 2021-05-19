@@ -44,11 +44,11 @@ class Signal:
         self.mu = None
         self.sigma = None
 
-    def gen_synth(self, N):
+    def gen_synth(self, samples):
         """Description goes here."""
 
-        self.synth = np.empty((N, self.times.size))
-        for n in range(N):
+        self.synth = np.empty((samples, self.times.size))
+        for n in range(samples):
             if self.fgen == "lc_gen_samp":
                 self.synth[n] = lc_gen_samp(self.values)
             elif self.fgen == "lc_gen_psd_nft":
