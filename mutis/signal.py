@@ -16,9 +16,6 @@ __all__ = ["Signal"]
 
 log = logging.getLogger(__name__)
 
-# TODO: choose method otherwise that modifying code
-# lc_gen_psd = lc_gen_psd_std
-lc_gen_psd = lc_gen_psd_nft
 
 
 class Signal:
@@ -54,8 +51,13 @@ class Signal:
         for n in range(N):
             if self.fgen == "lc_gen_samp":
                 self.synth[n] = lc_gen_samp(self.values)
-            if self.fgen == "lc_gen_psd":
-                self.synth[n] = lc_gen_psd(self.values, self.times)
+            elif self.fgen == "lc_gen_psd_nft":
+                self.synth[n] = lc_gen_psd_nft(self.times, self.values)
+            elif self.fgen == "lc_gen_psd_lombscargle":
+                self.synth[n] = lc_gen_psd_lombscargle(self.times, self.values)
+            elif self.fgen == "lc_gen_psd_fft":
+                self.synth[n] = lc_gen_psd_fft(self.values)
+            else:
             if self.fgen == "lc_gen_ou":
                 if self.theta is None or self.mu is None or self.sigma is None:
                     raise Exception("You need to set the parameters for the signal")
@@ -181,6 +183,7 @@ class Signal:
             fgen = self.fgen
         if ax is None:
             ax = plt.gca()
+
         if fgen == "lc_gen_psd":
             s2 = lc_gen_psd(self.times, self.values)
         elif fgen == "lc_gen_psd_nft":
