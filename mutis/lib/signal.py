@@ -9,7 +9,6 @@ import scipy.signal as scipy_signal
 
 __all__ = [
     "lc_gen_samp",
-    "lc_gen_psd_std",
     "lc_gen_psd_nft",
     "lc_gen_ou",
     "lc_gen_psd_lombscargle",
@@ -46,58 +45,45 @@ def lc_gen_ou(theta, mu, sigma, times, scale=None, loc=None):
     return s2
 
 
-def lc_gen_psd_std(signs):
-    """Generation using input PSD for light curves with similar PSD, mean and std."""
-
-    f, pxx = scipy_signal.welch(signs)
-    # fft2 = np.sqrt(2*pxx*pxx.size)*np.exp(1j*2*np.pi*np.random.randn(pxx.size))
-    fft2 = np.sqrt(2 * pxx * pxx.size) * np.exp(1j * 2 * np.pi * np.random.random(pxx.size))
-    s2 = np.fft.irfft(fft2, n=signs.size)
-    a = signs.std() / s2.std()
-    b = signs.mean() - a * s2.mean()
-    s2 = a * s2 + b
-    return s2
-
-
-def lc_gen_psd_c(ts, signs, times):
+def lc_gen_psd_c(ts, values, times):
     """Generation using interpolated PSD for light curves with similar PSD, mean and std."""
 
-    f, p = scipy_signal.welch(signs, nperseg=ts.size / 2)
+    f, p = scipy_signal.welch(values, nperseg=ts.size / 2)
     fp = np.linspace(min(f), max(f), times.size // 2 + 1)
     pp = np.interp(fp, f, p)
     fft = np.sqrt(2 * pp * pp.size) * np.exp(1j * 2 * np.pi * np.random.random(pp.size))
-    s2 = np.fft.irfft(fft, n=signs.size)
-    a = signs.std() / s2.std()
-    b = signs.mean() - a * s2.mean()
+    s2 = np.fft.irfft(fft, n=values.size)
+    a = values.std() / s2.std()
+    b = values.mean() - a * s2.mean()
     s2 = a * s2 + b
     return s2
 
 
-def lc_gen_psd_fft(signs):
+def lc_gen_psd_fft(values):
     """Generation using welch and fft with similar PSD, mean and std."""
 
     # this is not valid for non-uniform times (see PSD tests for a comparison)
-    f, pxx = scipy_signal.welch(signs)
+    f, pxx = scipy_signal.welch(values)
     # fft2 = np.sqrt(2*Pxx*Pxx.size)*np.exp(1j*2*pi*np.random.randn(Pxx.size))
     fft2 = np.sqrt(2 * pxx * pxx.size) * np.exp(1j * 2 * np.pi * np.random.random(pxx.size))
-    s2 = np.fft.irfft(fft2, n=signs.size)
-    a = signs.std() / s2.std()
-    b = signs.mean() - a * s2.mean()
+    s2 = np.fft.irfft(fft2, n=values.size)
+    a = values.std() / s2.std()
+    b = values.mean() - a * s2.mean()
     s2 = a * s2 + b
     return s2
 
 
-def lc_gen_psd_lombscargle(times, signs):
+def lc_gen_psd_lombscargle(times, values):
     """Description goes here."""
 
-    if signs.size % 2 != 0:
-        sigp = signs[:-1]
+    if values.size % 2 != 0:
+        sigp = values[:-1]
         tp = times[:-1]
     else:
-        sigp = signs
+        sigp = values
         tp = times
 
-    N = signs.size
+    N = values.size
     # k = np.arange(-N/2, N/2) no bc scipy_signal.lombscargle does not support freq zero
     k = np.linspace(-N / 2, N / 2 - 1 + 1e-6, N)
     freqs = k / 2 / np.pi
@@ -111,18 +97,18 @@ def lc_gen_psd_lombscargle(times, signs):
     s2 = nfft.nfft((times - (times.max() + times.min()) / 2) / np.ptp(times), fft2, N, use_fft=True) / N
 
     # fix small deviations
-    a = signs.std() / s2.std()
-    b = signs.mean() - a * s2.mean()
+    a = values.std() / s2.std()
+    b = values.mean() - a * s2.mean()
     s2 = a * s2 + b
 
     return s2
 
 
-def lc_gen_psd_nft(times, signs):
+def lc_gen_psd_nft(times, values):
     k = np.arange(-times.size // 2, times.size / 2)
     N = k.size
 
-    nft = nfft.nfft_adjoint((times - (times.max() + times.min()) / 2) / np.ptp(times), signs, N, use_fft=True)
+    nft = nfft.nfft_adjoint((times - (times.max() + times.min()) / 2) / np.ptp(times), values, N, use_fft=True)
 
     # build random phase to get real signal
     phase = np.random.random(N // 2)
@@ -133,8 +119,8 @@ def lc_gen_psd_nft(times, signs):
     s2 = np.real(s2)  # np.real to fix small imaginary part from numerical error
 
     # fix small mean, std difference from numerical error
-    a = signs.std() / s2.std()
-    b = signs.mean() - a * s2.mean()
+    a = values.std() / s2.std()
+    b = values.mean() - a * s2.mean()
     s2 = a * s2 + b
 
     return s2
