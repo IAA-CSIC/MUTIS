@@ -9,7 +9,6 @@ import scipy.signal as scipy_signal
 
 __all__ = [
     "lc_gen_samp",
-    "lc_gen_psd_std",
     "lc_gen_psd_nft",
     "lc_gen_ou",
     "lc_gen_psd_lombscargle",
@@ -43,19 +42,6 @@ def lc_gen_ou(theta, mu, sigma, times, scale=None, loc=None):
         s2 = scale * s2 / np.std(s2)
     if loc is not None:
         s2 = s2 - np.mean(s2) + loc
-    return s2
-
-
-def lc_gen_psd_std(signs):
-    """Generation using input PSD for light curves with similar PSD, mean and std."""
-
-    f, pxx = scipy_signal.welch(signs)
-    # fft2 = np.sqrt(2*pxx*pxx.size)*np.exp(1j*2*np.pi*np.random.randn(pxx.size))
-    fft2 = np.sqrt(2 * pxx * pxx.size) * np.exp(1j * 2 * np.pi * np.random.random(pxx.size))
-    s2 = np.fft.irfft(fft2, n=signs.size)
-    a = signs.std() / s2.std()
-    b = signs.mean() - a * s2.mean()
-    s2 = a * s2 + b
     return s2
 
 
