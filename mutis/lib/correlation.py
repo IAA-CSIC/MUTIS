@@ -133,8 +133,8 @@ def fwelsh(t1, d1, t2, d2, t, dt=None):
 
 
 # vectorize funcions
-kroedel = np.vectorize(fkroedel, excluded=(0, 1, 2, 3, 5), otypes=[np.float])
-welsh = np.vectorize(fwelsh, excluded=(0, 1, 2, 3, 5), otypes=[np.float])
+kroedel = np.vectorize(fkroedel, excluded=(0, 1, 2, 3, 5), otypes=[float])
+welsh = np.vectorize(fwelsh, excluded=(0, 1, 2, 3, 5), otypes=[float])
 
 
 def ndcf(x, y):
