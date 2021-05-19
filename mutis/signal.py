@@ -57,8 +57,7 @@ class Signal:
                 self.synth[n] = lc_gen_psd_lombscargle(self.times, self.values)
             elif self.fgen == "lc_gen_psd_fft":
                 self.synth[n] = lc_gen_psd_fft(self.values)
-            else:
-            if self.fgen == "lc_gen_ou":
+            elif self.fgen == "lc_gen_ou":
                 if self.theta is None or self.mu is None or self.sigma is None:
                     raise Exception("You need to set the parameters for the signal")
                 else:
