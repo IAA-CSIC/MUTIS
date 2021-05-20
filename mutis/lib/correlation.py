@@ -326,8 +326,8 @@ def gen_times_uniform(t1, t2, tmin=None, tmax=None, nbinsmin=121, N=200):
     if tmin is None:
         tmin = -tmax
 
-    t = np.linspace(tmin, tmax, N)
-    dtm = (tmax - tmin) / N
+    t = np.linspace(tmin, tmax, n)
+    dtm = (tmax - tmin) / n
     dt = np.full(t.shape, dtm)
     nb = np.empty(t.shape)
     t1m, t2m = np.meshgrid(t1, t2)
@@ -478,10 +478,10 @@ def gen_times_canopy(t1, t2, dtmin=0.01, dtmax=0.5, nbinsmin=500, nf=0.5):
 # MC estimators of uncertainties
 #
 
-# def MC_corr_err(t1, s1, t1p, t2, s2, t2p, t, dt, fcorr, fgen, N=400):
+# def MC_corr_err(t1, s1, t1p, t2, s2, t2p, t, dt, fcorr, fgen, n=400):
 #     """ MC percentiles generation."""
-#     mc_corr = np.empty((N, t.size))
-#     for n in range(0, N):
+#     mc_corr = np.empty((n, t.size))
+#     for n in range(0, n):
 #         mc_corr[n] = fcorr(t1, fgen(t1, s1, t1p), t2, fgen(t2, s2, t2p), t, dt)
 #
 #     uppp, lowpp = np.percentile(mc_corr, [0.135, 99.865], axis=0)
@@ -491,10 +491,10 @@ def gen_times_canopy(t1, t2, dtmin=0.01, dtmax=0.5, nbinsmin=500, nf=0.5):
 #     return (up, low), (upp, lowp), (uppp, lowpp)
 #
 #
-# def MC_sig_err(t1, s1, ds1, t2, s2, ds2, t, dt, fcorr, fgen, N=400):
+# def MC_sig_err(t1, s1, ds1, t2, s2, ds2, t, dt, fcorr, fgen, n=400):
 #     """ MC error generation."""
-#     mc_corr2 = np.empty((N, t.size))
-#     for n in range(0, N):
+#     mc_corr2 = np.empty((n, t.size))
+#     for n in range(0, n):
 #         mc_corr2[n] = fcorr(t1, s1 + ds1 * np.random.randn(s1.size),
 #                             t2, s2 + ds2 * np.random.randn(s2.size), t, dt)
 #

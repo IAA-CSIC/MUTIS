@@ -95,7 +95,7 @@ def lc_gen_psd_lombscargle(times, values):
     phase = np.random.random(pxx.size // 2)
     phase = np.concatenate((-np.flip(phase), [0], phase[:-1]))
     fft2 = np.sqrt(2 * pxx * pxx.size) * np.exp(1j * 2 * np.pi * phase)
-    s2 = nfft.nfft((times - (times.max() + times.min()) / 2) / np.ptp(times), fft2, N, use_fft=True) / N
+    s2 = nfft.nfft((times - (times.max() + times.min()) / 2) / np.ptp(times), fft2, n, use_fft=True) / n
 
     # fix small deviations
     a = values.std() / s2.std()
@@ -113,16 +113,16 @@ def lc_gen_psd_nft(times, values):
     randomised signal."""
 
     k = np.arange(-times.size // 2, times.size / 2)
-    N = k.size
+    n = k.size
 
-    nft = nfft.nfft_adjoint((times - (times.max() + times.min()) / 2) / np.ptp(times), values, N, use_fft=True)
+    nft = nfft.nfft_adjoint((times - (times.max() + times.min()) / 2) / np.ptp(times), values, n, use_fft=True)
 
     # build random phase to get real signal
-    phase = np.random.random(N // 2)
+    phase = np.random.random(n // 2)
     phase = np.concatenate((-np.flip(phase), [0], phase[:-1]))
 
     fft2 = np.abs(nft) * np.exp(1j * 2 * np.pi * phase)
-    s2 = nfft.nfft((times - (times.max() + times.min()) / 2) / np.ptp(times), fft2, use_fft=True) / N
+    s2 = nfft.nfft((times - (times.max() + times.min()) / 2) / np.ptp(times), fft2, use_fft=True) / n
     s2 = np.real(s2)  # np.real to fix small imaginary part from numerical error
 
     # fix small mean, std difference from numerical error
