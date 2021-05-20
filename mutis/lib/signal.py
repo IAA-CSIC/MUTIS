@@ -39,18 +39,18 @@ def lc_gen_ou(theta, mu, sigma, times, scale=None, loc=None):
     return s2
 
 
-def lc_gen_psd_c(ts, values, times):
-    """Generation using interpolated PSD for light curves with similar PSD, mean and std."""
-
-    f, p = scipy_signal.welch(values, nperseg=ts.size / 2)
-    fp = np.linspace(min(f), max(f), times.size // 2 + 1)
-    pp = np.interp(fp, f, p)
-    fft = np.sqrt(2 * pp * pp.size) * np.exp(1j * 2 * np.pi * np.random.random(pp.size))
-    s2 = np.fft.irfft(fft, n=values.size)
-    a = values.std() / s2.std()
-    b = values.mean() - a * s2.mean()
-    s2 = a * s2 + b
-    return s2
+# def lc_gen_psd_c(ts, values, times):
+#     """Generation using interpolated PSD for light curves with similar PSD, mean and std."""
+#
+#     f, p = scipy_signal.welch(values, nperseg=ts.size / 2)
+#     fp = np.linspace(min(f), max(f), times.size // 2 + 1)
+#     pp = np.interp(fp, f, p)
+#     fft = np.sqrt(2 * pp * pp.size) * np.exp(1j * 2 * np.pi * np.random.random(pp.size))
+#     s2 = np.fft.irfft(fft, n=values.size)
+#     a = values.std() / s2.std()
+#     b = values.mean() - a * s2.mean()
+#     s2 = a * s2 + b
+#     return s2
 
 
 def lc_gen_psd_fft(values):
