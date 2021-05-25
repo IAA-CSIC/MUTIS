@@ -32,9 +32,13 @@ def test_gen_synth(signal, ou_params):
     with pytest.raises(Exception):
         signal["fail"].gen_synth(10)
     signal["samp"].gen_synth(10)
+    assert len(signal["samp"].synth) == 10
     signal["psd_nft"].gen_synth(10)
+    assert len(signal["psd_nft"].synth) == 10
     signal["psd_fft"].gen_synth(10)
+    assert len(signal["psd_fft"].synth) == 10
     signal["psd_lombscargle"].gen_synth(10)
+    assert len(signal["psd_lombscargle"].synth) == 10
 
     with pytest.raises(Exception):
         signal["ou"].gen_synth(10)
@@ -42,6 +46,12 @@ def test_gen_synth(signal, ou_params):
     signal["ou"].mu = ou_params["mu"]
     signal["ou"].sigma = ou_params["sigma"]
     signal["ou"].gen_synth(10)
+    assert len(signal["ou"].synth) == 10
+
+
+def test_ou_fit(signal):
+    fits = signal["ou"].OU_fit()
+    assert_allclose(fits["curve_fit"][0][0], 0.24649419240104922, rtol=1e-3)
 
 
 def test_psd_checks_gen(signal):
@@ -50,11 +60,6 @@ def test_psd_checks_gen(signal):
     signal["psd_nft"].PSD_check_gen()
     signal["psd_fft"].PSD_check_gen()
     signal["psd_lombscargle"].PSD_check_gen()
-
-
-def test_ou_fit(signal):
-    fits = signal["ou"].OU_fit()
-    assert_allclose(fits["curve_fit"][0][0], 0.24649419240104922, rtol=1e-2)
 
 
 def test_ou_check_gen(signal, ou_params):

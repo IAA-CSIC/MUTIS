@@ -89,7 +89,7 @@ class Correlation:
                 "Please use gen_times() or manually set them."
             )
 
-        # TODO: refactor if/elif with an helper function
+        # TODO: refactor if/elif with a helper function
         mc_corr = np.empty((self.samples, self.times.size))
         if self.fcorr == "welsh_ab":
             for n in range(self.samples):
