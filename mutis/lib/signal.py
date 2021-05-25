@@ -105,7 +105,7 @@ def lc_gen_psd_lombscargle(times, values):
 
 
 def lc_gen_psd_nft(times, values):
-    k = np.arange(-times.size // 2, times.size / 2)
+    k = np.arange(-times.size // 2, times.size // 2)
     N = k.size
 
     nft = nfft.nfft_adjoint((times - (times.max() + times.min()) / 2) / np.ptp(times), values, N, use_fft=True)
