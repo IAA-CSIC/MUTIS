@@ -472,34 +472,3 @@ def gen_times_canopy(t1, t2, dtmin=0.01, dtmax=0.5, nbinsmin=500, nf=0.5):
     nb = np.delete(nb, idx)
 
     return t, dt, nb
-
-
-#
-# MC estimators of uncertainties
-#
-
-# def MC_corr_err(t1, s1, t1p, t2, s2, t2p, t, dt, fcorr, fgen, n=400):
-#     """ MC percentiles generation."""
-#     mc_corr = np.empty((n, t.size))
-#     for n in range(0, n):
-#         mc_corr[n] = fcorr(t1, fgen(t1, s1, t1p), t2, fgen(t2, s2, t2p), t, dt)
-#
-#     uppp, lowpp = np.percentile(mc_corr, [0.135, 99.865], axis=0)
-#     upp, lowp = np.percentile(mc_corr, [2.28, 97.73], axis=0)
-#     up, low = np.percentile(mc_corr, [15.865, 84.135], axis=0)
-#
-#     return (up, low), (upp, lowp), (uppp, lowpp)
-#
-#
-# def MC_sig_err(t1, s1, ds1, t2, s2, ds2, t, dt, fcorr, fgen, n=400):
-#     """ MC error generation."""
-#     mc_corr2 = np.empty((n, t.size))
-#     for n in range(0, n):
-#         mc_corr2[n] = fcorr(t1, s1 + ds1 * np.random.randn(s1.size),
-#                             t2, s2 + ds2 * np.random.randn(s2.size), t, dt)
-#
-#     uppp2, lowpp2 = np.percentile(mc_corr2, [0.135, 99.865], axis=0)
-#     upp2, lowp2 = np.percentile(mc_corr2, [2.28, 97.73], axis=0)
-#     up2, low2 = np.percentile(mc_corr2, [15.865, 84.135], axis=0)
-#
-#     return (up2, low2), (upp2, lowp2), (uppp2, lowpp2)
