@@ -51,12 +51,14 @@ class Signal:
         for n in range(samples):
             if self.fgen == "lc_gen_samp":
                 self.synth[n] = lc_gen_samp(self.values)
+            elif self.fgen == "lc_gen_psd_fft":
+                self.synth[n] = lc_gen_psd_fft(self.values)
             elif self.fgen == "lc_gen_psd_nft":
                 self.synth[n] = lc_gen_psd_nft(self.times, self.values)
             elif self.fgen == "lc_gen_psd_lombscargle":
                 self.synth[n] = lc_gen_psd_lombscargle(self.times, self.values)
-            elif self.fgen == "lc_gen_psd_fft":
-                self.synth[n] = lc_gen_psd_fft(self.values)
+            elif self.fgen == "lc_gen_psd_c":
+                self.synth[n] = lc_gen_psd_c(self.times, self.values, self.times)
             elif self.fgen == "lc_gen_ou":
                 if self.theta is None or self.mu is None or self.sigma is None:
                     raise Exception("You need to set the parameters for the signal")
@@ -184,12 +186,14 @@ class Signal:
         if ax is None:
             ax = plt.gca()
 
-        if fgen == "lc_gen_psd_nft":
+        if fgen == "lc_gen_psd_fft":
+            s2 = lc_gen_psd_fft(self.values)
+        elif fgen == "lc_gen_psd_nft":
             s2 = lc_gen_psd_nft(self.times, self.values)
         elif fgen == "lc_gen_psd_lombscargle":
             s2 = lc_gen_psd_lombscargle(self.times, self.values)
-        elif fgen == "lc_gen_psd_fft":
-            s2 = lc_gen_psd_fft(self.values)
+        elif fgen == "lc_gen_psd_c":
+            s2 = lc_gen_psd_c(self.times, self.values, self.times)
         else:
             raise Exception("No valid fgen specified")
 

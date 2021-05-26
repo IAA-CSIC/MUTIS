@@ -13,6 +13,7 @@ __all__ = [
     "lc_gen_ou",
     "lc_gen_psd_lombscargle",
     "lc_gen_psd_fft",
+    "lc_gen_psd_c"
 ]
 
 log = logging.getLogger(__name__)
