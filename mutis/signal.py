@@ -72,32 +72,39 @@ class Signal:
         # TODO: make a generic fit method
         res = dict()
 
+        y = self.values
+        t = self.times
+
+        dy = np.diff(y)
+        dt = np.diff(t)
+
         # estimate sigma
         try:
-            # dy = np.diff(self.values)
-            # dt = np.diff(self.times)
-            sigma_est = (np.nanmean(np.diff(self.values) ** 2 / self.values[:-1] ** 2 / np.diff(self.times))) ** 0.5
-            res["sigma_est"] = sigma_est
+            sigma_est = (np.nanmean(dy ** 2 / y[:-1] ** 2 / dt)) ** 0.5
+            res['sigma_est'] = sigma_est
         except Exception as e:
             raise Exception(f"Could not estimate sigma: {e}")
 
         # plot histogram
         if bins is None:
-            bins = np.int(self.values.size ** 0.5 / 1.5)  # bins='auto'
+            bins = np.int(y.size ** 0.5 / 1.5)  # bins='auto'
         if rang is None:
-            rang = (np.percentile(self.values, 0), np.percentile(self.values, 99))
-        p, x = np.histogram(self.values, density=True, bins=bins, range=rang)  # bins='sqrt')
+            rang = (np.percentile(y, 0), np.percentile(y, 99))
+
+        p, x = np.histogram(y, density=True, bins=bins, range=rang)  # bins='sqrt')
         x = (x + np.roll(x, -1))[:-1] / 2.0
 
         plt.subplots()
-        plt.hist(self.values, density=True, alpha=0.75, bins=bins, range=rang)
-        plt.plot(x, p, "r-", alpha=0.5)
+
+        plt.hist(y, density=True, alpha=0.75, bins=bins, range=rang)
+        plt.plot(x, p, 'r-', alpha=0.5)
+
         anchored_text = AnchoredText(
-            f"mean    {np.mean(self.values):.2g} \n "
-            "median  {np.median(self.values):.2g} \n "
-            "mode    {scipy_stats.mode(self.values)[0][0]:.2g} \n "
-            "std     {np.std(self.values):.2g} \n "
-            "var     {np.var(self.values):.2g}",
+            f"mean    {np.mean(y):.2g} \n "
+            f"median  {np.median(y):.2g} \n "
+            f"mode    {scipy_stats.mode(y)[0][0]:.2g} \n "
+            f"std     {np.std(y):.2g} \n "
+            f"var     {np.var(y):.2g}",
             loc="upper right",
         )
         plt.gca().add_artist(anchored_text)
@@ -111,35 +118,44 @@ class Signal:
             # print('pcov: ')
             # print(np.sqrt(np.diag(pcov)))
             x_c = np.linspace(1e-5, 1.1 * np.max(x), 1000)
-            plt.plot(x_c, self.pdf(x_c, *popt), "k-", label="curve_fit", alpha=0.8)
-            res["curve_fit"] = (popt, np.sqrt(np.diag(pcov)))
+            plt.plot(x_c, self.pdf(x_c, *popt), 'k-', label='curve_fit', alpha=0.8)
+            res['curve_fit'] = (popt, np.sqrt(np.diag(pcov)))
         except Exception as e:
+            popt, pcov = None, None
             raise Exception(f"Some error fitting with curve_fit {e}")
 
-        # TODO: place outside as a helper class
-        #       and understand how it is used
-        #       is it mu really needed ?
-        #       mu here is different than self.mu
         # fit pdf with MLE
+        # TODO: place outside as a helper class
+        #       mu here is different than self.mu
         class OU(scipy_stats.rv_continuous):
             def _pdf(self, x, l, mu):
                 return (l * mu) ** (1 + l) / scipy_special.gamma(1 + l) * np.exp(-l * mu / x) / x ** (l + 2)
 
         try:
-            fit = OU(a=a, b=np.percentile(self.values, b)).fit(self.values, 1, 1, floc=0, fscale=1)
+            fit = OU(a=a, b=np.percentile(y, b)).fit(y, 1, 1, floc=0, fscale=1)
             # print('MLE fit: (l, mu)')
             # print(fit)
             x_c = np.linspace(0, 1.1 * np.max(x), 1000)
-            plt.plot(x_c, self.pdf(x_c, fit[0], fit[1]), "k-.", label="MLE", alpha=0.8)
-            res["MLE_fit"] = fit[:-2]
+            plt.plot(x_c, self.pdf(x_c, fit[0], fit[1]), 'k-.', label='MLE', alpha=0.8)
+            res['MLE_fit'] = fit[:-2]
         except Exception as e:
             raise Exception(f"Some error fitting with MLE {e}")
+
         plt.legend(loc="lower right")
+
         plt.show()
 
-        # estimate theta
-        res["th_est1"] = fit[0] * sigma_est ** 2 / 2
-        res["th_est2"] = popt[0] * sigma_est ** 2 / 2
+        # estimate theta (from curve_fit)
+        try:
+            res['th_est1'] = fit[0] * sigma_est ** 2 / 2
+        except:
+            res['th_est1'] = None
+
+        # estimate theta (from MLE)
+        try:
+            res['th_est2'] = popt[0] * sigma_est ** 2 / 2
+        except:
+            res['th_est2'] = None
 
         return res
 
