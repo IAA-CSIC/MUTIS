@@ -2,6 +2,7 @@ import pytest
 import numpy as np
 from numpy.testing import assert_allclose
 from mutis.signal import Signal
+from mutis.lib.signal import lc_gen_psd_c
 
 
 @pytest.fixture
@@ -64,3 +65,9 @@ def test_psd_checks_gen(signal):
 
 def test_ou_check_gen(signal, ou_params):
     signal["ou"].OU_check_gen(ou_params["theta"], ou_params["mu"], ou_params["sigma"])
+
+
+def test_lc_gen_psd_c(signal):
+    values = lc_gen_psd_c(signal["samp"].times, signal["samp"].values, signal["samp"].times)
+    assert len(values) == 100
+
