@@ -159,38 +159,61 @@ class Signal:
 
         return res
 
-    def OU_check_gen(self, theta, mu, sigma):
-        """Description goes here."""
+    def OU_check_gen(self, theta, mu, sigma, fpsd='lombscargle', ax1=None, ax2=None, ax3=None):
 
-        # TODO: make a generic check_gen method
+        # TODO make a generic check_gen method
 
-        t, y = self.times, self.values
-        y2 = lc_gen_ou(theta, mu, sigma, self.times, scale=np.std(self.values), loc=np.mean(self.values))
+        t, y = self.t, self.s
+        y2 = lc_gen_ou(theta, mu, sigma, self.t)  # , scale=np.std(self.s), loc=np.mean(self.s))
 
-        # plot the two signals
-        fig, ax = plt.subplots()
-        ax.plot(t, y, "b-", label="orig", lw=0.5, alpha=0.8)
-        ax2 = ax.twinx()
-        ax2.plot(t, y2, "r-", label="gen", lw=0.5, alpha=0.8)
-        plt.show()
+        if (ax1 is None) or (ax2 is None) or (ax3 is None):
+            fig, (ax1, ax2, ax3) = plt.subplots(nrows=1, ncols=3, figsize=(20, 4))
 
-        # plot their histogram
-        fig, ax = plt.subplots()
-        bins = "auto"  # bins = np.int(y.size**0.5/1.5) #
+        # Plot the two signals
+
+        ax1.plot(t, y, 'b-', label='orig', lw=0.5, alpha=0.8)
+
+        # ax1p = ax1.twinx()
+        ax1.plot(t, y2, 'r-', label='gen', lw=0.5, alpha=0.8)
+        ax1.set_title('light curves')
+
+        # Plot their histogram
+
+        bins = 'auto'  # bins = np.int(y.size**0.5/1.5) #
         rang = (np.percentile(y, 0), np.percentile(y, 99))
-        ax.hist(y, density=True, color="b", alpha=0.4, bins=bins, range=rang)
-        ax2 = ax.twinx()
-        bins = "auto"  # bins = np.int(y.size**0.5/1.5) #
-        rang = (np.percentile(y2, 0), np.percentile(y2, 99))
-        ax2.hist(y2, density=True, color="r", alpha=0.4, bins=bins, range=rang)
-        plt.show()
+        ax2.hist(y, density=True, color='b', alpha=0.4, bins=bins, range=rang)
 
-        # plot their PSD
-        fig, ax = plt.subplots()
-        ax.psd(y, color="b", lw=1, alpha=0.5)
-        ax2 = ax.twinx()
-        ax2.psd(y2, color="r", lw=1, alpha=0.5)
-        plt.show()
+        # ax2p = ax2.twinx()
+        bins = 'auto'  # bins = np.int(y.size**0.5/1.5) #
+        rang = (np.percentile(y2, 0), np.percentile(y2, 99))
+        ax2.hist(y2, density=True, color='r', alpha=0.4, bins=bins, range=rang)
+
+        ax2.set_title('pdf')
+
+        # Plot their PSD
+
+        if fpsd == 'lombscargle':
+            N = self.s.size
+            k = np.linspace(1e-3, N / 2, N // 2)
+            freqs = k / 2 / pi
+
+            Pxx = sp.signal.lombscargle(t, y, freqs, normalize=True)
+            ax3.plot(freqs, Pxx, 'b-', lw=1, alpha=0.5)
+
+            Pxx2 = sp.signal.lombscargle(t, y2, freqs, normalize=True)
+            ax3.plot(freqs, Pxx2, 'r-', lw=1, alpha=0.5)
+
+            ax3.set_xscale('log')
+            # ax3.set_yscale('log')
+        else:
+            ax3.psd(y, color='b', lw=1, alpha=0.5)
+
+            ax3p = ax3.twinx()
+            ax3p.psd(y2, color='r', lw=1, alpha=0.5)
+
+        ax3.set_title('PSD')
+
+        return (ax1, ax2, ax3)
 
     def PSD_check_gen(self, fgen=None, ax=None):
         """Description goes here."""
