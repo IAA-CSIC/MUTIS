@@ -8,6 +8,7 @@ import numpy as np
 import scipy.optimize as scipy_optimize
 import scipy.special as scipy_special
 import scipy.stats as scipy_stats
+import scipy.signal as scipy_signal
 from matplotlib.offsetbox import AnchoredText
 
 from mutis.lib.signal import *
@@ -163,8 +164,8 @@ class Signal:
 
         # TODO make a generic check_gen method
 
-        t, y = self.t, self.s
-        y2 = lc_gen_ou(theta, mu, sigma, self.t)  # , scale=np.std(self.s), loc=np.mean(self.s))
+        t, y = self.times, self.values
+        y2 = lc_gen_ou(theta, mu, sigma, self.times)  # , scale=np.std(self.s), loc=np.mean(self.s))
 
         if (ax1 is None) or (ax2 is None) or (ax3 is None):
             fig, (ax1, ax2, ax3) = plt.subplots(nrows=1, ncols=3, figsize=(20, 4))
@@ -193,14 +194,14 @@ class Signal:
         # Plot their PSD
 
         if fpsd == 'lombscargle':
-            N = self.s.size
+            N = self.values.size
             k = np.linspace(1e-3, N / 2, N // 2)
-            freqs = k / 2 / pi
+            freqs = k / 2 / np.pi
 
-            Pxx = sp.signal.lombscargle(t, y, freqs, normalize=True)
+            Pxx = scipy_signal.lombscargle(t, y, freqs, normalize=True)
             ax3.plot(freqs, Pxx, 'b-', lw=1, alpha=0.5)
 
-            Pxx2 = sp.signal.lombscargle(t, y2, freqs, normalize=True)
+            Pxx2 = scipy_signal.lombscargle(t, y2, freqs, normalize=True)
             ax3.plot(freqs, Pxx2, 'r-', lw=1, alpha=0.5)
 
             ax3.set_xscale('log')
