@@ -194,15 +194,14 @@ class Signal:
         # Plot their PSD
 
         if fpsd == 'lombscargle':
-            N = self.values.size
-            k = np.linspace(1e-3, N / 2, N // 2)
+            k = np.linspace(1e-3, self.values.size / 2, self.values.size // 2)
             freqs = k / 2 / np.pi
 
-            Pxx = scipy_signal.lombscargle(t, y, freqs, normalize=True)
-            axes['ax3'].plot(freqs, Pxx, 'b-', lw=1, alpha=0.5)
+            pxx = scipy_signal.lombscargle(t, y, freqs, normalize=True)
+            axes['ax3'].plot(freqs, pxx, 'b-', lw=1, alpha=0.5)
 
-            Pxx2 = scipy_signal.lombscargle(t, y2, freqs, normalize=True)
-            axes['ax3'].plot(freqs, Pxx2, 'r-', lw=1, alpha=0.5)
+            pxx2 = scipy_signal.lombscargle(t, y2, freqs, normalize=True)
+            axes['ax3'].plot(freqs, pxx2, 'r-', lw=1, alpha=0.5)
 
             axes['ax3'].set_xscale('log')
             # ax3.set_yscale('log')
