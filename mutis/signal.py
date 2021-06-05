@@ -160,36 +160,36 @@ class Signal:
 
         return res
 
-    def OU_check_gen(self, theta, mu, sigma, fpsd='lombscargle', ax1=None, ax2=None, ax3=None):
+    def OU_check_gen(self, theta, mu, sigma, fpsd='lombscargle', **axes):
 
         # TODO make a generic check_gen method
 
         t, y = self.times, self.values
         y2 = lc_gen_ou(theta, mu, sigma, self.times)  # , scale=np.std(self.s), loc=np.mean(self.s))
 
-        if (ax1 is None) or (ax2 is None) or (ax3 is None):
-            fig, (ax1, ax2, ax3) = plt.subplots(nrows=1, ncols=3, figsize=(20, 4))
+        if ('ax1' not in axes) or ('ax2' not in axes) or ('ax3' not in axes):
+            fig, (axes['ax1'], axes['ax2'], axes['ax3']) = plt.subplots(nrows=1, ncols=3, figsize=(20, 4))
 
         # Plot the two signals
 
-        ax1.plot(t, y, 'b-', label='orig', lw=0.5, alpha=0.8)
+        axes['ax1'].plot(t, y, 'b-', label='orig', lw=0.5, alpha=0.8)
 
         # ax1p = ax1.twinx()
-        ax1.plot(t, y2, 'r-', label='gen', lw=0.5, alpha=0.8)
-        ax1.set_title('light curves')
+        axes['ax1'].plot(t, y2, 'r-', label='gen', lw=0.5, alpha=0.8)
+        axes['ax1'].set_title('light curves')
 
         # Plot their histogram
 
         bins = 'auto'  # bins = np.int(y.size**0.5/1.5) #
         rang = (np.percentile(y, 0), np.percentile(y, 99))
-        ax2.hist(y, density=True, color='b', alpha=0.4, bins=bins, range=rang)
+        axes['ax2'].hist(y, density=True, color='b', alpha=0.4, bins=bins, range=rang)
 
         # ax2p = ax2.twinx()
         bins = 'auto'  # bins = np.int(y.size**0.5/1.5) #
         rang = (np.percentile(y2, 0), np.percentile(y2, 99))
-        ax2.hist(y2, density=True, color='r', alpha=0.4, bins=bins, range=rang)
+        axes['ax2'].hist(y2, density=True, color='r', alpha=0.4, bins=bins, range=rang)
 
-        ax2.set_title('pdf')
+        axes['ax2'].set_title('pdf')
 
         # Plot their PSD
 
@@ -199,22 +199,22 @@ class Signal:
             freqs = k / 2 / np.pi
 
             Pxx = scipy_signal.lombscargle(t, y, freqs, normalize=True)
-            ax3.plot(freqs, Pxx, 'b-', lw=1, alpha=0.5)
+            axes['ax3'].plot(freqs, Pxx, 'b-', lw=1, alpha=0.5)
 
             Pxx2 = scipy_signal.lombscargle(t, y2, freqs, normalize=True)
-            ax3.plot(freqs, Pxx2, 'r-', lw=1, alpha=0.5)
+            axes['ax3'].plot(freqs, Pxx2, 'r-', lw=1, alpha=0.5)
 
-            ax3.set_xscale('log')
+            axes['ax3'].set_xscale('log')
             # ax3.set_yscale('log')
         else:
-            ax3.psd(y, color='b', lw=1, alpha=0.5)
+            axes['ax3'].psd(y, color='b', lw=1, alpha=0.5)
 
-            ax3p = ax3.twinx()
+            ax3p = axes['ax3'].twinx()
             ax3p.psd(y2, color='r', lw=1, alpha=0.5)
 
-        ax3.set_title('PSD')
+        axes['ax3'].set_title('PSD')
 
-        return (ax1, ax2, ax3)
+        return axes
 
     def PSD_check_gen(self, fgen=None, ax=None):
         """Description goes here."""
