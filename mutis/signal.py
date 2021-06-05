@@ -45,6 +45,12 @@ class Signal:
         self.mu = None
         self.sigma = None
 
+    def plot(self, ax=None):
+        if ax is None:
+            ax = plt.gca()
+
+        return ax.plot(self.times, self.values, '.-', lw=1, alpha=0.7)
+
     def gen_synth(self, samples):
         """Description goes here."""
 
