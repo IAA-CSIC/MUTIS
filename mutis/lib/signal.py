@@ -84,7 +84,7 @@ def lc_gen_psd_lombscargle(times, values):
         sigp = values
         tp = times
 
-    N = values.size
+    N = sigp.size
     # k = np.arange(-N/2, N/2) no bc scipy_signal.lombscargle does not support freq zero
     k = np.linspace(-N / 2, N / 2 - 1 + 1e-6, N)
     freqs = k / 2 / np.pi

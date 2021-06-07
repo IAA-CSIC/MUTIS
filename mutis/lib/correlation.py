@@ -19,16 +19,15 @@ __all__ = [
 log = logging.getLogger(__name__)
 
 
-def kroedel_ab_p(t1, d1, t2, d2, t, dt):
-    """Krolik & Edelson with adaptative binning."""
-    t1m, t2m = get_grid(t1, t2)
-    d1m, d2m = get_grid(d1, d2)
-    mask = ~(((t - dt / 2) < (t2m - t1m)) & ((t2m - t1m) < (t + dt / 2)))
-    udcf = (d1m - np.mean(d1)) * (d2m - np.mean(d2)) / np.std(d1) / np.std(d2)
-    udcf = np.ma.masked_where(mask, udcf)
-
-    return np.ma.mean(udcf)
-
+def kroedel_ab_p(t1,d1, t2,d2, t,dt):   
+    t1m, t2m = get_grid(t1,t2)
+    d1m, d2m = np.meshgrid(d1,d2)
+    
+    mask = (((t-dt/2)<(t2m-t1m)) & ((t2m-t1m)<(t+dt/2)))
+    
+    udcf = (d1m-np.mean(d1))*(d2m-np.mean(d2))/np.std(d1)/np.std(d2)
+    
+    return np.mean(udcf[mask])
 
 def kroedel_ab(t1, d1, t2, d2, t, dt):
     """Krolik & Edelson with adaptative binning.
@@ -66,39 +65,49 @@ def kroedel_ab(t1, d1, t2, d2, t, dt):
     >>> t = np.linspace(1, 10, 100);  dt = np.tan(t2)
     >>> kroedel_ab_p(t1, d1, t2, d2, t, dt)
     """
-    if dt.size != t.size:
-        print("Error, t and dt not the same size")
+    
+    if t.size != dt.size: 
+        print('Error, t and dt not the same size')
         return -1
-    res = np.array([])
+    if t1.size != d1.size: 
+        print('Error, t1 and d1 not the same size')
+        return -1
+    if t2.size != d2.size: 
+        print('Error, t2 and d2 not the same size')
+        return -1
+    
+    res = np.empty(t.size)
     for i in range(t.size):
-        res = np.append(res, kroedel_ab_p(t1, d1, t2, d2, t[i], dt[i]))
+        res[i] = kroedel_ab_p(t1,d1,t2,d2,t[i],dt[i])
     return res
 
 
-def welsh_ab_p(t1, d1, t2, d2, t, dt):
-    """Welsh with adaptative binning."""
-    t1m, t2m = get_grid(t1, t2)
-    d1m, d2m = np.meshgrid(d1, d2)
-    msk = ((t - dt / 2) < (t2m - t1m)) & ((t2m - t1m) < (t + dt / 2))
-    udcf = (d1m - np.mean(d1m[msk])) * (d2m - np.mean(d2m[msk])) / np.std(d1m[msk]) / np.std(d2m[msk])
-    return np.mean(udcf[msk])
+def welsh_ab_p(t1,d1, t2,d2, t,dt):
+        t1m, t2m = get_grid(t1,t2)
+        d1m, d2m = np.meshgrid(d1,d2)
+
+        msk = (((t-dt/2)<(t2m-t1m)) & ((t2m-t1m)<(t+dt/2)))
+
+        udcf = (d1m-np.mean(d1m[msk]))*(d2m-np.mean(d2m[msk]))/np.std(d1m[msk])/np.std(d2m[msk])
+                                       
+        return np.mean(udcf[msk])
 
 
-def welsh_ab(t1, d1, t2, d2, t, dt):
-    """Description goes here."""
-    if t.size != dt.size:
-        log.error("Error, t and dt not the same size")
+def welsh_ab(t1,d1, t2,d2, t,dt):
+    if t.size != dt.size: 
+        print('Error, t and dt not the same size')
         return -1
-    if t1.size != d1.size:
-        log.error("Error, t1 and d1 not the same size")
+    if t1.size != d1.size: 
+        print('Error, t1 and d1 not the same size')
         return -1
-    if t2.size != d2.size:
-        log.error("Error, t2 and d2 not the same size")
+    if t2.size != d2.size: 
+        print('Error, t2 and d2 not the same size')
         return -1
-    # res = np.array([])
+    
+    #res = np.array([])
     res = np.empty(t.size)
     for i in range(t.size):
-        res[i] = welsh_ab_p(t1, d1, t2, d2, t[i], dt[i])
+        res[i] = welsh_ab_p(t1,d1,t2,d2,t[i],dt[i])
     return res
 
 

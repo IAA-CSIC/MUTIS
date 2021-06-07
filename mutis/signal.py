@@ -41,9 +41,9 @@ class Signal:
         self.synth = None
 
         # TODO make attributes below specific of OU method / not the entire class
-        self.theta = None
-        self.mu = None
-        self.sigma = None
+        self.OU_theta = None
+        self.OU_mu = None
+        self.OU_sigma = None
 
     def plot(self, ax=None):
         if ax is None:
@@ -67,9 +67,9 @@ class Signal:
             elif self.fgen == "lc_gen_psd_c":
                 self.synth[n] = lc_gen_psd_c(self.times, self.values, self.times)
             elif self.fgen == "lc_gen_ou":
-                if self.theta is None or self.mu is None or self.sigma is None:
+                if self.OU_theta is None or self.OU_mu is None or self.OU_sigma is None:
                     raise Exception("You need to set the parameters for the signal")
-                self.synth[n] = lc_gen_ou(self.theta, self.mu, self.sigma, self.times)
+                self.synth[n] = lc_gen_ou(self.OU_theta, self.OU_mu, self.OU_sigma, self.times)
             else:
                 raise Exception(f"Unknown fgen method {self.fgen}")
 
