@@ -334,7 +334,7 @@ def gen_times_uniform(t1, t2, tmin=None, tmax=None, nbinsmin=121, N=200):
     return t, dt, nb
 
 
-def gen_times_canopy(t1, t2, dtmin=0.01, dtmax=0.5, nbinsmin=500, nf=0.5):
+def gen_times_canopy(t1,t2, dtmin=0.01, dtmax=0.5, nbinsmin=500, nf=0.5):
     """Returns a non-uniform t, dt time binning for use with adaptative binning methods.
     
     This cumbersome algorithm does more or less the following:
@@ -370,58 +370,96 @@ def gen_times_canopy(t1, t2, dtmin=0.01, dtmax=0.5, nbinsmin=500, nf=0.5):
             Number of points falling on each bin defined by `t` and `dt`.
     """
     
-    t1m, t2m = np.meshgrid(t1, t2)
-    tmax = +(np.max([t1.max(), t2.max()]) - np.min([t1.min(), t2.min()]))
+    t1m, t2m = np.meshgrid(t1,t2)
+
+    def _comp_nb(t, dt):
+        nb = np.empty(len(t))
+        for i in range(len(t)):
+            nb[i] = np.sum((((t[i]-dt[i]/2)<(t2m-t1m)) & ((t2m-t1m)<(t[i]+dt[i]/2))))
+        return nb
+
+    tmax = +(np.max([t1.max(),t2.max()]) - np.min([t1.min(),t2.min()]))
     tmin = -tmax
 
-    def _comp_nb(tis, dtis):
-        nbis = np.empty(len(tis))
-        for j in range(len(tis)):
-            nbis[j] = np.sum((((tis[j] - dtis[j] / 2) < (t2m - t1m)) & ((t2m - t1m) < (tis[j] + dtis[j] / 2))))
-        return nbis
+    
+    t = np.linspace(tmin, tmax, int((tmax-tmin)/dtmin))
+    dt = np.full(t.size, np.ptp(t)/t.size)
+    nb = _comp_nb(t,dt)
+ 
+    
+    k = 0
+    while (k<int(np.log(dtmax/dtmin)/np.log(1/nf))):
+        k = k + 1
 
-    t = np.linspace(tmin, tmax, int((tmax - tmin) / dtmin))
-    dt = np.full(t.size, np.ptp(t) / t.size)
-    nb = _comp_nb(t, dt)
-    for _ in range(int(np.log(dtmax / dtmin) / np.log(1 / nf))):
-        idx = nb < nbinsmin
+        idx = nb < nbinsmin 
+        
         ts, dts, nbs = t, dt, nb
+
         t, dt = np.copy(ts), np.copy(dts)
 
         n_grp = 0
-        grps = (np.where(np.diff(np.concatenate(([False], idx, [False]), dtype=int)) != 0)[0]).reshape(-1, 2)
-        for i_grp, grp in enumerate(grps):
-            ar = grp[0]
-            a = t[grp[0] - 1] if (grp[0] > 0) else t[grp[0]]
-            br = grp[1] - 1
-            b = t[grp[1]] if (grp[1] < t.size - 1) else t[grp[1] - 1]
-            if (br - ar) < 8:
-                n = br - ar + 1 if br - ar >= 1 else br - ar + 2
-                tins = np.linspace(a, b, n, endpoint=False)[1:]
-                ts = np.delete(ts, np.arange(ar, br + 1) - n_grp)
-                dts = np.delete(dts, np.arange(ar, br + 1) - n_grp)
-                ts = np.insert(ts, grp[0] - n_grp, tins)
-                dts = np.insert(dts, grp[0] - n_grp, np.full(n - 1, (b - a) / (n - 1)))
-                if br - ar >= 1:
-                    n_grp += 1
+        grps = (np.where(np.diff(np.concatenate(([False],idx,[False]), dtype=int)) != 0)[0]).reshape(-1,2)
+        for i_grp, grp in enumerate(grps):               
+            if (grp[0] > 0):
+                ar = grp[0]
+                a = t[grp[0]-1]
             else:
-                n = int(nf * (br - ar + 1))
+                ar = grp[0]
+                a = t[grp[0]]
+
+            if (grp[1] < t.size-1):
+                br = grp[1]-1
+                b = t[grp[1]]
+            else:
+                br = grp[1]-1
+                b = t[grp[1]-1]
+
+            if (br-ar) < 8:    
+                if br-ar>=1:
+                    n = br-ar+1
+                else:
+                    n = br-ar+2
+
+
                 tins = np.linspace(a, b, n, endpoint=False)[1:]
-                ts = np.delete(ts, np.arange(ar, br + 1) - n_grp)
-                dts = np.delete(dts, np.arange(ar, br + 1) - n_grp)
-                ts = np.insert(ts, grp[0] - n_grp, tins)
-                dts = np.insert(dts, grp[0] - n_grp, np.full(n - 1, (b - a) / (n - 1)))
-                if br - ar >= 1:
-                    n_grp = n_grp + (grp[1] - grp[0] - n) + 1
+
+                ts = np.delete(ts, np.arange(ar,br+1)-n_grp)
+                dts = np.delete(dts, np.arange(ar,br+1)-n_grp)
+
+                ts = np.insert(ts, grp[0]-n_grp, tins)
+                dts = np.insert(dts, grp[0]-n_grp, np.full(n-1, (b-a)/(n-1)))
+
+                if (br-ar>=1):
+                    n_grp = n_grp + 1
+                else:
+                    pass
+            else:
+                n = int(nf*(br-ar+1))
+
+                tins = np.linspace(a, b, n, endpoint=False)[1:]
+
+                ts = np.delete(ts, np.arange(ar,br+1)-n_grp)
+                dts = np.delete(dts, np.arange(ar,br+1)-n_grp)
+
+                ts = np.insert(ts, grp[0]-n_grp, tins)
+                dts = np.insert(dts, grp[0]-n_grp, np.full(n-1, (b-a)/(n-1)))
+
+                if (br-ar>=1):
+                    n_grp = n_grp + (grp[1]-grp[0]-n)+1
+                else:
+                    pass
+
+            
         t = ts
         dt = dts
-        nb = _comp_nb(t, dt)
-
+        nb = _comp_nb(t,dt)
+            
     idx = nb < nbinsmin
+    
     t = np.delete(t, idx)
     dt = np.delete(dt, idx)
     nb = np.delete(nb, idx)
-
+    
     return t, dt, nb
 
 
