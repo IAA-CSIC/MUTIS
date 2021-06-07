@@ -74,7 +74,10 @@ class Signal:
                 raise Exception(f"Unknown fgen method {self.fgen}")
 
     def OU_fit(self, bins=None, rang=None, a=1e-5, b=100):
-        """Description goes here."""
+        """Fit the signal to an OU stochastic process, using several statistical approaches.
+        
+        This function tries to fit the signal to an OU stochastic process using both basic curve fitting and the Maximum Likelihood Estimation method, and returns some plots of the signals and its properties, and the stimated parameters.
+        """
 
         # TODO: make a generic fit method
         res = dict()
@@ -167,7 +170,15 @@ class Signal:
         return res
 
     def OU_check_gen(self, theta, mu, sigma, fpsd='lombscargle', **axes):
-
+        """Check the generation of a synthethic signal with given OU parameters. 
+        
+        This function checks the generation of a synthethic light curve through an Orstein-Uhlenbeck process with given `theta`, `mu` and `sigma`, to ease the discovery of the most suitable parameters to be used in the generation of the synthethic light curves.
+        
+        It returns three plots, on which:
+        - The first plot show both the original signal and the synthethic one.
+        - The second plot shows the histogram of the values taken by both signals.
+        - The third plot shows their PSD.
+        """
         # TODO make a generic check_gen method
 
         t, y = self.times, self.values
@@ -222,8 +233,7 @@ class Signal:
         return axes
 
     def PSD_check_gen(self, fgen=None, ax=None):
-        """Description goes here."""
-
+        """Check the generation of a synthethic signal with a given `fgen` method."""
         # TODO: make a generic check_gen method
 
         if fgen is None:
@@ -248,5 +258,5 @@ class Signal:
 
     @staticmethod
     def pdf(xx, ll, mu):
-        """Fit pdf as a curve."""
+        """Helper func to fit pdf as a curve."""
         return (ll * mu) ** (1 + ll) / scipy_special.gamma(1 + ll) * np.exp(-ll * mu / xx) / xx ** (ll + 2)
