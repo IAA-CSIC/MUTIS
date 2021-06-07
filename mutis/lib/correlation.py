@@ -87,18 +87,18 @@ def kroedel_ab(t1, d1, t2, d2, t, dt):
 
 def welsh_ab_p(t1,d1, t2,d2, t,dt):
     """Helper func for welsh_ab()"""
-        t1m, t2m = get_grid(t1,t2)
-        d1m, d2m = np.meshgrid(d1,d2)
+    t1m, t2m = get_grid(t1,t2)
+    d1m, d2m = np.meshgrid(d1,d2)
 
-        msk = (((t-dt/2)<(t2m-t1m)) & ((t2m-t1m)<(t+dt/2)))
+    msk = (((t-dt/2)<(t2m-t1m)) & ((t2m-t1m)<(t+dt/2)))
 
-        udcf = (d1m-np.mean(d1m[msk]))*(d2m-np.mean(d2m[msk]))/np.std(d1m[msk])/np.std(d2m[msk])
-                                       
-        return np.mean(udcf[msk])
+    udcf = (d1m-np.mean(d1m[msk]))*(d2m-np.mean(d2m[msk]))/np.std(d1m[msk])/np.std(d2m[msk])
+
+    return np.mean(udcf[msk])
 
 
 def welsh_ab(t1,d1, t2,d2, t,dt):
-        """Welsh (1999) correlation with adaptative binning.
+    """Welsh (1999) correlation with adaptative binning.
 
     This function implements the correlation function proposed by Welsh (1999), which allows for the computation of the correlation for -discrete- signals non-uniformly sampled in time.
 
