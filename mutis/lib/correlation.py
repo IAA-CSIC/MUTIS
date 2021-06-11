@@ -74,14 +74,14 @@ def kroedel_ab(t1, d1, t2, d2, t, dt):
     """
     
     if t.size != dt.size: 
-        print('Error, t and dt not the same size')
-        return -1
+        log.error("Error, t and dt not the same size")
+        return False
     if t1.size != d1.size: 
-        print('Error, t1 and d1 not the same size')
-        return -1
+        log.error('Error, t1 and d1 not the same size')
+        return False
     if t2.size != d2.size: 
-        print('Error, t2 and d2 not the same size')
-        return -1
+        log.error('Error, t2 and d2 not the same size')
+        return False
     
     res = np.empty(t.size)
     for i in range(t.size):
@@ -142,15 +142,16 @@ def welsh_ab(t1,d1, t2,d2, t,dt):
     However, it is recommended to be used as expalined in the
     standard MUTIS' workflow notebook.
     """
+    
     if t.size != dt.size: 
-        print('Error, t and dt not the same size')
-        return -1
+        log.error("Error, t and dt not the same size")
+        return False
     if t1.size != d1.size: 
-        print('Error, t1 and d1 not the same size')
-        return -1
+        log.error('Error, t1 and d1 not the same size')
+        return False
     if t2.size != d2.size: 
-        print('Error, t2 and d2 not the same size')
-        return -1
+        log.error('Error, t2 and d2 not the same size')
+        return False
     
     #res = np.array([])
     res = np.empty(t.size)
