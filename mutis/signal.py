@@ -96,7 +96,7 @@ class Signal:
             sigma_est = (np.nanmean(dy ** 2 / y[:-1] ** 2 / dt)) ** 0.5
             res['sigma_est'] = sigma_est
         except Exception as e:
-            raise Exception(f"Could not estimate sigma: {e}")
+            log.error(f"Could not estimate sigma: {e}")
 
         # plot histogram
         if bins is None:
@@ -135,7 +135,7 @@ class Signal:
             res['curve_fit'] = (popt, np.sqrt(np.diag(pcov)))
         except Exception as e:
             popt, pcov = None, None
-            raise Exception(f"Some error fitting with curve_fit {e}")
+            log.error(f"Some error fitting with curve_fit {e}")
 
         # fit pdf with MLE
         # TODO: place outside as a helper class
@@ -152,7 +152,7 @@ class Signal:
             plt.plot(x_c, self.pdf(x_c, fit[0], fit[1]), 'k-.', label='MLE', alpha=0.8)
             res['MLE_fit'] = fit[:-2]
         except Exception as e:
-            raise Exception(f"Some error fitting with MLE {e}")
+            log.error(f"Some error fitting with MLE {e}")
 
         plt.legend(loc="lower right")
 
