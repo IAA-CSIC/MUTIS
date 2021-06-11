@@ -20,7 +20,7 @@ log = logging.getLogger(__name__)
 
 
 def kroedel_ab_p(t1,d1, t2,d2, t,dt):
-    """Helper func for kroedel_ab()"""
+    """Helper function for kroedel_ab()"""
     t1m, t2m = get_grid(t1,t2)
     d1m, d2m = np.meshgrid(d1,d2)
     
@@ -33,7 +33,10 @@ def kroedel_ab_p(t1,d1, t2,d2, t,dt):
 def kroedel_ab(t1, d1, t2, d2, t, dt):
     """Krolik & Edelson (1988) correlation with adaptative binning.
 
-    This function implements the correlation function proposed by Krolik & Edelson (1988), which allows for the computation of the correlation for -discrete- signals non-uniformly sampled in time.
+    This function implements the correlation function proposed by
+    Krolik & Edelson (1988), which allows for the computation of 
+    the correlation for -discrete- signals non-uniformly sampled 
+    in time.
 
     Parameters
     ----------
@@ -66,7 +69,8 @@ def kroedel_ab(t1, d1, t2, d2, t, dt):
     >>> t = np.linspace(1, 10, 100);  dt = np.full(t.shape, 0.1)
     >>> kroedel_ab_p(t1, d1, t2, d2, t, dt)
     
-    However, it is recommended to be used as expalined in the standard MUTIS' workflow notebook.
+    However, it is recommended to be used as expalined in the 
+    standard MUTIS' workflow notebook.
     """
     
     if t.size != dt.size: 
@@ -86,7 +90,7 @@ def kroedel_ab(t1, d1, t2, d2, t, dt):
 
 
 def welsh_ab_p(t1,d1, t2,d2, t,dt):
-    """Helper func for welsh_ab()"""
+    """Helper function for welsh_ab()"""
     t1m, t2m = get_grid(t1,t2)
     d1m, d2m = np.meshgrid(d1,d2)
 
@@ -100,7 +104,9 @@ def welsh_ab_p(t1,d1, t2,d2, t,dt):
 def welsh_ab(t1,d1, t2,d2, t,dt):
     """Welsh (1999) correlation with adaptative binning.
 
-    This function implements the correlation function proposed by Welsh (1999), which allows for the computation of the correlation for -discrete- signals non-uniformly sampled in time.
+    This function implements the correlation function proposed
+    by Welsh (1999), which allows for the computation of the correlation 
+    for -discrete- signals non-uniformly sampled in time.
 
     Parameters
     ----------
@@ -133,7 +139,8 @@ def welsh_ab(t1,d1, t2,d2, t,dt):
     >>> t = np.linspace(1, 10, 100);  dt = np.full(t.shape, 0.1)
     >>> welsh_ab_p(t1, d1, t2, d2, t, dt)
     
-    However, it is recommended to be used as expalined in the standard MUTIS' workflow notebook.
+    However, it is recommended to be used as expalined in the
+    standard MUTIS' workflow notebook.
     """
     if t.size != dt.size: 
         print('Error, t and dt not the same size')
@@ -207,11 +214,16 @@ def nindcf(t1, s1, t2, s2):
 def gen_times_rawab(t1, t2, dt0=None, ndtmax=1.0, nbinsmin=121, force=None):
     """LEGACY. Returns t, dt for use with adaptative binning methods.
     
-    Uses a shitty algorithm to find a time binning in which each bin contains a minimum of points (specified by `nbinsmin`, with an starting bin size (`dt0`) and a maximum bin size (`ndtmax*dt0`).
+    Uses a shitty algorithm to find a time binning in which each bin contains
+    a minimum of points (specified by `nbinsmin`, with an starting bin size
+    (`dt0`) and a maximum bin size (`ndtmax*dt0`).
     
-    The algorithms start at the first time bin, and enlarges the bin size until it has enough points or it reaches the maximum length, then creates another starting at that point.
+    The algorithms start at the first time bin, and enlarges the bin size
+    until it has enough points or it reaches the maximum length, then creates
+    another starting at that point.
     
-    If `force` is True, then it discards the created bins on which there are not enough points.
+    If `force` is True, then it discards the created bins on which there are
+    not enough points.
     """
 
     # Sensible values for these parameters must be found by hand, and depend
@@ -286,7 +298,8 @@ def gen_times_rawab(t1, t2, dt0=None, ndtmax=1.0, nbinsmin=121, force=None):
 def gen_times_uniform(t1, t2, tmin=None, tmax=None, nbinsmin=121, N=200):
     """Returns an uniform t, dt time binning for use with adaptative binning methods.
     
-    The time interval on which the correlation is defined is splitted in `N` bins. Bins with a number of point less than `nbinsmin` are discarded.
+    The time interval on which the correlation is defined is splitted in
+    `N` bins. Bins with a number of point less than `nbinsmin` are discarded.
     
     Parameters
     ----------
@@ -338,12 +351,17 @@ def gen_times_canopy(t1,t2, dtmin=0.01, dtmax=0.5, nbinsmin=500, nf=0.5):
     """Returns a non-uniform t, dt time binning for use with adaptative binning methods.
     
     This cumbersome algorithm does more or less the following:
-    1) Divides the time interval on which the correlation is defined in the maximum number of points (minium bin size defined by `dtmin`).
+    1) Divides the time interval on which the correlation is defined in 
+    the maximum number of points (minium bin size defined by `dtmin`).
     2) Checks the number of point falling on each bin.
-    3) If there are several consecutive intervals with a number of points over `nbinsmin`, it groups them (reducing the number of points exponentially as defined by `nf`, if the number of intervals in the group is high, or one by one if it is low.)
+    3) If there are several consecutive intervals with a number of points 
+    over `nbinsmin`, it groups them (reducing the number of points 
+    exponentially as defined by `nf`, if the number of intervals in the 
+    group is high, or one by one if it is low.)
     4) Repeat until APPROXIMATELY we have reached intervals of size `dtmax`.
     
-    How the exact implementation works, I forgot! But the results are more or less nice...
+    How the exact implementation works, I forgot! But the results are more
+    or less nice...
     
     Parameters
     ----------
@@ -352,9 +370,11 @@ def gen_times_canopy(t1,t2, dtmin=0.01, dtmax=0.5, nbinsmin=500, nf=0.5):
         t2 : :py:class:`np.ndarray`
             Times of the second signal.
         dtmin : :py:class:`~float`
-            Start of the time intervals (if not specified, start of the interval on which the correlation is define).
+            Start of the time intervals (if not specified, start of the 
+            interval on which the correlation is define).
         dtmax : :py:class:`~float`
-            End of the time intervals (if not specified, end of the interval on which the correlation is define).
+            End of the time intervals (if not specified, end of the interval 
+            on which the correlation is define).
         nbinsmin : :py:class:`~float`
             Minimum of points falling on each bin.
         nf : :py:class:`~float`

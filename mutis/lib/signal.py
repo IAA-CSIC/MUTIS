@@ -61,9 +61,11 @@ def lc_gen_psd_c(ts, values, times):
 
 
 def lc_gen_psd_fft(values):
-    """Generation using Welch algorithm and the FFT, of synthethic signals with similar PSD, mean and std.
+    """Generation using Welch algorithm and the FFT, of synthetic signals with similar PSD, mean and std.
     
-    Generates synthethic light curves using Lomb-Scargle algorithm to compute the power spectral density and the non-uniform fft to generate the signal."""
+    Generates synthetic light curves using Lomb-Scargle algorithm 
+    to compute the power spectral density and the non-uniform fft 
+    to generate the signal."""
     # this is not valid for non-uniform times (see PSD tests for a comparison)
     f, pxx = scipy_signal.welch(values)
     # fft2 = np.sqrt(2*Pxx*Pxx.size)*np.exp(1j*2*pi*np.random.randn(Pxx.size))
@@ -76,9 +78,11 @@ def lc_gen_psd_fft(values):
 
 
 def lc_gen_psd_lombscargle(times, values):
-    """Generation using Lomb-Scargle algorithm and the non-uniform FFT, of synthethic signals with similar PSD, mean and std.
+    """Generation using Lomb-Scargle algorithm and the non-uniform FFT, of synthetic signals with similar PSD, mean and std.
     
-    Generates synthethic light curves using Lomb-Scargle algorithm to compute the power spectral density and the non-uniform fft to reconstruct the randomised signal."""
+    Generates synthetic light curves using Lomb-Scargle algorithm 
+    to compute the power spectral density and the non-uniform fft 
+    to reconstruct the randomised signal."""
 
     if values.size % 2 != 0:
         sigp = values[:-1]
@@ -109,9 +113,11 @@ def lc_gen_psd_lombscargle(times, values):
 
 
 def lc_gen_psd_nft(times, values):
-    """Generation using the non-uniform FFT of synthethic signals with similar PSD, mean and std.
+    """Generation using the non-uniform FFT of synthetic signals with similar PSD, mean and std.
     
-    Generates synthethic light curves using the non-uniform FFT to compute the power spectral density and to reconstruct the randomised signal."""
+    Generates synthetic light curves using the non-uniform FFT to 
+    compute the power spectral density and to reconstruct the 
+    randomised signal."""
         
     k = np.arange(-times.size // 2, times.size / 2)
     N = k.size
