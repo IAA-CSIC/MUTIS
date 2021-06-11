@@ -6,9 +6,9 @@ import logging
 import matplotlib.pyplot as plt
 import numpy as np
 import scipy.optimize as scipy_optimize
+import scipy.signal as scipy_signal
 import scipy.special as scipy_special
 import scipy.stats as scipy_stats
-import scipy.signal as scipy_signal
 from matplotlib.offsetbox import AnchoredText
 
 from mutis.lib.signal import *
@@ -16,7 +16,6 @@ from mutis.lib.signal import *
 __all__ = ["Signal"]
 
 log = logging.getLogger(__name__)
-
 
 
 class Signal:
@@ -49,7 +48,7 @@ class Signal:
         if ax is None:
             ax = plt.gca()
 
-        return ax.plot(self.times, self.values, '.-', lw=1, alpha=0.7)
+        return ax.plot(self.times, self.values, ".-", lw=1, alpha=0.7)
 
     def gen_synth(self, samples):
         """Description goes here."""
@@ -75,10 +74,10 @@ class Signal:
 
     def OU_fit(self, bins=None, rang=None, a=1e-5, b=100):
         """Fit the signal to an OU stochastic process, using several statistical approaches.
-        
-        This function tries to fit the signal to an OU stochastic 
-        process using both basic curve fitting and the Maximum 
-        Likelihood Estimation method, and returns some plots of 
+
+        This function tries to fit the signal to an OU stochastic
+        process using both basic curve fitting and the Maximum
+        Likelihood Estimation method, and returns some plots of
         the signals and its properties, and the stimated parameters.
         """
 
@@ -94,7 +93,7 @@ class Signal:
         # estimate sigma
         try:
             sigma_est = (np.nanmean(dy ** 2 / y[:-1] ** 2 / dt)) ** 0.5
-            res['sigma_est'] = sigma_est
+            res["sigma_est"] = sigma_est
         except Exception as e:
             log.error(f"Could not estimate sigma: {e}")
 
@@ -110,7 +109,7 @@ class Signal:
         plt.subplots()
 
         plt.hist(y, density=True, alpha=0.75, bins=bins, range=rang)
-        plt.plot(x, p, 'r-', alpha=0.5)
+        plt.plot(x, p, "r-", alpha=0.5)
 
         anchored_text = AnchoredText(
             f"mean    {np.mean(y):.2g} \n "
@@ -131,8 +130,8 @@ class Signal:
             # print('pcov: ')
             # print(np.sqrt(np.diag(pcov)))
             x_c = np.linspace(1e-5, 1.1 * np.max(x), 1000)
-            plt.plot(x_c, self.pdf(x_c, *popt), 'k-', label='curve_fit', alpha=0.8)
-            res['curve_fit'] = (popt, np.sqrt(np.diag(pcov)))
+            plt.plot(x_c, self.pdf(x_c, *popt), "k-", label="curve_fit", alpha=0.8)
+            res["curve_fit"] = (popt, np.sqrt(np.diag(pcov)))
         except Exception as e:
             popt, pcov = None, None
             log.error(f"Some error fitting with curve_fit {e}")
@@ -149,8 +148,8 @@ class Signal:
             # print('MLE fit: (l, mu)')
             # print(fit)
             x_c = np.linspace(0, 1.1 * np.max(x), 1000)
-            plt.plot(x_c, self.pdf(x_c, fit[0], fit[1]), 'k-.', label='MLE', alpha=0.8)
-            res['MLE_fit'] = fit[:-2]
+            plt.plot(x_c, self.pdf(x_c, fit[0], fit[1]), "k-.", label="MLE", alpha=0.8)
+            res["MLE_fit"] = fit[:-2]
         except Exception as e:
             log.error(f"Some error fitting with MLE {e}")
 
@@ -160,26 +159,26 @@ class Signal:
 
         # estimate theta (from curve_fit)
         try:
-            res['th_est1'] = fit[0] * sigma_est ** 2 / 2
+            res["th_est1"] = fit[0] * sigma_est ** 2 / 2
         except:
-            res['th_est1'] = None
+            res["th_est1"] = None
 
         # estimate theta (from MLE)
         try:
-            res['th_est2'] = popt[0] * sigma_est ** 2 / 2
+            res["th_est2"] = popt[0] * sigma_est ** 2 / 2
         except:
-            res['th_est2'] = None
+            res["th_est2"] = None
 
         return res
 
-    def OU_check_gen(self, theta, mu, sigma, fpsd='lombscargle', **axes):
-        """Check the generation of a synthetic signal with given OU parameters. 
-        
-        This function checks the generation of a synthetic light curve through 
-        an Orstein-Uhlenbeck process with given `theta`, `mu` and `sigma`, to 
-        ease the discovery of the most suitable parameters to be used in the 
+    def OU_check_gen(self, theta, mu, sigma, fpsd="lombscargle", **axes):
+        """Check the generation of a synthetic signal with given OU parameters.
+
+        This function checks the generation of a synthetic light curve through
+        an Orstein-Uhlenbeck process with given `theta`, `mu` and `sigma`, to
+        ease the discovery of the most suitable parameters to be used in the
         generation of the synthetic light curves.
-        
+
         It returns three plots, on which:
         - The first plot show both the original signal and the synthetic one.
         - The second plot shows the histogram of the values taken by both signals.
@@ -190,51 +189,51 @@ class Signal:
         t, y = self.times, self.values
         y2 = lc_gen_ou(theta, mu, sigma, self.times)  # , scale=np.std(self.s), loc=np.mean(self.s))
 
-        if ('ax1' not in axes) or ('ax2' not in axes) or ('ax3' not in axes):
-            fig, (axes['ax1'], axes['ax2'], axes['ax3']) = plt.subplots(nrows=1, ncols=3, figsize=(20, 4))
+        if ("ax1" not in axes) or ("ax2" not in axes) or ("ax3" not in axes):
+            fig, (axes["ax1"], axes["ax2"], axes["ax3"]) = plt.subplots(nrows=1, ncols=3, figsize=(20, 4))
 
         # Plot the two signals
 
-        axes['ax1'].plot(t, y, 'b-', label='orig', lw=0.5, alpha=0.8)
+        axes["ax1"].plot(t, y, "b-", label="orig", lw=0.5, alpha=0.8)
 
         # ax1p = ax1.twinx()
-        axes['ax1'].plot(t, y2, 'r-', label='gen', lw=0.5, alpha=0.8)
-        axes['ax1'].set_title('light curves')
+        axes["ax1"].plot(t, y2, "r-", label="gen", lw=0.5, alpha=0.8)
+        axes["ax1"].set_title("light curves")
 
         # Plot their histogram
 
-        bins = 'auto'  # bins = np.int(y.size**0.5/1.5) #
+        bins = "auto"  # bins = np.int(y.size**0.5/1.5) #
         rang = (np.percentile(y, 0), np.percentile(y, 99))
-        axes['ax2'].hist(y, density=True, color='b', alpha=0.4, bins=bins, range=rang)
+        axes["ax2"].hist(y, density=True, color="b", alpha=0.4, bins=bins, range=rang)
 
         # ax2p = ax2.twinx()
-        bins = 'auto'  # bins = np.int(y.size**0.5/1.5) #
+        bins = "auto"  # bins = np.int(y.size**0.5/1.5) #
         rang = (np.percentile(y2, 0), np.percentile(y2, 99))
-        axes['ax2'].hist(y2, density=True, color='r', alpha=0.4, bins=bins, range=rang)
+        axes["ax2"].hist(y2, density=True, color="r", alpha=0.4, bins=bins, range=rang)
 
-        axes['ax2'].set_title('pdf')
+        axes["ax2"].set_title("pdf")
 
         # Plot their PSD
 
-        if fpsd == 'lombscargle':
+        if fpsd == "lombscargle":
             k = np.linspace(1e-3, self.values.size / 2, self.values.size // 2)
             freqs = k / 2 / np.pi
 
             pxx = scipy_signal.lombscargle(t, y, freqs, normalize=True)
-            axes['ax3'].plot(freqs, pxx, 'b-', lw=1, alpha=0.5)
+            axes["ax3"].plot(freqs, pxx, "b-", lw=1, alpha=0.5)
 
             pxx2 = scipy_signal.lombscargle(t, y2, freqs, normalize=True)
-            axes['ax3'].plot(freqs, pxx2, 'r-', lw=1, alpha=0.5)
+            axes["ax3"].plot(freqs, pxx2, "r-", lw=1, alpha=0.5)
 
-            axes['ax3'].set_xscale('log')
+            axes["ax3"].set_xscale("log")
             # ax3.set_yscale('log')
         else:
-            axes['ax3'].psd(y, color='b', lw=1, alpha=0.5)
+            axes["ax3"].psd(y, color="b", lw=1, alpha=0.5)
 
-            ax3p = axes['ax3'].twinx()
-            ax3p.psd(y2, color='r', lw=1, alpha=0.5)
+            ax3p = axes["ax3"].twinx()
+            ax3p.psd(y2, color="r", lw=1, alpha=0.5)
 
-        axes['ax3'].set_title('PSD')
+        axes["ax3"].set_title("PSD")
 
         return axes
 

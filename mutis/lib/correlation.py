@@ -7,35 +7,29 @@ import numpy as np
 
 from mutis.lib.utils import get_grid
 
-__all__ = [
-    "kroedel_ab",
-    "welsh_ab",
-    "nindcf",
-    "gen_times_rawab",
-    "gen_times_uniform",
-    "gen_times_canopy"
-]
+__all__ = ["kroedel_ab", "welsh_ab", "nindcf", "gen_times_rawab", "gen_times_uniform", "gen_times_canopy"]
 
 log = logging.getLogger(__name__)
 
 
-def kroedel_ab_p(t1,d1, t2,d2, t,dt):
+def kroedel_ab_p(t1, d1, t2, d2, t, dt):
     """Helper function for kroedel_ab()"""
-    t1m, t2m = get_grid(t1,t2)
-    d1m, d2m = np.meshgrid(d1,d2)
-    
-    mask = (((t-dt/2)<(t2m-t1m)) & ((t2m-t1m)<(t+dt/2)))
-    
-    udcf = (d1m-np.mean(d1))*(d2m-np.mean(d2))/np.std(d1)/np.std(d2)
-    
+    t1m, t2m = get_grid(t1, t2)
+    d1m, d2m = np.meshgrid(d1, d2)
+
+    mask = ((t - dt / 2) < (t2m - t1m)) & ((t2m - t1m) < (t + dt / 2))
+
+    udcf = (d1m - np.mean(d1)) * (d2m - np.mean(d2)) / np.std(d1) / np.std(d2)
+
     return np.mean(udcf[mask])
+
 
 def kroedel_ab(t1, d1, t2, d2, t, dt):
     """Krolik & Edelson (1988) correlation with adaptative binning.
 
     This function implements the correlation function proposed by
-    Krolik & Edelson (1988), which allows for the computation of 
-    the correlation for -discrete- signals non-uniformly sampled 
+    Krolik & Edelson (1988), which allows for the computation of
+    the correlation for -discrete- signals non-uniformly sampled
     in time.
 
     Parameters
@@ -68,44 +62,44 @@ def kroedel_ab(t1, d1, t2, d2, t, dt):
     >>> t2 = np.linspace(1, 10, 100); s2 = np.cos(t2)
     >>> t = np.linspace(1, 10, 100);  dt = np.full(t.shape, 0.1)
     >>> kroedel_ab_p(t1, d1, t2, d2, t, dt)
-    
-    However, it is recommended to be used as expalined in the 
+
+    However, it is recommended to be used as expalined in the
     standard MUTIS' workflow notebook.
     """
-    
-    if t.size != dt.size: 
+
+    if t.size != dt.size:
         log.error("Error, t and dt not the same size")
         return False
-    if t1.size != d1.size: 
-        log.error('Error, t1 and d1 not the same size')
+    if t1.size != d1.size:
+        log.error("Error, t1 and d1 not the same size")
         return False
-    if t2.size != d2.size: 
-        log.error('Error, t2 and d2 not the same size')
+    if t2.size != d2.size:
+        log.error("Error, t2 and d2 not the same size")
         return False
-    
+
     res = np.empty(t.size)
     for i in range(t.size):
-        res[i] = kroedel_ab_p(t1,d1,t2,d2,t[i],dt[i])
+        res[i] = kroedel_ab_p(t1, d1, t2, d2, t[i], dt[i])
     return res
 
 
-def welsh_ab_p(t1,d1, t2,d2, t,dt):
+def welsh_ab_p(t1, d1, t2, d2, t, dt):
     """Helper function for welsh_ab()"""
-    t1m, t2m = get_grid(t1,t2)
-    d1m, d2m = np.meshgrid(d1,d2)
+    t1m, t2m = get_grid(t1, t2)
+    d1m, d2m = np.meshgrid(d1, d2)
 
-    msk = (((t-dt/2)<(t2m-t1m)) & ((t2m-t1m)<(t+dt/2)))
+    msk = ((t - dt / 2) < (t2m - t1m)) & ((t2m - t1m) < (t + dt / 2))
 
-    udcf = (d1m-np.mean(d1m[msk]))*(d2m-np.mean(d2m[msk]))/np.std(d1m[msk])/np.std(d2m[msk])
+    udcf = (d1m - np.mean(d1m[msk])) * (d2m - np.mean(d2m[msk])) / np.std(d1m[msk]) / np.std(d2m[msk])
 
     return np.mean(udcf[msk])
 
 
-def welsh_ab(t1,d1, t2,d2, t,dt):
+def welsh_ab(t1, d1, t2, d2, t, dt):
     """Welsh (1999) correlation with adaptative binning.
 
     This function implements the correlation function proposed
-    by Welsh (1999), which allows for the computation of the correlation 
+    by Welsh (1999), which allows for the computation of the correlation
     for -discrete- signals non-uniformly sampled in time.
 
     Parameters
@@ -138,25 +132,25 @@ def welsh_ab(t1,d1, t2,d2, t,dt):
     >>> t2 = np.linspace(1, 10, 100); s2 = np.cos(t2)
     >>> t = np.linspace(1, 10, 100);  dt = np.full(t.shape, 0.1)
     >>> welsh_ab_p(t1, d1, t2, d2, t, dt)
-    
+
     However, it is recommended to be used as expalined in the
     standard MUTIS' workflow notebook.
     """
-    
-    if t.size != dt.size: 
+
+    if t.size != dt.size:
         log.error("Error, t and dt not the same size")
         return False
-    if t1.size != d1.size: 
-        log.error('Error, t1 and d1 not the same size')
+    if t1.size != d1.size:
+        log.error("Error, t1 and d1 not the same size")
         return False
-    if t2.size != d2.size: 
-        log.error('Error, t2 and d2 not the same size')
+    if t2.size != d2.size:
+        log.error("Error, t2 and d2 not the same size")
         return False
-    
-    #res = np.array([])
+
+    # res = np.array([])
     res = np.empty(t.size)
     for i in range(t.size):
-        res[i] = welsh_ab_p(t1,d1,t2,d2,t[i],dt[i])
+        res[i] = welsh_ab_p(t1, d1, t2, d2, t[i], dt[i])
     return res
 
 
@@ -214,15 +208,15 @@ def nindcf(t1, s1, t2, s2):
 
 def gen_times_rawab(t1, t2, dt0=None, ndtmax=1.0, nbinsmin=121, force=None):
     """LEGACY. Returns t, dt for use with adaptative binning methods.
-    
+
     Uses a shitty algorithm to find a time binning in which each bin contains
     a minimum of points (specified by `nbinsmin`, with an starting bin size
     (`dt0`) and a maximum bin size (`ndtmax*dt0`).
-    
+
     The algorithms start at the first time bin, and enlarges the bin size
     until it has enough points or it reaches the maximum length, then creates
     another starting at that point.
-    
+
     If `force` is True, then it discards the created bins on which there are
     not enough points.
     """
@@ -298,10 +292,10 @@ def gen_times_rawab(t1, t2, dt0=None, ndtmax=1.0, nbinsmin=121, force=None):
 
 def gen_times_uniform(t1, t2, tmin=None, tmax=None, nbinsmin=121, N=200):
     """Returns an uniform t, dt time binning for use with adaptative binning methods.
-    
+
     The time interval on which the correlation is defined is splitted in
     `N` bins. Bins with a number of point less than `nbinsmin` are discarded.
-    
+
     Parameters
     ----------
         t1 : :py:class:`np.ndarray`
@@ -322,7 +316,7 @@ def gen_times_uniform(t1, t2, tmin=None, tmax=None, nbinsmin=121, N=200):
         t : :py:class:`np.array`
             Time binning on which to compute the correlation.
         dt : :py:class:`np.array`
-            Size of the bins defined by `t`           
+            Size of the bins defined by `t`
         nb : :py:class:`np.array`
             Number of points falling on each bin defined by `t` and `dt`.
     """
@@ -348,22 +342,22 @@ def gen_times_uniform(t1, t2, tmin=None, tmax=None, nbinsmin=121, N=200):
     return t, dt, nb
 
 
-def gen_times_canopy(t1,t2, dtmin=0.01, dtmax=0.5, nbinsmin=500, nf=0.5):
+def gen_times_canopy(t1, t2, dtmin=0.01, dtmax=0.5, nbinsmin=500, nf=0.5):
     """Returns a non-uniform t, dt time binning for use with adaptative binning methods.
-    
+
     This cumbersome algorithm does more or less the following:
-    1) Divides the time interval on which the correlation is defined in 
+    1) Divides the time interval on which the correlation is defined in
     the maximum number of points (minium bin size defined by `dtmin`).
     2) Checks the number of point falling on each bin.
-    3) If there are several consecutive intervals with a number of points 
-    over `nbinsmin`, it groups them (reducing the number of points 
-    exponentially as defined by `nf`, if the number of intervals in the 
+    3) If there are several consecutive intervals with a number of points
+    over `nbinsmin`, it groups them (reducing the number of points
+    exponentially as defined by `nf`, if the number of intervals in the
     group is high, or one by one if it is low.)
     4) Repeat until APPROXIMATELY we have reached intervals of size `dtmax`.
-    
+
     How the exact implementation works, I forgot! But the results are more
     or less nice...
-    
+
     Parameters
     ----------
         t1 : :py:class:`np.ndarray`
@@ -371,10 +365,10 @@ def gen_times_canopy(t1,t2, dtmin=0.01, dtmax=0.5, nbinsmin=500, nf=0.5):
         t2 : :py:class:`np.ndarray`
             Times of the second signal.
         dtmin : :py:class:`~float`
-            Start of the time intervals (if not specified, start of the 
+            Start of the time intervals (if not specified, start of the
             interval on which the correlation is define).
         dtmax : :py:class:`~float`
-            End of the time intervals (if not specified, end of the interval 
+            End of the time intervals (if not specified, end of the interval
             on which the correlation is define).
         nbinsmin : :py:class:`~float`
             Minimum of points falling on each bin.
@@ -386,101 +380,97 @@ def gen_times_canopy(t1,t2, dtmin=0.01, dtmax=0.5, nbinsmin=500, nf=0.5):
         t : :py:class:`np.array`
             Time binning on which to compute the correlation.
         dt : :py:class:`np.array`
-            Size of the bins defined by `t`           
+            Size of the bins defined by `t`
         nb : :py:class:`np.array`
             Number of points falling on each bin defined by `t` and `dt`.
     """
-    
-    t1m, t2m = np.meshgrid(t1,t2)
+
+    t1m, t2m = np.meshgrid(t1, t2)
 
     def _comp_nb(t, dt):
         nb = np.empty(len(t))
         for i in range(len(t)):
-            nb[i] = np.sum((((t[i]-dt[i]/2)<(t2m-t1m)) & ((t2m-t1m)<(t[i]+dt[i]/2))))
+            nb[i] = np.sum((((t[i] - dt[i] / 2) < (t2m - t1m)) & ((t2m - t1m) < (t[i] + dt[i] / 2))))
         return nb
 
-    tmax = +(np.max([t1.max(),t2.max()]) - np.min([t1.min(),t2.min()]))
+    tmax = +(np.max([t1.max(), t2.max()]) - np.min([t1.min(), t2.min()]))
     tmin = -tmax
 
-    
-    t = np.linspace(tmin, tmax, int((tmax-tmin)/dtmin))
-    dt = np.full(t.size, np.ptp(t)/t.size)
-    nb = _comp_nb(t,dt)
- 
-    
+    t = np.linspace(tmin, tmax, int((tmax - tmin) / dtmin))
+    dt = np.full(t.size, np.ptp(t) / t.size)
+    nb = _comp_nb(t, dt)
+
     k = 0
-    while (k<int(np.log(dtmax/dtmin)/np.log(1/nf))):
+    while k < int(np.log(dtmax / dtmin) / np.log(1 / nf)):
         k = k + 1
 
-        idx = nb < nbinsmin 
-        
+        idx = nb < nbinsmin
+
         ts, dts, nbs = t, dt, nb
 
         t, dt = np.copy(ts), np.copy(dts)
 
         n_grp = 0
-        grps = (np.where(np.diff(np.concatenate(([False],idx,[False]), dtype=int)) != 0)[0]).reshape(-1,2)
-        for i_grp, grp in enumerate(grps):               
-            if (grp[0] > 0):
+        grps = (np.where(np.diff(np.concatenate(([False], idx, [False]), dtype=int)) != 0)[0]).reshape(-1, 2)
+        for i_grp, grp in enumerate(grps):
+            if grp[0] > 0:
                 ar = grp[0]
-                a = t[grp[0]-1]
+                a = t[grp[0] - 1]
             else:
                 ar = grp[0]
                 a = t[grp[0]]
 
-            if (grp[1] < t.size-1):
-                br = grp[1]-1
+            if grp[1] < t.size - 1:
+                br = grp[1] - 1
                 b = t[grp[1]]
             else:
-                br = grp[1]-1
-                b = t[grp[1]-1]
+                br = grp[1] - 1
+                b = t[grp[1] - 1]
 
-            if (br-ar) < 8:    
-                if br-ar>=1:
-                    n = br-ar+1
+            if (br - ar) < 8:
+                if br - ar >= 1:
+                    n = br - ar + 1
                 else:
-                    n = br-ar+2
-
+                    n = br - ar + 2
 
                 tins = np.linspace(a, b, n, endpoint=False)[1:]
 
-                ts = np.delete(ts, np.arange(ar,br+1)-n_grp)
-                dts = np.delete(dts, np.arange(ar,br+1)-n_grp)
+                ts = np.delete(ts, np.arange(ar, br + 1) - n_grp)
+                dts = np.delete(dts, np.arange(ar, br + 1) - n_grp)
 
-                ts = np.insert(ts, grp[0]-n_grp, tins)
-                dts = np.insert(dts, grp[0]-n_grp, np.full(n-1, (b-a)/(n-1)))
+                ts = np.insert(ts, grp[0] - n_grp, tins)
+                dts = np.insert(dts, grp[0] - n_grp, np.full(n - 1, (b - a) / (n - 1)))
 
-                if (br-ar>=1):
+                if br - ar >= 1:
                     n_grp = n_grp + 1
                 else:
                     pass
             else:
-                n = int(nf*(br-ar+1))
+                n = int(nf * (br - ar + 1))
 
                 tins = np.linspace(a, b, n, endpoint=False)[1:]
 
-                ts = np.delete(ts, np.arange(ar,br+1)-n_grp)
-                dts = np.delete(dts, np.arange(ar,br+1)-n_grp)
+                ts = np.delete(ts, np.arange(ar, br + 1) - n_grp)
+                dts = np.delete(dts, np.arange(ar, br + 1) - n_grp)
 
-                ts = np.insert(ts, grp[0]-n_grp, tins)
-                dts = np.insert(dts, grp[0]-n_grp, np.full(n-1, (b-a)/(n-1)))
+                ts = np.insert(ts, grp[0] - n_grp, tins)
+                dts = np.insert(dts, grp[0] - n_grp, np.full(n - 1, (b - a) / (n - 1)))
 
-                if (br-ar>=1):
-                    n_grp = n_grp + (grp[1]-grp[0]-n)+1
+                if br - ar >= 1:
+                    n_grp = n_grp + (grp[1] - grp[0] - n) + 1
                 else:
                     pass
 
-            
         t = ts
         dt = dts
-        nb = _comp_nb(t,dt)
-            
+        nb = _comp_nb(t, dt)
+
     idx = nb < nbinsmin
-    
+
     t = np.delete(t, idx)
     dt = np.delete(dt, idx)
     nb = np.delete(nb, idx)
-    
+
     return t, dt, nb
 
 

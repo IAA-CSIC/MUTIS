@@ -7,14 +7,7 @@ import nfft
 import numpy as np
 import scipy.signal as scipy_signal
 
-__all__ = [
-    "lc_gen_samp",
-    "lc_gen_psd_nft",
-    "lc_gen_ou",
-    "lc_gen_psd_lombscargle",
-    "lc_gen_psd_fft",
-    "lc_gen_psd_c"
-]
+__all__ = ["lc_gen_samp", "lc_gen_psd_nft", "lc_gen_ou", "lc_gen_psd_lombscargle", "lc_gen_psd_fft", "lc_gen_psd_c"]
 
 log = logging.getLogger(__name__)
 
@@ -62,9 +55,9 @@ def lc_gen_psd_c(ts, values, times):
 
 def lc_gen_psd_fft(values):
     """Generation using Welch algorithm and the FFT, of synthetic signals with similar PSD, mean and std.
-    
-    Generates synthetic light curves using Lomb-Scargle algorithm 
-    to compute the power spectral density and the non-uniform fft 
+
+    Generates synthetic light curves using Lomb-Scargle algorithm
+    to compute the power spectral density and the non-uniform fft
     to generate the signal."""
     # this is not valid for non-uniform times (see PSD tests for a comparison)
     f, pxx = scipy_signal.welch(values)
@@ -79,9 +72,9 @@ def lc_gen_psd_fft(values):
 
 def lc_gen_psd_lombscargle(times, values):
     """Generation using Lomb-Scargle algorithm and the non-uniform FFT, of synthetic signals with similar PSD, mean and std.
-    
-    Generates synthetic light curves using Lomb-Scargle algorithm 
-    to compute the power spectral density and the non-uniform fft 
+
+    Generates synthetic light curves using Lomb-Scargle algorithm
+    to compute the power spectral density and the non-uniform fft
     to reconstruct the randomised signal."""
 
     if values.size % 2 != 0:
@@ -114,11 +107,11 @@ def lc_gen_psd_lombscargle(times, values):
 
 def lc_gen_psd_nft(times, values):
     """Generation using the non-uniform FFT of synthetic signals with similar PSD, mean and std.
-    
-    Generates synthetic light curves using the non-uniform FFT to 
-    compute the power spectral density and to reconstruct the 
+
+    Generates synthetic light curves using the non-uniform FFT to
+    compute the power spectral density and to reconstruct the
     randomised signal."""
-        
+
     k = np.arange(-times.size // 2, times.size / 2)
     N = k.size
 
