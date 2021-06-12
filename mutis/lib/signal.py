@@ -59,6 +59,7 @@ def lc_gen_psd_fft(values):
     Generates synthetic light curves using Lomb-Scargle algorithm
     to compute the power spectral density and the non-uniform fft
     to generate the signal."""
+
     # this is not valid for non-uniform times (see PSD tests for a comparison)
     f, pxx = scipy_signal.welch(values)
     # fft2 = np.sqrt(2*Pxx*Pxx.size)*np.exp(1j*2*pi*np.random.randn(Pxx.size))
@@ -84,9 +85,10 @@ def lc_gen_psd_lombscargle(times, values):
         sigp = values
         tp = times
 
-    N = sigp.size
-    # k = np.arange(-N/2, N/2) no bc scipy_signal.lombscargle does not support freq zero
-    k = np.linspace(-N / 2, N / 2 - 1 + 1e-6, N)
+    offset = 1e-6
+    n = sigp.size
+    # k = np.arange(-n/2, n/2) no bc scipy_signal.lombscargle does not support freq zero
+    k = np.linspace(-n / 2, n / 2 - 1 + offset, n)
     freqs = k / 2 / np.pi
 
     pxx = scipy_signal.lombscargle(tp, sigp, freqs)
