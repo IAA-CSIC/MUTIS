@@ -3,10 +3,7 @@
 
 import numpy as np
 
-__all__ = [
-    "get_grid",
-    "memoize"
-]
+__all__ = ["get_grid", "memoize"]
 
 
 def memoize(f):

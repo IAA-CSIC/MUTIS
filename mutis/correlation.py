@@ -47,16 +47,28 @@ class Correlation:
         self.t0_full = (self.tmax_full + self.tmin_full) / 2
         self.tmin_same = -(np.max([t1.max() - t1.min(), t2.max() - t2.min()])) / 2 + self.t0_full
         self.tmax_same = (np.max([t1.max() - t1.min(), t2.max() - t2.min()])) / 2 + self.t0_full
-        self.tmin_valid = -(np.max([t1.max() - t1.min(), t2.max() - t2.min()]) - np.min([t1.max() - t1.min(), t2.max() - t2.min()]))/ 2 + self.t0_full
-        self.tmax_valid = +(np.max([t1.max() - t1.min(), t2.max() - t2.min()]) - np.min([t1.max() - t1.min(), t2.max() - t2.min()]))/ 2 + self.t0_full
+        self.tmin_valid = (
+            -(np.max([t1.max() - t1.min(), t2.max() - t2.min()]) - np.min([t1.max() - t1.min(), t2.max() - t2.min()]))
+            / 2
+            + self.t0_full
+        )
+        self.tmax_valid = (
+            +(np.max([t1.max() - t1.min(), t2.max() - t2.min()]) - np.min([t1.max() - t1.min(), t2.max() - t2.min()]))
+            / 2
+            + self.t0_full
+        )
 
     def gen_synth(self, samples):
-        """Description goes here.
+        """Generates the synthetic light curves.
+
+        Generates the specified number `samples` of synthetic light
+        curves for each signal, to be used to compute the significance
+        the correlation.
 
         Parameters
         ----------
         samples : :py:class:`~int`
-            Parameter description.
+            Number of synthetic light curves to be generated for each signal.
         """
 
         self.samples = samples
@@ -64,7 +76,12 @@ class Correlation:
         self.signal2.gen_synth(samples)
 
     def gen_corr(self):
-        """Description goes here."""
+        """Generates the correlation of the signals.
+
+        Generates the correlation of the signals, and computes their
+        confidence level from the synthetic light curves, which must
+        have been generated before.
+        """
 
         if not len(self.times) or not len(self.dts):
             raise Exception(
@@ -137,10 +154,15 @@ class Correlation:
         Parameters
         ----------
         ftimes : :py:class:`~str`
-            Method used to bin the time interval of the correlation. Possible values are:
-                - "canopy": Computes a binning as dense as possible, with variable bin width and (with a minimum and a maximum resolution) and a minimum statistic.
-                - "rawab": Computes a binning with variable bin width, a given step, maximum bin size and a minimum statistic.
-                - "uniform": Computes a binning with uniform bin width and a minimum statistic.
+            Method used to bin the time interval of the correlation.
+            Possible values are:
+                - "canopy": Computes a binning as dense as possible, with
+                variable bin width and (with a minimum and a maximum
+                resolution) and a minimum statistic.
+                - "rawab": Computes a binning with variable bin width,
+                a given step, maximum bin size and a minimum statistic.
+                - "uniform": Computes a binning with uniform bin width
+                and a minimum statistic.
                 - "numpy": Computes a binning suitable for method='numpy'.
         """
         if ftimes == "canopy":
@@ -159,8 +181,19 @@ class Correlation:
         else:
             raise Exception("Unknown method " + ftimes + ", please indicate how to generate times.")
 
-    def plot_corr(self, ax=None, legend=None):
-        """Description goes here."""
+    def plot_corr(self, ax=None, legend=False):
+        """Plots the correlation of the signals.
+
+        Plots the correlation of the signal, and the confidence limits
+        computed from the synthetic curves.
+
+        Parameters
+        ----------
+        ax : :class:`matplotlib.axes.Axes`
+            Axes to be used (default None, it creates a new axes).
+        legend : boolean
+            Whether to add a legend indicating the confidence levels.
+        """
 
         # TODO: develop a plotting object for plots
         #       this will considerably shorten the
@@ -188,14 +221,27 @@ class Correlation:
         ax.axvline(x=self.tmin_valid, ymin=-1, ymax=+1, color="cyan", linewidth=1, alpha=0.5)
         ax.axvline(x=self.tmax_valid, ymin=-1, ymax=+1, color="cyan", linewidth=1, alpha=0.5)
 
-        if legend is not None:
+        if legend is True:
             ax.legend()
 
         # plt.show()
         return ax
 
     def plot_times(self, rug=False):
-        """Description goes here."""
+        """Plots the time binning generated previously.
+
+        Plots the number of total bins, their distribution and the
+        number of points in each bin for the generated time binning,
+        previously generated with Correlation().gen_times(...).
+
+        Parameters
+        ----------
+        rug : boolean
+            Whether to make a rug plot just below the binning, to make
+            it easier to visually understand the density and distribution
+            of the generated bins.
+
+        """
 
         # TODO: develop a plotting object for plots
         #       this will considerably shorten the
@@ -234,7 +280,16 @@ class Correlation:
         # fig.show()
 
     def plot_signals(self, ax=None):
-        """Description goes here."""
+        """Plots the signals involved in this correlation.
+
+        Plots the signals involved in this correlation, in the same window
+        but with different twin y-axes and different colors.
+
+        Parameters
+        ----------
+        ax : :py:class:`~matplotlib.axes.Axes`
+            Axes to be used for plotting.
+        """
 
         # TODO: develop a plotting object for plots
         #       this will considerably shorten the
