@@ -133,7 +133,6 @@ class Signal:
             plt.plot(x_c, self.pdf(x_c, *popt), "k-", label="curve_fit", alpha=0.8)
             res["curve_fit"] = (popt, np.sqrt(np.diag(pcov)))
         except Exception as e:
-            popt, pcov = None, None
             log.error(f"Some error fitting with curve_fit {e}")
 
         # fit pdf with MLE
@@ -160,13 +159,13 @@ class Signal:
         # estimate theta (from curve_fit)
         try:
             res["th_est1"] = fit[0] * sigma_est ** 2 / 2
-        except:
+        except NameError as e:
             res["th_est1"] = None
 
         # estimate theta (from MLE)
         try:
             res["th_est2"] = popt[0] * sigma_est ** 2 / 2
-        except:
+        except NameError as e:
             res["th_est2"] = None
 
         return res
