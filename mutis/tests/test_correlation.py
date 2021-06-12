@@ -14,7 +14,7 @@ def corr():
     signal1 = Signal(times1, values1, "lc_gen_psd_nft")
     signal2 = Signal(times2, values2, "lc_gen_psd_nft")
     return {
-        "fail": Correlation(signal1, signal2, "test"),
+        "fail": Correlation(signal1, signal2, "fail"),
         "welsh_ab": Correlation(signal1, signal2, "welsh_ab"),
         "kroedel_ab": Correlation(signal1, signal2, "kroedel_ab"),
         "numpy": Correlation(signal1, signal2, "numpy"),
@@ -34,6 +34,8 @@ def test_plot_signals(corr):
 
 
 def test_gen_times(corr):
+    with pytest.raises(Exception):
+        corr["fail"].gen_corr()
     corr["welsh_ab"].gen_times(dtmin=0.1, dtmax=3, nbinsmin=3)
     assert_allclose(corr["welsh_ab"].times[0], 2.160, rtol=1e-3)
     assert corr["welsh_ab"].dts[0] == 0.1
@@ -50,6 +52,8 @@ def test_gen_times(corr):
     assert corr["welsh_ab"].times[0] == 2
     assert corr["welsh_ab"].dts[0] == 0.01
     assert corr["welsh_ab"].nb[0] == 3
+    with pytest.raises(Exception):
+        corr["fail"].gen_times(ftimes="fail")
 
 
 def test_plot_times(corr):
@@ -68,13 +72,19 @@ def test_gen_corr(corr):
     corr["kroedel_ab"].gen_times(dtmin=0.1, dtmax=3, nbinsmin=3)
     corr["kroedel_ab"].gen_synth(10)
     corr["kroedel_ab"].gen_corr()
+
     assert np.shape(corr["kroedel_ab"].l1s) == (2, 77)
     assert np.shape(corr["kroedel_ab"].l2s) == (2, 77)
     assert np.shape(corr["kroedel_ab"].l3s) == (2, 77)
+
+    corr["fail"].gen_times(dtmin=0.1, dtmax=3, nbinsmin=3)
+    corr["fail"].gen_synth(10)
+    with pytest.raises(Exception):
+        corr["fail"].gen_corr()
 
 
 def test_plot_corr(corr):
     corr["welsh_ab"].gen_times(dtmin=0.1, dtmax=3, nbinsmin=3)
     corr["welsh_ab"].gen_synth(10)
     corr["welsh_ab"].gen_corr()
-    corr["welsh_ab"].plot_corr()
+    corr["welsh_ab"].plot_corr(legend=True)
