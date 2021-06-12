@@ -78,7 +78,7 @@ class Signal:
         This function tries to fit the signal to an OU stochastic
         process using both basic curve fitting and the Maximum
         Likelihood Estimation method, and returns some plots of
-        the signals and its properties, and the stimated parameters.
+        the signals and its properties, and the estimated parameters.
         """
 
         # TODO: make a generic fit method
