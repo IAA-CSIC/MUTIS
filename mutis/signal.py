@@ -33,7 +33,7 @@ class Signal:
         Method used to generate the synthetic signal.
     """
 
-    def __init__(self, times, values, fgen, dvalues = None):
+    def __init__(self, times, values, dvalues = None, fgen=None):
         self.times = np.array(times)
         self.values = np.array(values)
         self.fgen = fgen
