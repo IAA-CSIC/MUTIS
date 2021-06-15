@@ -14,6 +14,7 @@ log = logging.getLogger(__name__)
 
 def kroedel_ab_p(t1, d1, t2, d2, t, dt):
     """Helper function for kroedel_ab()"""
+
     t1m, t2m = get_grid(t1, t2)
     d1m, d2m = np.meshgrid(d1, d2)
 
@@ -85,6 +86,7 @@ def kroedel_ab(t1, d1, t2, d2, t, dt):
 
 def welsh_ab_p(t1, d1, t2, d2, t, dt):
     """Helper function for welsh_ab()"""
+
     t1m, t2m = get_grid(t1, t2)
     d1m, d2m = np.meshgrid(d1, d2)
 
@@ -155,7 +157,8 @@ def welsh_ab(t1, d1, t2, d2, t, dt):
 
 
 def fkroedel(t1, d1, t2, d2, t, dt=None):
-    """Krolik & Edelson 1988 legacy funcs."""
+    """Krolik & Edelson 1988 legacy functions."""
+
     if dt is None:
         dt = (np.max([t1.max(), t2.max()]) - np.min([t1.min(), t2.min()])) / np.min([t1.size, t2.size])
         # print('dt is {:.3f}'.format(dt))
@@ -170,7 +173,8 @@ def fkroedel(t1, d1, t2, d2, t, dt=None):
 
 
 def fwelsh(t1, d1, t2, d2, t, dt=None):
-    """Welsh 1999 legacy funcs."""
+    """Welsh 1999 legacy functions."""
+
     if dt is None:
         dt = (np.max([t1.max(), t2.max()]) - np.min([t1.min(), t2.min()])) / np.min([t1.size, t2.size])
         # print('dt is {:.3f}'.format(dt))
@@ -184,13 +188,14 @@ def fwelsh(t1, d1, t2, d2, t, dt=None):
     return np.mean(udcf)
 
 
-# vectorize legacy funcs
+# vectorize legacy functions
 kroedel = np.vectorize(fkroedel, excluded=(0, 1, 2, 3, 5), otypes=[float])
 welsh = np.vectorize(fwelsh, excluded=(0, 1, 2, 3, 5), otypes=[float])
 
 
 def ndcf(x, y):
     """Computes the normalised correlation of two discrete signals (ignoring times)."""
+
     x = (x - np.mean(x)) / np.std(x) / len(x)
     y = (y - np.mean(y)) / np.std(y)
     return np.correlate(y, x, "full")
@@ -198,6 +203,7 @@ def ndcf(x, y):
 
 def nindcf(t1, s1, t2, s2):
     """Computes the normalised correlation of two discrete signals (interpolating them)."""
+
     dt = np.max([(t1.max() - t1.min()) / t1.size, (t2.max() - t2.min()) / t2.size])
     n1 = np.int(np.ptp(t1) / dt * 10.0)
     n2 = np.int(np.ptp(t1) / dt * 10.0)
@@ -290,11 +296,11 @@ def gen_times_rawab(t1, t2, dt0=None, ndtmax=1.0, nbinsmin=121, force=None):
     return t, dt, nb
 
 
-def gen_times_uniform(t1, t2, tmin=None, tmax=None, nbinsmin=121, N=200):
+def gen_times_uniform(t1, t2, tmin=None, tmax=None, nbinsmin=121, n=200):
     """Returns an uniform t, dt time binning for use with adaptative binning methods.
 
-    The time interval on which the correlation is defined is splitted in
-    `N` bins. Bins with a number of point less than `nbinsmin` are discarded.
+    The time interval on which the correlation is defined is split in
+    `n` bins. Bins with a number of point less than `nbinsmin` are discarded.
 
     Parameters
     ----------
@@ -308,7 +314,7 @@ def gen_times_uniform(t1, t2, tmin=None, tmax=None, nbinsmin=121, N=200):
             End of the time intervals (if not specified, end of the interval on which the correlation is define).
         nbinsmin : :py:class:`~float`
             Minimum of points falling on each bin.
-        N : :py:class:`~float`
+        n : :py:class:`~float`
             Number of bins in which to split (needs not to be the number of bins returned).
 
     Returns
@@ -326,8 +332,8 @@ def gen_times_uniform(t1, t2, tmin=None, tmax=None, nbinsmin=121, N=200):
     if tmin is None:
         tmin = -tmax
 
-    t = np.linspace(tmin, tmax, N)
-    dtm = (tmax - tmin) / N
+    t = np.linspace(tmin, tmax, n)
+    dtm = (tmax - tmin) / n
     dt = np.full(t.shape, dtm)
     nb = np.empty(t.shape)
     t1m, t2m = np.meshgrid(t1, t2)
@@ -347,7 +353,7 @@ def gen_times_canopy(t1, t2, dtmin=0.01, dtmax=0.5, nbinsmin=500, nf=0.5):
 
     This cumbersome algorithm does more or less the following:
     1) Divides the time interval on which the correlation is defined in
-    the maximum number of points (minium bin size defined by `dtmin`).
+    the maximum number of points (minimum bin size defined by `dtmin`).
     2) Checks the number of point falling on each bin.
     3) If there are several consecutive intervals with a number of points
     over `nbinsmin`, it groups them (reducing the number of points
@@ -472,34 +478,3 @@ def gen_times_canopy(t1, t2, dtmin=0.01, dtmax=0.5, nbinsmin=500, nf=0.5):
     nb = np.delete(nb, idx)
 
     return t, dt, nb
-
-
-#
-# MC estimators of uncertainties
-#
-
-# def MC_corr_err(t1, s1, t1p, t2, s2, t2p, t, dt, fcorr, fgen, N=400):
-#     """ MC percentiles generation."""
-#     mc_corr = np.empty((N, t.size))
-#     for n in range(0, N):
-#         mc_corr[n] = fcorr(t1, fgen(t1, s1, t1p), t2, fgen(t2, s2, t2p), t, dt)
-#
-#     uppp, lowpp = np.percentile(mc_corr, [0.135, 99.865], axis=0)
-#     upp, lowp = np.percentile(mc_corr, [2.28, 97.73], axis=0)
-#     up, low = np.percentile(mc_corr, [15.865, 84.135], axis=0)
-#
-#     return (up, low), (upp, lowp), (uppp, lowpp)
-#
-#
-# def MC_sig_err(t1, s1, ds1, t2, s2, ds2, t, dt, fcorr, fgen, N=400):
-#     """ MC error generation."""
-#     mc_corr2 = np.empty((N, t.size))
-#     for n in range(0, N):
-#         mc_corr2[n] = fcorr(t1, s1 + ds1 * np.random.randn(s1.size),
-#                             t2, s2 + ds2 * np.random.randn(s2.size), t, dt)
-#
-#     uppp2, lowpp2 = np.percentile(mc_corr2, [0.135, 99.865], axis=0)
-#     upp2, lowp2 = np.percentile(mc_corr2, [2.28, 97.73], axis=0)
-#     up2, low2 = np.percentile(mc_corr2, [15.865, 84.135], axis=0)
-#
-#     return (up2, low2), (upp2, lowp2), (uppp2, lowpp2)

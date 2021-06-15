@@ -47,7 +47,6 @@ class Signal:
     def plot(self, ax=None):
         if ax is None:
             ax = plt.gca()
-
         return ax.plot(self.times, self.values, ".-", lw=1, alpha=0.7)
 
     def gen_synth(self, samples):
@@ -153,8 +152,7 @@ class Signal:
             log.error(f"Some error fitting with MLE {e}")
 
         plt.legend(loc="lower right")
-
-        plt.show()
+        # plt.show()
 
         # estimate theta (from curve_fit)
         try:
@@ -191,16 +189,14 @@ class Signal:
         if ("ax1" not in axes) or ("ax2" not in axes) or ("ax3" not in axes):
             fig, (axes["ax1"], axes["ax2"], axes["ax3"]) = plt.subplots(nrows=1, ncols=3, figsize=(20, 4))
 
-        # Plot the two signals
-
+        # plot the two signals
         axes["ax1"].plot(t, y, "b-", label="orig", lw=0.5, alpha=0.8)
 
         # ax1p = ax1.twinx()
         axes["ax1"].plot(t, y2, "r-", label="gen", lw=0.5, alpha=0.8)
         axes["ax1"].set_title("light curves")
 
-        # Plot their histogram
-
+        # plot their histogram
         bins = "auto"  # bins = np.int(y.size**0.5/1.5) #
         rang = (np.percentile(y, 0), np.percentile(y, 99))
         axes["ax2"].hist(y, density=True, color="b", alpha=0.4, bins=bins, range=rang)
@@ -212,8 +208,7 @@ class Signal:
 
         axes["ax2"].set_title("pdf")
 
-        # Plot their PSD
-
+        # plot their PSD
         if fpsd == "lombscargle":
             k = np.linspace(1e-3, self.values.size / 2, self.values.size // 2)
             freqs = k / 2 / np.pi

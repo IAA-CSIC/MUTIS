@@ -89,7 +89,7 @@ class Correlation:
                 "Please use gen_times() or manually set them."
             )
 
-        # TODO: refactor if/elif with an helper function
+        # TODO: refactor if/elif with a helper function
         mc_corr = np.empty((self.samples, self.times.size))
         if self.fcorr == "welsh_ab":
             for n in range(self.samples):
@@ -174,8 +174,8 @@ class Correlation:
         elif ftimes == "numpy":
             t1, t2 = self.signal1.times, self.signal1.times
             dt = np.max([(t1.max() - t1.min()) / t1.size, (t2.max() - t2.min()) / t2.size])
-            n1 = np.int(np.ptp(t1) / dt * 10.0)
-            n2 = np.int(np.ptp(t1) / dt * 10.0)
+            n1 = int(np.ptp(t1) / dt * 10.0)
+            n2 = int(np.ptp(t1) / dt * 10.0)
             self.times = np.linspace(self.tmin_full, self.tmax_full, n1 + n2 - 1)
             self.dts = np.full(self.times.size, (self.tmax_full - self.tmin_full) / (n1 + n2))
         else:
@@ -204,11 +204,11 @@ class Correlation:
             ax = plt.gca()
 
         ax.plot(self.times, self.l1s[0], "c-.")
-        ax.plot(self.times, self.l1s[1], "c-.", label="$1\sigma$")
+        ax.plot(self.times, self.l1s[1], "c-.", label=r"$1\sigma$")
         ax.plot(self.times, self.l2s[0], "k--")
-        ax.plot(self.times, self.l2s[1], "k--", label="$2\sigma$")
+        ax.plot(self.times, self.l2s[1], "k--", label=r"$2\sigma$")
         ax.plot(self.times, self.l3s[0], "r-")
-        ax.plot(self.times, self.l3s[1], "r-", label="$3\sigma$")
+        ax.plot(self.times, self.l3s[1], "r-", label=r"$3\sigma$")
         ax.plot(self.times, self.values, "b.--", lw=1)
 
         # full limit
@@ -221,7 +221,7 @@ class Correlation:
         ax.axvline(x=self.tmin_valid, ymin=-1, ymax=+1, color="cyan", linewidth=1, alpha=0.5)
         ax.axvline(x=self.tmax_valid, ymin=-1, ymax=+1, color="cyan", linewidth=1, alpha=0.5)
 
-        if legend is True:
+        if legend:
             ax.legend()
 
         # plt.show()
