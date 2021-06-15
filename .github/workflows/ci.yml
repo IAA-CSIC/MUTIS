@@ -1,0 +1,44 @@
+name: CI
+on: [push, pull_request]
+jobs:
+  tests:
+    defaults:
+      run:
+        shell: bash -l {0}
+    name: test coverage
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v2
+      - name: create and activate env
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          activate-environment: mutis
+          environment-file: environment.yml
+      - name: install mutis
+        run: |
+          pip install -e .
+      - name: test coverage
+        run: |
+          make test-cov
+          codecov -X gcov
+  docs:
+    defaults:
+      run:
+        shell: bash -l {0}
+    name: docs building
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v2
+      - name: create and activate env
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          activate-environment: mutis
+          environment-file: environment.yml
+      - name: install mutis
+        run: |
+          pip install -e .
+      - name: build docs
+        run: |
+          make docs-sphinx
