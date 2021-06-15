@@ -156,14 +156,14 @@ class Correlation:
         ftimes : :py:class:`~str`
             Method used to bin the time interval of the correlation.
             Possible values are:
-                - "canopy": Computes a binning as dense as possible, with
-                variable bin width and (with a minimum and a maximum
-                resolution) and a minimum statistic.
-                - "rawab": Computes a binning with variable bin width,
-                a given step, maximum bin size and a minimum statistic.
-                - "uniform": Computes a binning with uniform bin width
-                and a minimum statistic.
-                - "numpy": Computes a binning suitable for method='numpy'.
+            - "canopy": Computes a binning as dense as possible, with
+            variable bin width and (with a minimum and a maximum
+            resolution) and a minimum statistic.
+            - "rawab": Computes a binning with variable bin width,
+            a given step, maximum bin size and a minimum statistic.
+            - "uniform": Computes a binning with uniform bin width
+            and a minimum statistic.
+            - "numpy": Computes a binning suitable for method='numpy'.
         """
         if ftimes == "canopy":
             self.times, self.dts, self.nb = gen_times_canopy(self.signal1.times, self.signal2.times, *args, **kwargs)
@@ -191,7 +191,7 @@ class Correlation:
         ----------
         ax : :class:`matplotlib.axes.Axes`
             Axes to be used (default None, it creates a new axes).
-        legend : boolean
+        legend : :py:class:`~bool`
             Whether to add a legend indicating the confidence levels.
         """
 
@@ -236,7 +236,7 @@ class Correlation:
 
         Parameters
         ----------
-        rug : boolean
+        rug : :py:class:`~bool`
             Whether to make a rug plot just below the binning, to make
             it easier to visually understand the density and distribution
             of the generated bins.

@@ -304,27 +304,27 @@ def gen_times_uniform(t1, t2, tmin=None, tmax=None, nbinsmin=121, n=200):
 
     Parameters
     ----------
-        t1 : :py:class:`np.ndarray`
-            Times of the first signal.
-        t2 : :py:class:`np.ndarray`
-            Times of the second signal.
-        tmin : :py:class:`~float`
-            Start of the time intervals (if not specified, start of the interval on which the correlation is define).
-        tmax : :py:class:`~float`
-            End of the time intervals (if not specified, end of the interval on which the correlation is define).
-        nbinsmin : :py:class:`~float`
-            Minimum of points falling on each bin.
-        n : :py:class:`~float`
-            Number of bins in which to split (needs not to be the number of bins returned).
+    t1 : :py:class:`np.ndarray`
+        Times of the first signal.
+    t2 : :py:class:`np.ndarray`
+        Times of the second signal.
+    tmin : :py:class:`~float`
+        Start of the time intervals (if not specified, start of the interval on which the correlation is define).
+    tmax : :py:class:`~float`
+        End of the time intervals (if not specified, end of the interval on which the correlation is define).
+    nbinsmin : :py:class:`~float`
+        Minimum of points falling on each bin.
+    n : :py:class:`~float`
+        Number of bins in which to split (needs not to be the number of bins returned).
 
     Returns
     -------
-        t : :py:class:`np.array`
-            Time binning on which to compute the correlation.
-        dt : :py:class:`np.array`
-            Size of the bins defined by `t`
-        nb : :py:class:`np.array`
-            Number of points falling on each bin defined by `t` and `dt`.
+    t : :class:`~numpy.ndarray`
+        Time binning on which to compute the correlation.
+    dt : :class:`~numpy.ndarray`
+        Size of the bins defined by `t`
+    nb : :class:`~numpy.ndarray`
+        Number of points falling on each bin defined by `t` and `dt`.
     """
 
     if tmax is None:
@@ -366,29 +366,29 @@ def gen_times_canopy(t1, t2, dtmin=0.01, dtmax=0.5, nbinsmin=500, nf=0.5):
 
     Parameters
     ----------
-        t1 : :py:class:`np.ndarray`
-            Times of the first signal.
-        t2 : :py:class:`np.ndarray`
-            Times of the second signal.
-        dtmin : :py:class:`~float`
-            Start of the time intervals (if not specified, start of the
-            interval on which the correlation is define).
-        dtmax : :py:class:`~float`
-            End of the time intervals (if not specified, end of the interval
-            on which the correlation is define).
-        nbinsmin : :py:class:`~float`
-            Minimum of points falling on each bin.
-        nf : :py:class:`~float`
-            How fast are the intervals divided.
+    t1 : :py:class:`np.ndarray`
+        Times of the first signal.
+    t2 : :py:class:`np.ndarray`
+        Times of the second signal.
+    dtmin : :py:class:`~float`
+        Start of the time intervals (if not specified, start of the
+        interval on which the correlation is define).
+    dtmax : :py:class:`~float`
+        End of the time intervals (if not specified, end of the interval
+        on which the correlation is define).
+    nbinsmin : :py:class:`~float`
+        Minimum of points falling on each bin.
+    nf : :py:class:`~float`
+        How fast are the intervals divided.
 
     Returns
     -------
-        t : :py:class:`np.array`
-            Time binning on which to compute the correlation.
-        dt : :py:class:`np.array`
-            Size of the bins defined by `t`
-        nb : :py:class:`np.array`
-            Number of points falling on each bin defined by `t` and `dt`.
+    t : :class:`~numpy.ndarray`
+        Time binning on which to compute the correlation.
+    dt : :class:`~numpy.ndarray`
+        Size of the bins defined by `t`
+    nb : :class:`~numpy.ndarray`
+        Number of points falling on each bin defined by `t` and `dt`.
     """
 
     t1m, t2m = np.meshgrid(t1, t2)
