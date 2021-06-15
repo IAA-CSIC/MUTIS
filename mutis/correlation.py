@@ -74,7 +74,7 @@ class Correlation:
         self.samples = samples
         self.signal1.gen_synth(samples)
         self.signal2.gen_synth(samples)
-        
+
     def gen_corr(self, uncert=True, dsamples=500):
         """Generates the correlation of the signals.
 
@@ -84,12 +84,12 @@ class Correlation:
         """
 
         if (uncert is True) and (self.signal1.dvalues is None):
-            log.error('uncert is True but no uncertainties for Signal 1 were specified')
+            log.error("uncert is True but no uncertainties for Signal 1 were specified")
             uncert = False
         if (uncert is True) and (self.signal2.dvalues is None):
-            log.error('uncert is True but no uncertainties for Signal 2 were specified')
+            log.error("uncert is True but no uncertainties for Signal 2 were specified")
             uncert = False
-            
+
         if not len(self.times) or not len(self.dts):
             raise Exception(
                 "You need to define the times on which to calculate the correlation."
@@ -114,9 +114,9 @@ class Correlation:
                 for n in range(dsamples):
                     mc_sig[n] = welsh_ab(
                         self.signal1.times,
-                        self.signal1.values + self.signal1.dvalues*np.random.randn(self.signal1.values.size),
+                        self.signal1.values + self.signal1.dvalues * np.random.randn(self.signal1.values.size),
                         self.signal2.times,
-                        self.signal2.values + self.signal2.dvalues*np.random.randn(self.signal2.values.size),
+                        self.signal2.values + self.signal2.dvalues * np.random.randn(self.signal2.values.size),
                         self.times,
                         self.dts,
                     )
@@ -142,12 +142,12 @@ class Correlation:
                 for n in range(dsamples):
                     mc_sig[n] = kroedel_ab(
                         self.signal1.times,
-                        self.signal1.values + self.signal1.dvalues*np.random.randn(self.signal1.values.size),
+                        self.signal1.values + self.signal1.dvalues * np.random.randn(self.signal1.values.size),
                         self.signal2.times,
-                        self.signal2.values + self.signal2.dvalues*np.random.randn(self.signal2.values.size),
+                        self.signal2.values + self.signal2.dvalues * np.random.randn(self.signal2.values.size),
                         self.times,
                         self.dts,
-                    )                
+                    )
             self.values = kroedel_ab(
                 self.signal1.times,
                 self.signal1.values,
@@ -168,10 +168,10 @@ class Correlation:
                 for n in range(dsamples):
                     mc_sig[n] = nindcf(
                         self.signal1.times,
-                        self.signal1.values + self.signal1.dvalues*np.random.randn(self.signal1.values.size),
+                        self.signal1.values + self.signal1.dvalues * np.random.randn(self.signal1.values.size),
                         self.signal2.times,
-                        self.signal2.values + self.signal2.dvalues*np.random.randn(self.signal2.values.size),
-                    )             
+                        self.signal2.values + self.signal2.dvalues * np.random.randn(self.signal2.values.size),
+                    )
             self.values = nindcf(
                 self.signal1.times,
                 self.signal1.values,
@@ -184,7 +184,7 @@ class Correlation:
         self.l3s = np.percentile(mc_corr, [0.135, 99.865], axis=0)
         self.l2s = np.percentile(mc_corr, [2.28, 97.73], axis=0)
         self.l1s = np.percentile(mc_corr, [15.865, 84.135], axis=0)
-        
+
         if uncert is True:
             self.s3s = np.percentile(mc_sig, [0.135, 99.865], axis=0)
             self.s2s = np.percentile(mc_sig, [2.28, 97.73], axis=0)
@@ -265,9 +265,9 @@ class Correlation:
 
 
         if uncert is True:
-            ax.fill_between(x=self.times, y1=self.s1s[0], y2=self.s1s[1], color='b', alpha=0.5)
-            ax.fill_between(x=self.times, y1=self.s2s[0], y2=self.s2s[1], color='b', alpha=0.3)
-            ax.fill_between(x=self.times, y1=self.s3s[0], y2=self.s3s[1], color='b', alpha=0.1)
+            ax.fill_between(x=self.times, y1=self.s1s[0], y2=self.s1s[1], color="b", alpha=0.5)
+            ax.fill_between(x=self.times, y1=self.s2s[0], y2=self.s2s[1], color="b", alpha=0.3)
+            ax.fill_between(x=self.times, y1=self.s3s[0], y2=self.s3s[1], color="b", alpha=0.1)
 
         if legend:
             ax.legend()
