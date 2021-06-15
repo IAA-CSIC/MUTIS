@@ -83,6 +83,13 @@ class Correlation:
         have been generated before.
         """
 
+        if (uncert is True) and (self.signal1.dvalues is None):
+            log.error('uncert is True but no uncertainties for Signal 1 were specified')
+            uncert = False
+        if (uncert is True) and (self.signal2.dvalues is None):
+            log.error('uncert is True but no uncertainties for Signal 2 were specified')
+            uncert = False
+            
         if not len(self.times) or not len(self.dts):
             raise Exception(
                 "You need to define the times on which to calculate the correlation."
@@ -258,9 +265,9 @@ class Correlation:
 
 
         if uncert is True:
-            ax.fill_between(x=self.times, y1=self.s1s[0], y2=self.s1s[1], color='b', alpha=0.6)
-            ax.fill_between(x=self.times, y1=self.s2s[0], y2=self.s2s[1], color='b', alpha=0.4)
-            ax.fill_between(x=self.times, y1=self.s3s[0], y2=self.s3s[1], color='b', alpha=0.2)
+            ax.fill_between(x=self.times, y1=self.s1s[0], y2=self.s1s[1], color='b', alpha=0.5)
+            ax.fill_between(x=self.times, y1=self.s2s[0], y2=self.s2s[1], color='b', alpha=0.3)
+            ax.fill_between(x=self.times, y1=self.s3s[0], y2=self.s3s[1], color='b', alpha=0.1)
 
         if legend:
             ax.legend()
