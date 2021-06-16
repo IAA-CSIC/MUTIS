@@ -92,10 +92,10 @@ class Correlation:
         """
 
         if uncert and self.signal1.dvalues is None:
-            log.error("uncert is True but no uncertainties for Signal 1 were specified")
+            log.error("uncert is True but no uncertainties for Signal 1 were specified, setting uncert to False")
             uncert = False
         if uncert and self.signal2.dvalues is None:
-            log.error("uncert is True but no uncertainties for Signal 2 were specified")
+            log.error("uncert is True but no uncertainties for Signal 2 were specified, setting uncert to False")
             uncert = False
 
         if len(self.times) == 0 or len(self.dts) == 0:
@@ -194,7 +194,7 @@ class Correlation:
         self.l2s = np.percentile(mc_corr, [2.28, 97.73], axis=0)
         self.l1s = np.percentile(mc_corr, [15.865, 84.135], axis=0)
 
-        if uncert is True:
+        if uncert:
             self.s3s = np.percentile(mc_sig, [0.135, 99.865], axis=0)
             self.s2s = np.percentile(mc_sig, [2.28, 97.73], axis=0)
             self.s1s = np.percentile(mc_sig, [15.865, 84.135], axis=0)
@@ -250,6 +250,13 @@ class Correlation:
         #       this will considerably shorten the
         #       number of attributes of this class
 
+        if uncert and self.signal1.dvalues is None:
+            log.error("uncert is True but no uncertainties for Signal 1 were specified, setting uncert to False")
+            uncert = False
+        if uncert and self.signal2.dvalues is None:
+            log.error("uncert is True but no uncertainties for Signal 2 were specified, setting uncert to False")
+            uncert = False
+            
         # plt.figure()
         if ax is None:
             ax = plt.gca()
@@ -273,7 +280,7 @@ class Correlation:
         ax.axvline(x=self.tmax_valid, ymin=-1, ymax=+1, color="cyan", linewidth=1, alpha=0.5)
 
 
-        if uncert is True:
+        if uncert:
             ax.fill_between(x=self.times, y1=self.s1s[0], y2=self.s1s[1], color="b", alpha=0.5)
             ax.fill_between(x=self.times, y1=self.s2s[0], y2=self.s2s[1], color="b", alpha=0.3)
             ax.fill_between(x=self.times, y1=self.s3s[0], y2=self.s3s[1], color="b", alpha=0.1)

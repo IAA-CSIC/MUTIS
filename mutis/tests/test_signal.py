@@ -11,13 +11,13 @@ def signal():
     values = 0.5 * np.sin(1 * np.linspace(10, 20, 100)) + 0.5 * np.sin(6 * np.linspace(10, 20, 100)) + 1
 
     return {
-        "fail": Signal(times, values, "test"),
-        "samp": Signal(times, values, "lc_gen_samp"),
-        "psd_c": Signal(times, values, "lc_gen_psd_c"),
-        "psd_nft": Signal(times, values, "lc_gen_psd_nft"),
-        "psd_fft": Signal(times, values, "lc_gen_psd_fft"),
-        "psd_lombscargle": Signal(times, values, "lc_gen_psd_lombscargle"),
-        "ou": Signal(times, values, "lc_gen_ou"),
+        "fail": Signal(times, values, fgen="test"),
+        "samp": Signal(times, values, fgen="lc_gen_samp"),
+        "psd_c": Signal(times, values, fgen="lc_gen_psd_c"),
+        "psd_nft": Signal(times, values, fgen="lc_gen_psd_nft"),
+        "psd_fft": Signal(times, values, fgen="lc_gen_psd_fft"),
+        "psd_lombscargle": Signal(times, values, fgen="lc_gen_psd_lombscargle"),
+        "ou": Signal(times, values, fgen="lc_gen_ou"),
     }
 
 

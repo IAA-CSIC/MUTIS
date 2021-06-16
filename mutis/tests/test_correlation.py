@@ -11,8 +11,8 @@ def corr():
     values1 = np.sin(times1)
     times2 = np.linspace(8, 12, 40)
     values2 = np.sin(times2)
-    signal1 = Signal(times1, values1, "lc_gen_psd_nft")
-    signal2 = Signal(times2, values2, "lc_gen_psd_nft")
+    signal1 = Signal(times1, values1, fgen = "lc_gen_psd_nft")
+    signal2 = Signal(times2, values2, fgen = "lc_gen_psd_nft")
     return {
         "fail": Correlation(signal1, signal2, "fail"),
         "welsh_ab": Correlation(signal1, signal2, "welsh_ab"),
