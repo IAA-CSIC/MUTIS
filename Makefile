@@ -47,7 +47,7 @@ docs-show:
 black:
 	black $(PROJECT)/ docs/ \
 	--exclude="extern/|docs/_static|docs/_build" \
-	--line-length 120
+	--line-length 100
 
 isort:
 	isort mutis docs -s docs/conf.py
