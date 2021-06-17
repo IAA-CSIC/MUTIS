@@ -30,17 +30,25 @@ class Correlation:
         self.signal1 = signal1
         self.signal2 = signal2
         self.fcorr = fcorr
+
         self.times = np.array([])
         self.dts = np.array([])
         self.nb = np.array([])
 
+        self.values = None
+        
         # TODO: have a much smaller set of attributes
         self.samples = None
+        # storage of the significance limits of the correlation
         self.l1s = None
         self.l2s = None
         self.l3s = None
-        self.values = None
+        # storage of the uncertainties of the correlation
+        self.s1s = None
+        self.s2s = None
+        self.s3s = None
 
+        # attributes indicating the ranges where the correlations are defined
         t1, t2 = self.signal1.times, self.signal2.times
         self.tmin_full = t2.min() - t1.max()
         self.tmax_full = t2.max() - t1.min()
@@ -75,7 +83,7 @@ class Correlation:
         self.signal1.gen_synth(samples)
         self.signal2.gen_synth(samples)
 
-    def gen_corr(self):
+    def gen_corr(self, uncert=True, dsamples=500):
         """Generates the correlation of the signals.
 
         Generates the correlation of the signals, and computes their
@@ -83,7 +91,14 @@ class Correlation:
         have been generated before.
         """
 
-        if not len(self.times) or not len(self.dts):
+        if uncert and self.signal1.dvalues is None:
+            log.error("uncert is True but no uncertainties for Signal 1 were specified, setting uncert to False")
+            uncert = False
+        if uncert and self.signal2.dvalues is None:
+            log.error("uncert is True but no uncertainties for Signal 2 were specified, setting uncert to False")
+            uncert = False
+
+        if len(self.times) == 0 or len(self.dts) == 0:
             raise Exception(
                 "You need to define the times on which to calculate the correlation."
                 "Please use gen_times() or manually set them."
@@ -91,6 +106,9 @@ class Correlation:
 
         # TODO: refactor if/elif with a helper function
         mc_corr = np.empty((self.samples, self.times.size))
+        if uncert:
+            mc_sig = np.empty((dsamples, self.times.size))
+
         if self.fcorr == "welsh_ab":
             for n in range(self.samples):
                 mc_corr[n] = welsh_ab(
@@ -101,6 +119,16 @@ class Correlation:
                     self.times,
                     self.dts,
                 )
+            if uncert:
+                for n in range(dsamples):
+                    mc_sig[n] = welsh_ab(
+                        self.signal1.times,
+                        self.signal1.values + self.signal1.dvalues * np.random.randn(self.signal1.values.size),
+                        self.signal2.times,
+                        self.signal2.values + self.signal2.dvalues * np.random.randn(self.signal2.values.size),
+                        self.times,
+                        self.dts,
+                    )
             self.values = welsh_ab(
                 self.signal1.times,
                 self.signal1.values,
@@ -119,14 +147,24 @@ class Correlation:
                     self.times,
                     self.dts,
                 )
-                self.values = kroedel_ab(
-                    self.signal1.times,
-                    self.signal1.values,
-                    self.signal2.times,
-                    self.signal2.values,
-                    self.times,
-                    self.dts,
-                )
+            if uncert:
+                for n in range(dsamples):
+                    mc_sig[n] = kroedel_ab(
+                        self.signal1.times,
+                        self.signal1.values + self.signal1.dvalues * np.random.randn(self.signal1.values.size),
+                        self.signal2.times,
+                        self.signal2.values + self.signal2.dvalues * np.random.randn(self.signal2.values.size),
+                        self.times,
+                        self.dts,
+                    )
+            self.values = kroedel_ab(
+                self.signal1.times,
+                self.signal1.values,
+                self.signal2.times,
+                self.signal2.values,
+                self.times,
+                self.dts,
+            )
         elif self.fcorr == "numpy":
             for n in range(self.samples):
                 mc_corr[n] = nindcf(
@@ -135,6 +173,14 @@ class Correlation:
                     self.signal2.times,
                     self.signal2.synth[n],
                 )
+            if uncert:
+                for n in range(dsamples):
+                    mc_sig[n] = nindcf(
+                        self.signal1.times,
+                        self.signal1.values + self.signal1.dvalues * np.random.randn(self.signal1.values.size),
+                        self.signal2.times,
+                        self.signal2.values + self.signal2.dvalues * np.random.randn(self.signal2.values.size),
+                    )
             self.values = nindcf(
                 self.signal1.times,
                 self.signal1.values,
@@ -147,6 +193,11 @@ class Correlation:
         self.l3s = np.percentile(mc_corr, [0.135, 99.865], axis=0)
         self.l2s = np.percentile(mc_corr, [2.28, 97.73], axis=0)
         self.l1s = np.percentile(mc_corr, [15.865, 84.135], axis=0)
+
+        if uncert:
+            self.s3s = np.percentile(mc_sig, [0.135, 99.865], axis=0)
+            self.s2s = np.percentile(mc_sig, [2.28, 97.73], axis=0)
+            self.s1s = np.percentile(mc_sig, [15.865, 84.135], axis=0)
 
     def gen_times(self, ftimes="canopy", *args, **kwargs):
         """Sets times and bins using the method defined by ftimes parameter.
@@ -181,7 +232,7 @@ class Correlation:
         else:
             raise Exception("Unknown method " + ftimes + ", please indicate how to generate times.")
 
-    def plot_corr(self, ax=None, legend=False):
+    def plot_corr(self, uncert=True, ax=None, legend=False):
         """Plots the correlation of the signals.
 
         Plots the correlation of the signal, and the confidence limits
@@ -199,6 +250,13 @@ class Correlation:
         #       this will considerably shorten the
         #       number of attributes of this class
 
+        if uncert and self.signal1.dvalues is None:
+            log.error("uncert is True but no uncertainties for Signal 1 were specified, setting uncert to False")
+            uncert = False
+        if uncert and self.signal2.dvalues is None:
+            log.error("uncert is True but no uncertainties for Signal 2 were specified, setting uncert to False")
+            uncert = False
+            
         # plt.figure()
         if ax is None:
             ax = plt.gca()
@@ -220,6 +278,12 @@ class Correlation:
         # valid limit
         ax.axvline(x=self.tmin_valid, ymin=-1, ymax=+1, color="cyan", linewidth=1, alpha=0.5)
         ax.axvline(x=self.tmax_valid, ymin=-1, ymax=+1, color="cyan", linewidth=1, alpha=0.5)
+
+
+        if uncert:
+            ax.fill_between(x=self.times, y1=self.s1s[0], y2=self.s1s[1], color="b", alpha=0.5)
+            ax.fill_between(x=self.times, y1=self.s2s[0], y2=self.s2s[1], color="b", alpha=0.3)
+            ax.fill_between(x=self.times, y1=self.s3s[0], y2=self.s3s[1], color="b", alpha=0.1)
 
         if legend:
             ax.legend()

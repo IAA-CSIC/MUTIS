@@ -1,6 +1,6 @@
-import pytest
 import numpy as np
 from numpy.testing import assert_allclose
+import pytest
 from mutis.signal import Signal
 from mutis.lib.signal import lc_gen_psd_c
 
@@ -11,13 +11,13 @@ def signal():
     values = 0.5 * np.sin(1 * np.linspace(10, 20, 100)) + 0.5 * np.sin(6 * np.linspace(10, 20, 100)) + 1
 
     return {
-        "fail": Signal(times, values, "test"),
-        "samp": Signal(times, values, "lc_gen_samp"),
-        "psd_c": Signal(times, values, "lc_gen_psd_c"),
-        "psd_nft": Signal(times, values, "lc_gen_psd_nft"),
-        "psd_fft": Signal(times, values, "lc_gen_psd_fft"),
-        "psd_lombscargle": Signal(times, values, "lc_gen_psd_lombscargle"),
-        "ou": Signal(times, values, "lc_gen_ou"),
+        "fail": Signal(times, values, fgen="test"),
+        "samp": Signal(times, values, fgen="lc_gen_samp"),
+        "psd_c": Signal(times, values, fgen="lc_gen_psd_c"),
+        "psd_nft": Signal(times, values, fgen="lc_gen_psd_nft"),
+        "psd_fft": Signal(times, values, fgen="lc_gen_psd_fft"),
+        "psd_lombscargle": Signal(times, values, fgen="lc_gen_psd_lombscargle"),
+        "ou": Signal(times, values, fgen="lc_gen_ou"),
     }
 
 
@@ -79,4 +79,3 @@ def test_ou_check_gen(signal, ou_params):
 def test_lc_gen_psd_c(signal):
     values = lc_gen_psd_c(signal["samp"].times, signal["samp"].values, signal["samp"].times)
     assert len(values) == 100
-

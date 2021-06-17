@@ -12,6 +12,7 @@ __all__ = ["kroedel_ab", "welsh_ab", "nindcf", "gen_times_rawab", "gen_times_uni
 log = logging.getLogger(__name__)
 
 
+
 def kroedel_ab_p(t1, d1, t2, d2, t, dt):
     """Helper function for kroedel_ab()"""
 
@@ -82,6 +83,7 @@ def kroedel_ab(t1, d1, t2, d2, t, dt):
     for i in range(t.size):
         res[i] = kroedel_ab_p(t1, d1, t2, d2, t[i], dt[i])
     return res
+
 
 
 def welsh_ab_p(t1, d1, t2, d2, t, dt):
@@ -156,42 +158,6 @@ def welsh_ab(t1, d1, t2, d2, t, dt):
     return res
 
 
-def fkroedel(t1, d1, t2, d2, t, dt=None):
-    """Krolik & Edelson 1988 legacy functions."""
-
-    if dt is None:
-        dt = (np.max([t1.max(), t2.max()]) - np.min([t1.min(), t2.min()])) / np.min([t1.size, t2.size])
-        # print('dt is {:.3f}'.format(dt))
-    t1m, t2m = get_grid(t1, t2)
-    d1m, d2m = get_grid(d1, d2)
-    mask = ~(((t - dt / 2) < (t2m - t1m)) & ((t2m - t1m) < (t + dt / 2)))
-    udcf = (d1m - np.mean(d1)) * (d2m - np.mean(d2)) / np.std(d1) / np.std(d2)
-    udcf = np.ma.masked_where(mask, udcf)
-    if np.sum(mask) < 12:
-        return np.nan
-    return np.ma.mean(udcf)
-
-
-def fwelsh(t1, d1, t2, d2, t, dt=None):
-    """Welsh 1999 legacy functions."""
-
-    if dt is None:
-        dt = (np.max([t1.max(), t2.max()]) - np.min([t1.min(), t2.min()])) / np.min([t1.size, t2.size])
-        # print('dt is {:.3f}'.format(dt))
-    t1m, t2m = get_grid(t1, t2)
-    d1m, d2m = get_grid(d1, d2)
-    msk = ~(((t - dt / 2) < (t2m - t1m)) & ((t2m - t1m) < (t + dt / 2)))
-    d1msk = np.ma.array(d1m, mask=msk)
-    d2msk = np.ma.array(d2m, mask=msk)
-    udcf = (d1m - d1msk.mean()) * (d2m - d2msk.mean()) / d1msk.std() / d2msk.std()
-    udcf = np.ma.masked_where(msk, udcf)
-    return np.mean(udcf)
-
-
-# vectorize legacy functions
-kroedel = np.vectorize(fkroedel, excluded=(0, 1, 2, 3, 5), otypes=[float])
-welsh = np.vectorize(fwelsh, excluded=(0, 1, 2, 3, 5), otypes=[float])
-
 
 def ndcf(x, y):
     """Computes the normalised correlation of two discrete signals (ignoring times)."""
@@ -199,6 +165,7 @@ def ndcf(x, y):
     x = (x - np.mean(x)) / np.std(x) / len(x)
     y = (y - np.mean(y)) / np.std(y)
     return np.correlate(y, x, "full")
+
 
 
 def nindcf(t1, s1, t2, s2):
@@ -210,6 +177,7 @@ def nindcf(t1, s1, t2, s2):
     s1i = np.interp(np.linspace(t1.min(), t1.max(), n1), t1, s1)
     s2i = np.interp(np.linspace(t2.min(), t2.max(), n2), t2, s2)
     return ndcf(s1i, s2i)
+
 
 
 def gen_times_rawab(t1, t2, dt0=None, ndtmax=1.0, nbinsmin=121, force=None):

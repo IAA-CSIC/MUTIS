@@ -33,10 +33,16 @@ class Signal:
         Method used to generate the synthetic signal.
     """
 
-    def __init__(self, times, values, fgen):
+    def __init__(self, times, values, dvalues=None, fgen=None):
         self.times = np.array(times)
         self.values = np.array(values)
         self.fgen = fgen
+
+        if dvalues is not None:
+            self.dvalues = np.array(dvalues)
+        else:
+            self.dvalues = None
+
         self.synth = None
 
         # TODO make attributes below specific of OU method / not the entire class
