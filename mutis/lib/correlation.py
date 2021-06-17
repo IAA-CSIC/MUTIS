@@ -7,10 +7,16 @@ import numpy as np
 
 from mutis.lib.utils import get_grid
 
-__all__ = ["kroedel_ab", "welsh_ab", "nindcf", "gen_times_rawab", "gen_times_uniform", "gen_times_canopy"]
+__all__ = [
+    "kroedel_ab",
+    "welsh_ab",
+    "nindcf",
+    "gen_times_rawab",
+    "gen_times_uniform",
+    "gen_times_canopy",
+]
 
 log = logging.getLogger(__name__)
-
 
 
 def kroedel_ab_p(t1, d1, t2, d2, t, dt):
@@ -85,7 +91,6 @@ def kroedel_ab(t1, d1, t2, d2, t, dt):
     return res
 
 
-
 def welsh_ab_p(t1, d1, t2, d2, t, dt):
     """Helper function for welsh_ab()"""
 
@@ -94,7 +99,9 @@ def welsh_ab_p(t1, d1, t2, d2, t, dt):
 
     msk = ((t - dt / 2) < (t2m - t1m)) & ((t2m - t1m) < (t + dt / 2))
 
-    udcf = (d1m - np.mean(d1m[msk])) * (d2m - np.mean(d2m[msk])) / np.std(d1m[msk]) / np.std(d2m[msk])
+    udcf = (
+        (d1m - np.mean(d1m[msk])) * (d2m - np.mean(d2m[msk])) / np.std(d1m[msk]) / np.std(d2m[msk])
+    )
 
     return np.mean(udcf[msk])
 
@@ -158,14 +165,12 @@ def welsh_ab(t1, d1, t2, d2, t, dt):
     return res
 
 
-
 def ndcf(x, y):
     """Computes the normalised correlation of two discrete signals (ignoring times)."""
 
     x = (x - np.mean(x)) / np.std(x) / len(x)
     y = (y - np.mean(y)) / np.std(y)
     return np.correlate(y, x, "full")
-
 
 
 def nindcf(t1, s1, t2, s2):
@@ -177,7 +182,6 @@ def nindcf(t1, s1, t2, s2):
     s1i = np.interp(np.linspace(t1.min(), t1.max(), n1), t1, s1)
     s2i = np.interp(np.linspace(t2.min(), t2.max(), n2), t2, s2)
     return ndcf(s1i, s2i)
-
 
 
 def gen_times_rawab(t1, t2, dt0=None, ndtmax=1.0, nbinsmin=121, force=None):
@@ -364,7 +368,9 @@ def gen_times_canopy(t1, t2, dtmin=0.01, dtmax=0.5, nbinsmin=500, nf=0.5):
     def _comp_nb(t, dt):
         nb = np.empty(len(t))
         for i in range(len(t)):
-            nb[i] = np.sum((((t[i] - dt[i] / 2) < (t2m - t1m)) & ((t2m - t1m) < (t[i] + dt[i] / 2))))
+            nb[i] = np.sum(
+                (((t[i] - dt[i] / 2) < (t2m - t1m)) & ((t2m - t1m) < (t[i] + dt[i] / 2)))
+            )
         return nb
 
     tmax = +(np.max([t1.max(), t2.max()]) - np.min([t1.min(), t2.min()]))
@@ -385,7 +391,9 @@ def gen_times_canopy(t1, t2, dtmin=0.01, dtmax=0.5, nbinsmin=500, nf=0.5):
         t, dt = np.copy(ts), np.copy(dts)
 
         n_grp = 0
-        grps = (np.where(np.diff(np.concatenate(([False], idx, [False]), dtype=int)) != 0)[0]).reshape(-1, 2)
+        grps = (
+            np.where(np.diff(np.concatenate(([False], idx, [False]), dtype=int)) != 0)[0]
+        ).reshape(-1, 2)
         for i_grp, grp in enumerate(grps):
             if grp[0] > 0:
                 ar = grp[0]

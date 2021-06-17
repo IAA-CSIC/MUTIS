@@ -34,9 +34,8 @@ class Correlation:
         self.times = np.array([])
         self.dts = np.array([])
         self.nb = np.array([])
-
         self.values = None
-        
+
         # TODO: have a much smaller set of attributes
         self.samples = None
         # storage of the significance limits of the correlation
@@ -56,12 +55,18 @@ class Correlation:
         self.tmin_same = -(np.max([t1.max() - t1.min(), t2.max() - t2.min()])) / 2 + self.t0_full
         self.tmax_same = (np.max([t1.max() - t1.min(), t2.max() - t2.min()])) / 2 + self.t0_full
         self.tmin_valid = (
-            -(np.max([t1.max() - t1.min(), t2.max() - t2.min()]) - np.min([t1.max() - t1.min(), t2.max() - t2.min()]))
+            -(
+                np.max([t1.max() - t1.min(), t2.max() - t2.min()])
+                - np.min([t1.max() - t1.min(), t2.max() - t2.min()])
+            )
             / 2
             + self.t0_full
         )
         self.tmax_valid = (
-            +(np.max([t1.max() - t1.min(), t2.max() - t2.min()]) - np.min([t1.max() - t1.min(), t2.max() - t2.min()]))
+            +(
+                np.max([t1.max() - t1.min(), t2.max() - t2.min()])
+                - np.min([t1.max() - t1.min(), t2.max() - t2.min()])
+            )
             / 2
             + self.t0_full
         )
@@ -92,10 +97,14 @@ class Correlation:
         """
 
         if uncert and self.signal1.dvalues is None:
-            log.error("uncert is True but no uncertainties for Signal 1 were specified, setting uncert to False")
+            log.error(
+                "uncert is True but no uncertainties for Signal 1 were specified, setting uncert to False"
+            )
             uncert = False
         if uncert and self.signal2.dvalues is None:
-            log.error("uncert is True but no uncertainties for Signal 2 were specified, setting uncert to False")
+            log.error(
+                "uncert is True but no uncertainties for Signal 2 were specified, setting uncert to False"
+            )
             uncert = False
 
         if len(self.times) == 0 or len(self.dts) == 0:
@@ -110,22 +119,24 @@ class Correlation:
             mc_sig = np.empty((dsamples, self.times.size))
 
         if self.fcorr == "welsh_ab":
-            for n in range(self.samples):
-                mc_corr[n] = welsh_ab(
+            for idx in range(self.samples):
+                mc_corr[idx] = welsh_ab(
                     self.signal1.times,
-                    self.signal1.synth[n],
+                    self.signal1.synth[idx],
                     self.signal2.times,
-                    self.signal2.synth[n],
+                    self.signal2.synth[idx],
                     self.times,
                     self.dts,
                 )
             if uncert:
-                for n in range(dsamples):
-                    mc_sig[n] = welsh_ab(
+                for idx in range(dsamples):
+                    mc_sig[idx] = welsh_ab(
                         self.signal1.times,
-                        self.signal1.values + self.signal1.dvalues * np.random.randn(self.signal1.values.size),
+                        self.signal1.values
+                        + self.signal1.dvalues * np.random.randn(self.signal1.values.size),
                         self.signal2.times,
-                        self.signal2.values + self.signal2.dvalues * np.random.randn(self.signal2.values.size),
+                        self.signal2.values
+                        + self.signal2.dvalues * np.random.randn(self.signal2.values.size),
                         self.times,
                         self.dts,
                     )
@@ -138,22 +149,24 @@ class Correlation:
                 self.dts,
             )
         elif self.fcorr == "kroedel_ab":
-            for n in range(self.samples):
-                mc_corr[n] = kroedel_ab(
+            for idx in range(self.samples):
+                mc_corr[idx] = kroedel_ab(
                     self.signal1.times,
-                    self.signal1.synth[n],
+                    self.signal1.synth[idx],
                     self.signal2.times,
-                    self.signal2.synth[n],
+                    self.signal2.synth[idx],
                     self.times,
                     self.dts,
                 )
             if uncert:
-                for n in range(dsamples):
-                    mc_sig[n] = kroedel_ab(
+                for idx in range(dsamples):
+                    mc_sig[idx] = kroedel_ab(
                         self.signal1.times,
-                        self.signal1.values + self.signal1.dvalues * np.random.randn(self.signal1.values.size),
+                        self.signal1.values
+                        + self.signal1.dvalues * np.random.randn(self.signal1.values.size),
                         self.signal2.times,
-                        self.signal2.values + self.signal2.dvalues * np.random.randn(self.signal2.values.size),
+                        self.signal2.values
+                        + self.signal2.dvalues * np.random.randn(self.signal2.values.size),
                         self.times,
                         self.dts,
                     )
@@ -166,20 +179,22 @@ class Correlation:
                 self.dts,
             )
         elif self.fcorr == "numpy":
-            for n in range(self.samples):
-                mc_corr[n] = nindcf(
+            for idx in range(self.samples):
+                mc_corr[idx] = nindcf(
                     self.signal1.times,
-                    self.signal1.synth[n],
+                    self.signal1.synth[idx],
                     self.signal2.times,
-                    self.signal2.synth[n],
+                    self.signal2.synth[idx],
                 )
             if uncert:
-                for n in range(dsamples):
-                    mc_sig[n] = nindcf(
+                for idx in range(dsamples):
+                    mc_sig[idx] = nindcf(
                         self.signal1.times,
-                        self.signal1.values + self.signal1.dvalues * np.random.randn(self.signal1.values.size),
+                        self.signal1.values
+                        + self.signal1.dvalues * np.random.randn(self.signal1.values.size),
                         self.signal2.times,
-                        self.signal2.values + self.signal2.dvalues * np.random.randn(self.signal2.values.size),
+                        self.signal2.values
+                        + self.signal2.dvalues * np.random.randn(self.signal2.values.size),
                     )
             self.values = nindcf(
                 self.signal1.times,
@@ -217,11 +232,17 @@ class Correlation:
             - "numpy": Computes a binning suitable for method='numpy'.
         """
         if ftimes == "canopy":
-            self.times, self.dts, self.nb = gen_times_canopy(self.signal1.times, self.signal2.times, *args, **kwargs)
+            self.times, self.dts, self.nb = gen_times_canopy(
+                self.signal1.times, self.signal2.times, *args, **kwargs
+            )
         elif ftimes == "rawab":
-            self.times, self.dts, self.nb = gen_times_rawab(self.signal1.times, self.signal2.times, *args, **kwargs)
+            self.times, self.dts, self.nb = gen_times_rawab(
+                self.signal1.times, self.signal2.times, *args, **kwargs
+            )
         elif ftimes == "uniform":
-            self.times, self.dts, self.nb = gen_times_uniform(self.signal1.times, self.signal2.times, *args, **kwargs)
+            self.times, self.dts, self.nb = gen_times_uniform(
+                self.signal1.times, self.signal2.times, *args, **kwargs
+            )
         elif ftimes == "numpy":
             t1, t2 = self.signal1.times, self.signal1.times
             dt = np.max([(t1.max() - t1.min()) / t1.size, (t2.max() - t2.min()) / t2.size])
@@ -251,12 +272,16 @@ class Correlation:
         #       number of attributes of this class
 
         if uncert and self.signal1.dvalues is None:
-            log.error("uncert is True but no uncertainties for Signal 1 were specified, setting uncert to False")
+            log.error(
+                "uncert is True but no uncertainties for Signal 1 were specified, setting uncert to False"
+            )
             uncert = False
         if uncert and self.signal2.dvalues is None:
-            log.error("uncert is True but no uncertainties for Signal 2 were specified, setting uncert to False")
+            log.error(
+                "uncert is True but no uncertainties for Signal 2 were specified, setting uncert to False"
+            )
             uncert = False
-            
+
         # plt.figure()
         if ax is None:
             ax = plt.gca()
@@ -278,7 +303,6 @@ class Correlation:
         # valid limit
         ax.axvline(x=self.tmin_valid, ymin=-1, ymax=+1, color="cyan", linewidth=1, alpha=0.5)
         ax.axvline(x=self.tmax_valid, ymin=-1, ymax=+1, color="cyan", linewidth=1, alpha=0.5)
-
 
         if uncert:
             ax.fill_between(x=self.times, y1=self.s1s[0], y2=self.s1s[1], color="b", alpha=0.5)
@@ -335,9 +359,9 @@ class Correlation:
         ax[1].axvline(x=self.tmin_valid, ymin=-1, ymax=+1, color="cyan", linewidth=1, alpha=0.5)
         ax[1].axvline(x=self.tmax_valid, ymin=-1, ymax=+1, color="cyan", linewidth=1, alpha=0.5)
 
-        if rug is True:
-            for t in self.times:
-                ax[1].axvline(x=t, ymin=0, ymax=0.2, color="black", linewidth=0.8, alpha=1.0)
+        if rug:
+            for time in self.times:
+                ax[1].axvline(x=time, ymin=0, ymax=0.2, color="black", linewidth=0.8, alpha=1.0)
             # ax[1].plot(self.t, ax[1].get_ylim()[0]+np.zeros(self.t.size), 'k|', alpha=0.8, lw=1)
 
         ax[1].grid()

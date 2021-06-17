@@ -1,14 +1,17 @@
 import numpy as np
-from numpy.testing import assert_allclose
 import pytest
-from mutis.signal import Signal
+from numpy.testing import assert_allclose
+
 from mutis.lib.signal import lc_gen_psd_c
+from mutis.signal import Signal
 
 
 @pytest.fixture
 def signal():
     times = np.linspace(10, 20, 100)
-    values = 0.5 * np.sin(1 * np.linspace(10, 20, 100)) + 0.5 * np.sin(6 * np.linspace(10, 20, 100)) + 1
+    values = (
+        0.5 * np.sin(1 * np.linspace(10, 20, 100)) + 0.5 * np.sin(6 * np.linspace(10, 20, 100)) + 1
+    )
 
     return {
         "fail": Signal(times, values, fgen="test"),
@@ -23,11 +26,7 @@ def signal():
 
 @pytest.fixture
 def ou_params():
-    return {
-        "theta": 100,
-        "mu": 1,
-        "sigma": 10
-    }
+    return {"theta": 100, "mu": 1, "sigma": 10}
 
 
 def test_plot(signal):

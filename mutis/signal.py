@@ -38,11 +38,7 @@ class Signal:
         self.values = np.array(values)
         self.fgen = fgen
 
-        if dvalues is not None:
-            self.dvalues = np.array(dvalues)
-        else:
-            self.dvalues = None
-
+        self.dvalues = np.array(dvalues) if dvalues is not None else None
         self.synth = None
 
         # TODO make attributes below specific of OU method / not the entire class
@@ -145,7 +141,12 @@ class Signal:
         #       mu here is different than self.mu
         class OU(scipy_stats.rv_continuous):
             def _pdf(self, x, l, mu):
-                return (l * mu) ** (1 + l) / scipy_special.gamma(1 + l) * np.exp(-l * mu / x) / x ** (l + 2)
+                return (
+                    (l * mu) ** (1 + l)
+                    / scipy_special.gamma(1 + l)
+                    * np.exp(-l * mu / x)
+                    / x ** (l + 2)
+                )
 
         try:
             fit = OU(a=a, b=np.percentile(y, b)).fit(y, 1, 1, floc=0, fscale=1)
@@ -193,7 +194,9 @@ class Signal:
         y2 = lc_gen_ou(theta, mu, sigma, self.times)  # , scale=np.std(self.s), loc=np.mean(self.s))
 
         if ("ax1" not in axes) or ("ax2" not in axes) or ("ax3" not in axes):
-            fig, (axes["ax1"], axes["ax2"], axes["ax3"]) = plt.subplots(nrows=1, ncols=3, figsize=(20, 4))
+            fig, (axes["ax1"], axes["ax2"], axes["ax3"]) = plt.subplots(
+                nrows=1, ncols=3, figsize=(20, 4)
+            )
 
         # plot the two signals
         axes["ax1"].plot(t, y, "b-", label="orig", lw=0.5, alpha=0.8)
@@ -264,4 +267,9 @@ class Signal:
     @staticmethod
     def pdf(xx, ll, mu):
         """Helper func to fit pdf as a curve."""
-        return (ll * mu) ** (1 + ll) / scipy_special.gamma(1 + ll) * np.exp(-ll * mu / xx) / xx ** (ll + 2)
+        return (
+            (ll * mu) ** (1 + ll)
+            / scipy_special.gamma(1 + ll)
+            * np.exp(-ll * mu / xx)
+            / xx ** (ll + 2)
+        )
