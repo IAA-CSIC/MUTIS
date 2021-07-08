@@ -5,6 +5,7 @@ import logging
 
 import matplotlib.pyplot as plt
 import numpy as np
+import scipy as sp
 
 from mutis.lib.correlation import *
 
@@ -70,6 +71,34 @@ class Correlation:
             / 2
             + self.t0_full
         )
+
+
+    def peak_find(self, k=3, a=-0.1, b=0.1, n=5, ax=None):
+        """Find the peak of the correlation
+        
+        """
+        x, y = self.times, self.values
+        t = np.linspace(a, b, n)
+
+        spl = sp.interpolate.LSQUnivariateSpline(x, y, t, k=3)
+
+        xs = np.linspace(min(x), max(x), 1000)
+        ys = spl(xs)
+               
+        peak_idx = np.argmax(ys)
+        peak_x = xs[peak_idx]
+        peak_y = ys[peak_idx]
+        
+        if ax is None:
+            print(f'Peak at {365*peak_x:.1f} days (C = {peak_y:.2f})')
+            fig, ax = plt.subplots()
+            self.plot_corr()
+            plt.xlim([-100/365,100/365])
+
+        plt.plot(xs, ys, 'k-')
+        #plot_corr_set_axs()
+
+        return {'x_peak':peak_x, 'y_peak':peak_y}
 
     def gen_synth(self, samples):
         """Generates the synthetic light curves.
@@ -253,7 +282,7 @@ class Correlation:
         else:
             raise Exception("Unknown method " + ftimes + ", please indicate how to generate times.")
 
-    def plot_corr(self, uncert=True, ax=None, legend=False):
+    def plot_corr(self, uncert=True, peak=False, ax=None, legend=False):
         """Plots the correlation of the signals.
 
         Plots the correlation of the signal, and the confidence limits
@@ -309,6 +338,11 @@ class Correlation:
             ax.fill_between(x=self.times, y1=self.s2s[0], y2=self.s2s[1], color="b", alpha=0.3)
             ax.fill_between(x=self.times, y1=self.s3s[0], y2=self.s3s[1], color="b", alpha=0.1)
 
+        if peak:
+            peak_sp = self.peak_find(ax=ax)
+            ax.annotate(f"Peak at ({365*peak_sp['x_peak']:.1f}, {peak_sp['y_peak']:.2f})", (peak_sp['x_peak'], peak_sp['y_peak']))
+            
+            
         if legend:
             ax.legend()
 
