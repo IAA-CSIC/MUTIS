@@ -1,5 +1,5 @@
 # Licensed under a 3-clause BSD style license - see LICENSE
-"""Synthetic generation of light curves."""
+"""Utils specific to the field of astrophysics"""
 
 import logging
 
@@ -10,6 +10,10 @@ __all__ = ["Astro"]
 log = logging.getLogger(__name__)
 
 def pol_angle_reshape(s):
+    """
+        Reshape a signal as a polarization angle: shifting by 180 degrees in a way it varies as smoothly as possible.
+    """
+    
     s = np.array(s)
     s = np.mod(s,180) # s % 180
     print(np.amax(s))
