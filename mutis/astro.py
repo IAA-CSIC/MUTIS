@@ -20,7 +20,48 @@ __all__ = ["Astro"]
 
 log = logging.getLogger(__name__)
 
-
+#############################################################################
+### Output compatible with IPython widgets and with plain python console: ###
+#
+# With this we can follow follow a commen scheme:
+#
+# def someGUIfunction():
+#     out = get_output()
+#     ... gui things...
+#         out.clear_output()
+#         out.append_stdout('some msg')
+#     out.display_output()
+#
+class plain_printer:
+    @staticmethod
+    def append_stdout(msg):
+        print(msg, end='')
+    @staticmethod
+    def clear_output():
+        print('\n')
+    @staticmethod
+    def display_output():
+        pass
+        
+def get_output():
+    try:
+        get_ipython().__class__.__name__
+        
+        import ipywidgets
+        class pretty_printer(ipywidgets.Output):
+            def __init__(self, *args, **kwargs):
+                super().__init__(*args, **kwargs)
+            def display_output(self):
+                display(self)
+                
+        out = pretty_printer(layout={'border': '1px solid black'})
+        
+        return out
+    except:
+        return plain_printer
+#############################################################################
+   
+    
 def pol_angle_reshape(s):
     """
         Reshape a signal as a polarization angle: shifting by 180 degrees in a way it varies as smoothly as possible.
@@ -164,7 +205,9 @@ def  KnotsIdAuto(mod):
         data['label'] = B[i]
          
     mod = pd.concat(mod_data, ignore_index=True)
-            
+    
+    log.debug('Finito!')
+    
     return mod
 
 
@@ -200,6 +243,8 @@ def KnotsId2dGUI(mod, use_arrows=False, arrow_pos=1.0):
 
 
     from matplotlib.widgets import Slider, Button, TextBox, RectangleSelector
+    
+    out = get_output()
 
     fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(8,8))
 
@@ -330,11 +375,12 @@ def KnotsId2dGUI(mod, use_arrows=False, arrow_pos=1.0):
             knots_X = {k:knots[k]['X'].to_numpy() for k in knots}
             knots_Y = {k:knots[k]['Y'].to_numpy() for k in knots}
 
-            print(f"Updated index {selected_ind} to {text.upper()}")
+            log.debug(f"Updated index {selected_ind} to {text.upper()}")
         else:
             pass
 
         draw_all(slider_date.val)
+
 
     def line_select_callback(eclick, erelease):
         nonlocal selected_knot,selected_x, selected_y, selected_ind
@@ -365,16 +411,27 @@ def KnotsId2dGUI(mod, use_arrows=False, arrow_pos=1.0):
 
             if np.sum(rect_idx) > 0:
                 textbox.set_val(label)
+                
                 selected_knot = label
                 selected_x = x[rect_idx].ravel()
                 selected_y = y[rect_idx].ravel()
                 selected_ind = knots[label].index[rect_idx]
+                
                 log.debug(f'Selected {label} points  rect_idx {rect_idx} x {x[rect_idx]}, y {y[rect_idx]} with indices {selected_ind}')
+            
                 textbox.begin_typing(None)
                 break # if we find selected components in this epoch, continue with renaming
             else:
                 pass
 
+        # print epoch of selected points:
+        if selected_knot is not None:
+            out.clear_output()
+            out.append_stdout('Selected:\n')
+            for idx in selected_ind:
+                #print(f"Selected {mod.loc[idx, 'label']} {mod.loc[idx, 'date']}")
+                out.append_stdout(f" -> {mod.loc[idx, 'label']} {mod.loc[idx, 'date'].strftime('%Y-%m-%d')}\n")
+                
         update(slider_date.val)
 
 
@@ -427,12 +484,17 @@ def KnotsId2dGUI(mod, use_arrows=False, arrow_pos=1.0):
 
     fig.suptitle('S to select, R to rename, Q to deactivate selector')
 
-    print('S to select, R to rename, Q to deactivate selector')
-    print('(you can select points from one component at a time)')
-    print('(if you use the zoom or movement tools, remember to unselect them)')
-
+    print('Usage:',
+          '-> S to select, R to rename, Q to deactivate selector',
+          '-> To delete the knot, name it with a whitespace', 
+          '-> You can select points from one component at a time',
+          '-> If you use the zoom or movement tools, remember to unselect them',
+          sep='\n')
+        
     plt.show()
     
+    out.display_output()
+  
     return mod
 
 
@@ -470,6 +532,8 @@ def KnotsIdGUI(mod):
     knots_fluxes = {k:knots[k]['Flux (Jy)'].to_numpy() for k in knots}
 
     from matplotlib.widgets import TextBox, RectangleSelector
+    
+    out = get_output()
 
     fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(8,5))
     
@@ -611,6 +675,14 @@ def KnotsIdGUI(mod):
             else:
                 pass
 
+        # print epoch of selected points:
+        if selected_knot is not None:
+            out.clear_output()
+            out.append_stdout('Selected:\n')
+            for idx in selected_ind:
+                #print(f"Selected {mod.loc[idx, 'label']} {mod.loc[idx, 'date']}")
+                out.append_stdout(f" -> {mod.loc[idx, 'label']} {mod.loc[idx, 'date'].strftime('%Y-%m-%d')}\n")
+           
         update()
 
 
@@ -656,7 +728,19 @@ def KnotsIdGUI(mod):
     
     xlims = Time(np.amin(mod['date'])).jyear, Time(np.amax(mod['date'])).jyear
     ax.set_xlim((xlims[0]-0.03*np.abs(xlims[1]-xlims[0]), xlims[1]+0.03*np.abs(xlims[1]-xlims[0])))
+    
+    fig.suptitle('S to select, R to rename, Q to deactivate selector')
+
+    print('Usage:',
+          '-> S to select, R to rename, Q to deactivate selector',
+          '-> To delete the knot, name it with a whitespace', 
+          '-> You can select points from one component at a time',
+          '-> If you use the zoom or movement tools, remember to unselect them',
+          sep='\n')
+        
     plt.show()
+    
+    out.display_output()
 
     return mod
 
