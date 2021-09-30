@@ -9,6 +9,10 @@ import pandas as pd
 import matplotlib as mplt
 import matplotlib.pyplot as plt
 
+import glob
+import re
+from datetime import datetime
+
 from astropy.time import Time
 
 
@@ -42,36 +46,36 @@ def pol_angle_reshape(s):
 
 
 
-def  KnotsIdAuto(mod_dates, mod_dates_str, mod_data):
+
+#########################################
+################# Knots #################
+#########################################
+
+
+
+def  KnotsIdAuto(mod):
     """
        Identify the knots appearing in several epochs giving them names, based on their position.
        
         Parameters:
         -----------
-         mod_dates : a list containing the dates (datetime) of each of the epochs.
-         mod_data : a list containing a pandas.DataFrame for each epoch, with at least columns
-             'X', 'Y' and 'Flux (Jy)'.
+         mod : :pd.DataFrame:
+             pandas.DataFrame containing every knot, with 
+             at least columns 'label', 'date', 'X', 'Y', 'Flux (Jy)'.
        
-        Returns: ((Bx, By, B), mod)
+        Returns: mod
         --------
-         (Bx, By, B) : :tuple: 
-            three lists, the first two containing the positions of 
-            the identified knots, the third their assigned names (for each epoch).
          mod : :pd.DataFrame:
              pandas.DataFrame containing every knot with their altered labels, with 
              at least columns 'label', 'date', 'X', 'Y', 'Flux (Jy)'.
          
-           
-        Usage: (old)
-        ------
-         >> Bx, By, B = KnotsIdAuto(mod_dates, mod_dates_str, mod_data)
-         
-         >> for i, (date, data) in enumerate(zip(mod_dates, mod_data)):
-               data['label'] = B[i]
-         
-         >> mod = pd.concat(mod_data, ignore_index=True)
-         >> mod
     """
+    
+    mod_date_dict = dict(list((mod.groupby('date'))))
+    
+    mod_dates = list(Time(list(mod_date_dict.keys())).datetime)
+    mod_dates_str = list(Time(list(mod_date_dict.keys())).strftime('%Y-%m-%d'))
+    mod_data = list(mod_date_dict.values())
     
     Bx = [[]]*len(mod_dates)
     By = [[]]*len(mod_dates)
@@ -100,7 +104,7 @@ def  KnotsIdAuto(mod_dates, mod_dates_str, mod_data):
             log.debug(' first epoch, giving names...')
 
             for n in range(0,len(mod_data[i].index)):
-                if data['Flux (Jy)'][n] < 0.001:
+                if data['Flux (Jy)'].iloc[n] < 0.001:
                     log.debug('  skipping, too weak')
                     break
                 if n == 0:
@@ -114,7 +118,7 @@ def  KnotsIdAuto(mod_dates, mod_dates_str, mod_data):
         # if not first epoch...:
 
         for n in range(0,len(mod_data[i].index)):
-            if data['Flux (Jy)'][n] < 0.001:
+            if data['Flux (Jy)'].iloc[n] < 0.001:
                     log.debug('  skipping, too weak')
                     break
             if n == 0:
@@ -155,15 +159,13 @@ def  KnotsIdAuto(mod_dates, mod_dates_str, mod_data):
 
         log.debug(f' -> FOUND: {B[i]}\n')
         
-        
-    #Bx, By, B = KnotsIdAuto(mod_dates, mod_dates_str, mod_data)
-         
+                 
     for i, (date, data) in enumerate(zip(mod_dates, mod_data)):
         data['label'] = B[i]
          
     mod = pd.concat(mod_data, ignore_index=True)
             
-    return (Bx, By, B), mod
+    return mod
 
 
 
@@ -173,6 +175,18 @@ def KnotsId2dGUI(mod, use_arrows=False, arrow_pos=1.0):
         spatial distribution in different times.
         
         It can be used inside jupyter notebooks, using '%matplotlib widget' first.
+        
+        Parameters:
+        -----------
+         mod : :pd.DataFrame:
+             pandas.DataFrame containing every knot, with at least columns 
+             'label', 'date', 'X', 'Y', 'Flux (Jy)'.
+        
+        Returns:
+        --------
+         mod : :pd.DataFrame:
+             pandas.DataFrame containing every knot with their altered labels, with 
+             at least columns 'label', 'date', 'X', 'Y', 'Flux (Jy)'.
     """
     
     mod = mod.copy()
@@ -365,7 +379,7 @@ def KnotsId2dGUI(mod, use_arrows=False, arrow_pos=1.0):
 
 
     def toggle_selector(event):
-        log.debug('GUI: Key pressed.', end=' ')
+        log.debug('GUI: Key pressed.')
         if event.key in ['Q', 'q'] and toggle_selector.RS.active:
             log.debug('Selector deactivated.')
             toggle_selector.RS.set_active(False)
@@ -432,9 +446,6 @@ def KnotsIdGUI(mod):
         time evolution.
         
         It can be used inside jupyter notebooks, using '%matplotlib widget' first.
-    
-             mod_data : a list containing a pandas.DataFrame for each epoch, with at least columns
-             'X', 'Y' and 'Flux (Jy)'.
        
         Parameters:
         -----------
@@ -460,7 +471,7 @@ def KnotsIdGUI(mod):
 
     from matplotlib.widgets import TextBox, RectangleSelector
 
-    fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(10,6))
+    fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(8,5))
     
     lineas = list()
     textos = list()
@@ -648,3 +659,160 @@ def KnotsIdGUI(mod):
     plt.show()
 
     return mod
+
+
+
+def KnotsIdReadMod(path=None, file_list=None):
+    """
+        Read *_mod.mod files as printed by diffmap, return a dataframe containing all information ready
+        to be worked on for labelling and to be used with these GUIs.
+   
+        Parameters:
+        -----------
+         path : :str:
+             string indicating the path to the mod files to be used, their names must end in the format
+             '%Y-%m-%d_mod.mod', for example, path = 'vlbi/ftree/*/*_mod.mod'.
+             
+        Returns:
+        -----------
+         mod : :pd.DataFrame:
+             pandas.DataFrame containing every knot, with at least columns 
+             'label', 'date', 'X', 'Y', 'Flux (Jy)'.
+    """
+    
+    mod_dates_str = list()
+    mod_dates = list()
+    mod_data = list()
+
+    for f in glob.glob(f'{path}'):
+        match = re.findall(r'([0-9]{4}-[0-9]{2}-[0-9]{2})_mod.mod', f)
+        if not len(match) > 0:
+            continue
+
+        date_str = match[0]
+        date = datetime.strptime(date_str, '%Y-%m-%d')
+
+        mod_dates_str.append(date_str)
+        mod_dates.append(date)
+        mod_data.append(pd.read_csv(f, sep='\s+', comment='!', names=['Flux (Jy)', 'Radius (mas)', 'Theta (deg)', 'Major FWHM (mas)', 'Axial ratio', 'Phi (deg)', 'T', 'Freq (Hz)', 'SpecIndex']))
+
+    # sort by date    
+    idx = np.argsort(mod_dates)
+    mod_dates_str = list(np.array(mod_dates_str, dtype=object)[idx])
+    mod_dates = list(np.array(mod_dates, dtype=object)[idx])
+    mod_data = list(np.array(mod_data, dtype=object)[idx])
+
+    # fix stupid 'v' in columns, insert a label field, add X, Y columns
+    for i in range(len(mod_dates)):
+        mod_data[i].insert(0, 'label', value=None)
+        mod_data[i].insert(1, 'date', value=mod_dates[i])
+
+        mod_data[i]['Flux (Jy)'] = mod_data[i]['Flux (Jy)'].str.strip('v').astype(float)
+        mod_data[i]['Radius (mas)'] = mod_data[i]['Radius (mas)'].str.strip('v').astype(float)
+        mod_data[i]['Theta (deg)'] = mod_data[i]['Theta (deg)'].str.strip('v').astype(float)
+
+        mod_data[i].insert(5, 'X', mod_data[i]['Radius (mas)']*np.cos(np.pi/180*(mod_data[i]['Theta (deg)']-90)))
+        mod_data[i].insert(6, 'Y', mod_data[i]['Radius (mas)']*np.sin(np.pi/180*(mod_data[i]['Theta (deg)']-90)))
+
+     
+    mod = pd.concat(mod_data, ignore_index=True)
+    
+    return mod
+
+
+def KnotsIdSaveMod(mod, path=None):
+    pass
+
+def KnotsIdReadCSV(path=None):
+    """
+        Read Knots data to .csv files (as done by Svetlana? ##)
+        
+        Each knot label has its own {label}.csv. To be compatible with Svetlana's format, 
+        columns should be modified to:
+        'Date' (jyear), 'MJD', 'X(mas)', 'Y(mas)', 'Flux(Jy)'
+        These columns are derived from the ones in `mod`, old ones are removed.
+        
+        Parameters:
+        -----------
+         path: :str:
+             string containing the path to read files from eg:
+             path = 'myknows/*.csv'
+        Returns:
+        --------
+         mod : :pd.DataFrame:
+             pandas.DataFrame containing every knot, with at least columns 
+             'label', 'date', 'X', 'Y', 'Flux (Jy)'.
+    """
+    
+    if path is None:
+        log.error('Path not specified')
+        raise Exception('Path not specified')
+    
+    dataL = list()
+    
+    for f in glob.glob(f'{path}'):
+        match = re.findall(r'/(.*).csv', f)
+        
+        if not len(match) > 0:
+            continue
+        
+        knot_name = match[0]
+        
+        log.debug(f'Loading {knot_name} from {f}')
+        
+        knot_data = pd.read_csv(f, parse_dates=['date'], date_parser=pd.to_datetime)
+        
+        dataL.append((knot_name, knot_data))
+    
+    mod = pd.concat(dict(dataL), ignore_index=True)
+
+    return mod
+
+
+
+def KnotsIdSaveCSV(mod, path=None):
+    """
+        Save Knots data to .csv files (as done by Svetlana? ##)
+        
+        Each knot label has its own {label}.csv. To be compatible with Svetlana's format, 
+        columns should be modified to:
+        'Date' (jyear), 'MJD', 'X(mas)', 'Y(mas)', 'Flux(Jy)'
+        These columns are derived from the ones in `mod`, old ones are removed.
+        
+        Parameters:
+        -----------
+         mod : :pd.DataFrame:
+             pandas.DataFrame containing every knot, with at least columns 
+             'label', 'date', 'X', 'Y', 'Flux (Jy)'.
+         path: :str:
+             string containing the path to which the files are to be saved, eg:
+             path = 'my_knots/'
+             
+        Returns:
+        --------
+         None
+    """
+    
+    if path is None:
+        log.error('Path not specified')
+        raise Exception('Path not specified')
+        
+        
+    mod = mod.copy()
+    
+    
+    mod_dict = dict(list(mod.groupby('label')))
+    
+    for label, data in mod_dict.items():
+        data = data.copy()
+        
+        #data.insert(0, 'Date', Time(data['date']).jyear)
+        #data.insert(1, 'MJD', Time(data['date']).mjd)
+        #data = data.rename(columns={'X': 'X (mas)', 'Y': 'Y (mas)'})
+        #data = data.drop(columns=['date'])
+        #data = data.drop(columns=['label'])
+        #if 'Radius (mas)' in data.columns:
+        #    data = data.rename(columns={'Radius (mas)':'R(mas)'})
+        #data.columns = data.columns.str.replace(' ', '')
+        
+        data.to_csv(f'{path}/{label}.csv', index=False) 
