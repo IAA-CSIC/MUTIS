@@ -468,6 +468,9 @@ def KnotsId2dGUI(mod, twidth=0.75, use_arrows=False, arrow_pos=1.0):
             toggle_selector.RS.set_active(False)
             textbox.begin_typing(None)
             #textbox.set_val('')
+        if event.key in ['E', 'e']:
+            out.append_stdout('-> Close\n')
+            plt.close()
 
 
     toggle_selector.RS = RectangleSelector(ax, line_select_callback,
@@ -502,10 +505,10 @@ def KnotsId2dGUI(mod, twidth=0.75, use_arrows=False, arrow_pos=1.0):
     ax.set_ylim([-1.0, +1.0])
     ax.set_aspect('equal')
 
-    fig.suptitle('S to select, R to rename, Q to deactivate selector')
+    fig.suptitle('S to select, R to rename, Q to deactivate selector, E to exit')
 
     print('Usage:',
-          '-> S to select, R to rename, Q to deactivate selector',
+          '-> S to select, R to rename, Q to deactivate selector, E to exit',
           '-> To delete the knot, name it with a whitespace', 
           '-> You can select points from one component at a time',
           '-> If you use the zoom or movement tools, remember to unselect them',
@@ -725,6 +728,9 @@ def KnotsIdGUI(mod):
             toggle_selector.RS.set_active(False)
             textbox.begin_typing(None)
             #textbox.set_val('')
+        if event.key in ['E', 'e']:
+            out.append_stdout('-> Close\n')
+            plt.close()
 
 
     toggle_selector.RS = RectangleSelector(ax, line_select_callback,
@@ -755,10 +761,10 @@ def KnotsIdGUI(mod):
     xlims = Time(np.amin(mod['date'])).jyear, Time(np.amax(mod['date'])).jyear
     ax.set_xlim((xlims[0]-0.03*np.abs(xlims[1]-xlims[0]), xlims[1]+0.03*np.abs(xlims[1]-xlims[0])))
     
-    fig.suptitle('S to select, R to rename, Q to deactivate selector')
+    fig.suptitle('S to select, R to rename, Q to deactivate selector, E to exit')
 
     print('Usage:',
-          '-> S to select, R to rename, Q to deactivate selector',
+          '-> S to select, R to rename, Q to deactivate selector, E to exit',
           '-> To delete the knot, name it with a whitespace', 
           '-> You can select points from one component at a time',
           '-> If you use the zoom or movement tools, remember to unselect them',
