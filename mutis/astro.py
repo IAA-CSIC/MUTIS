@@ -90,9 +90,9 @@ def pol_angle_reshape(s):
 
 
 
-#########################################
-################# Knots #################
-#########################################
+###########################################################################
+################################## Knots ##################################
+###########################################################################
 
 
 
@@ -213,6 +213,11 @@ def  KnotsIdAuto(mod):
     return mod
 
 
+
+
+############################################
+############## Knots 2D GUI ################
+############################################
 
 def KnotsId2dGUI(mod, twidth=0.75, use_arrows=False, arrow_pos=1.0):
     """
@@ -523,6 +528,10 @@ def KnotsId2dGUI(mod, twidth=0.75, use_arrows=False, arrow_pos=1.0):
 
 
 
+############################################
+################ Knots GUI #################
+############################################
+
 
 
 def KnotsIdGUI(mod):
@@ -778,6 +787,10 @@ def KnotsIdGUI(mod):
 
 
 
+###################################################
+########### Knots Read Mod (diffmap only) #########
+###################################################
+
 def KnotsIdReadMod_from_diffmap(path=None):
     """
         Read *_mod.mod files as printed by diffmap, return a dataframe containing all information ready
@@ -840,6 +853,9 @@ def KnotsIdReadMod_from_diffmap(path=None):
     return mod
 
 
+###################################################
+################## Knots Save Mod #################
+###################################################
 
 def KnotsIdSaveMod(mod, path=None, rewrite=False, drop_blanks=False):
     """
@@ -928,101 +944,9 @@ def KnotsIdSaveMod(mod, path=None, rewrite=False, drop_blanks=False):
 
         
 
-def KnotsIdReadCSV(path=None):
-    """
-        Read Knots data to .csv files (as done by Svetlana? ##)
-        
-        Each knot label has its own {label}.csv. To be compatible with Svetlana's format, 
-        columns should be modified to:
-        'Date' (jyear), 'MJD', 'X(mas)', 'Y(mas)', 'Flux(Jy)'
-        These columns are derived from the ones in `mod`, old ones are removed.
-        
-        Parameters:
-        -----------
-         path: :str:
-             string containing the path to read files from eg:
-             path = 'myknows/*.csv'
-        Returns:
-        --------
-         mod : :pd.DataFrame:
-             pandas.DataFrame containing every knot, with at least columns 
-             'label', 'date', 'X', 'Y', 'Flux (Jy)'.
-    """
-    
-    if path is None:
-        log.error('Path not specified')
-        raise Exception('Path not specified')
-    
-    dataL = list()
-    
-    for f in glob.glob(f'{path}'):
-        match = re.findall(r'/(.*).csv', f)
-        
-        if not len(match) > 0:
-            continue
-        
-        knot_name = match[0]
-        
-        log.debug(f'Loading {knot_name} from {f}')
-        
-        knot_data = pd.read_csv(f, parse_dates=['date'], date_parser=pd.to_datetime)
-        
-        dataL.append((knot_name, knot_data))
-    
-    mod = pd.concat(dict(dataL), ignore_index=True)
-
-    return mod
-
-
-
-def KnotsIdSaveCSV(mod, path=None):
-    """
-        Save Knots data to .csv files (as done by Svetlana? ##)
-        
-        Each knot label has its own {label}.csv. To be compatible with Svetlana's format, 
-        columns should be modified to:
-        'Date' (jyear), 'MJD', 'X(mas)', 'Y(mas)', 'Flux(Jy)'
-        These columns are derived from the ones in `mod`, old ones are removed.
-        
-        Parameters:
-        -----------
-         mod : :pd.DataFrame:
-             pandas.DataFrame containing every knot, with at least columns 
-             'label', 'date', 'X', 'Y', 'Flux (Jy)'.
-         path: :str:
-             string containing the path to which the files are to be saved, eg:
-             path = 'my_knots/'
-             
-        Returns:
-        --------
-         None
-    """
-    
-    if path is None:
-        log.error('Path not specified')
-        raise Exception('Path not specified')
-        
-        
-    mod = mod.copy()
-    
-    
-    mod_dict = dict(list(mod.groupby('label')))
-    
-    for label, data in mod_dict.items():
-        data = data.copy()
-        
-        #data.insert(0, 'Date', Time(data['date']).jyear)
-        #data.insert(1, 'MJD', Time(data['date']).mjd)
-        #data = data.rename(columns={'X': 'X (mas)', 'Y': 'Y (mas)'})
-        #data = data.drop(columns=['date'])
-        #data = data.drop(columns=['label'])
-        #if 'Radius (mas)' in data.columns:
-        #    data = data.rename(columns={'Radius (mas)':'R(mas)'})
-        #data.columns = data.columns.str.replace(' ', '')
-        
-        data.to_csv(f'{path}/{label}.csv', index=False)
-        
-        
+###################################################
+################## Knots Read Mod #################
+###################################################        
         
 def KnotsIdReadMod(path=None):
     """
@@ -1104,3 +1028,104 @@ def KnotsIdReadMod(path=None):
     mod = pd.concat(mod_data, ignore_index=True)
     
     return mod
+
+
+
+###################################################
+########### Knots CSV final outputting ############
+###################################################
+
+def KnotsIdSaveCSV(mod, path=None):
+    """
+        Save Knots data to .csv files (as done by Svetlana? ##)
+        
+        Each knot label has its own {label}.csv. To be compatible with Svetlana's format, 
+        columns should be modified to:
+        'Date' (jyear), 'MJD', 'X(mas)', 'Y(mas)', 'Flux(Jy)'
+        These columns are derived from the ones in `mod`, old ones are removed.
+        
+        Parameters:
+        -----------
+         mod : :pd.DataFrame:
+             pandas.DataFrame containing every knot, with at least columns 
+             'label', 'date', 'X', 'Y', 'Flux (Jy)'.
+         path: :str:
+             string containing the path to which the files are to be saved, eg:
+             path = 'my_knots/'
+             
+        Returns:
+        --------
+         None
+    """
+    
+    if path is None:
+        log.error('Path not specified')
+        raise Exception('Path not specified')
+        
+        
+    mod = mod.copy()
+    
+    
+    mod_dict = dict(list(mod.groupby('label')))
+    
+    for label, data in mod_dict.items():
+        data = data.copy()
+        
+        #data.insert(0, 'Date', Time(data['date']).jyear)
+        #data.insert(1, 'MJD', Time(data['date']).mjd)
+        #data = data.rename(columns={'X': 'X (mas)', 'Y': 'Y (mas)'})
+        #data = data.drop(columns=['date'])
+        #data = data.drop(columns=['label'])
+        #if 'Radius (mas)' in data.columns:
+        #    data = data.rename(columns={'Radius (mas)':'R(mas)'})
+        #data.columns = data.columns.str.replace(' ', '')
+        
+        data.to_csv(f'{path}/{label}.csv', index=False)
+        
+        
+
+def KnotsIdReadCSV(path=None):
+    """
+        Read Knots data to .csv files (as done by Svetlana? ##)
+        
+        Each knot label has its own {label}.csv. To be compatible with Svetlana's format, 
+        columns should be modified to:
+        'Date' (jyear), 'MJD', 'X(mas)', 'Y(mas)', 'Flux(Jy)'
+        These columns are derived from the ones in `mod`, old ones are removed.
+        
+        Parameters:
+        -----------
+         path: :str:
+             string containing the path to read files from eg:
+             path = 'myknows/*.csv'
+        Returns:
+        --------
+         mod : :pd.DataFrame:
+             pandas.DataFrame containing every knot, with at least columns 
+             'label', 'date', 'X', 'Y', 'Flux (Jy)'.
+    """
+    
+    if path is None:
+        log.error('Path not specified')
+        raise Exception('Path not specified')
+    
+    dataL = list()
+    
+    for f in glob.glob(f'{path}'):
+        match = re.findall(r'/(.*).csv', f)
+        
+        if not len(match) > 0:
+            continue
+        
+        knot_name = match[0]
+        
+        log.debug(f'Loading {knot_name} from {f}')
+        
+        knot_data = pd.read_csv(f, parse_dates=['date'], date_parser=pd.to_datetime)
+        
+        dataL.append((knot_name, knot_data))
+    
+    mod = pd.concat(dict(dataL), ignore_index=True)
+
+    return mod
+        
