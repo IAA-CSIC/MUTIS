@@ -214,7 +214,7 @@ def  KnotsIdAuto(mod):
 
 
 
-def KnotsId2dGUI(mod, use_arrows=False, arrow_pos=1.0):
+def KnotsId2dGUI(mod, twidth=0.75, use_arrows=False, arrow_pos=1.0):
     """
         Prompt a GUI to select identified knots and alter their label, reprenting their 2D
         spatial distribution in different times.
@@ -279,14 +279,20 @@ def KnotsId2dGUI(mod, use_arrows=False, arrow_pos=1.0):
             
         for i, label in enumerate(knots_names):
             years = knots_jyears[label]
-            idx = (val-1.5 < years) & (years < val)
+            idx = (val-twidth < years) & (years < val)
             x = knots_X[label][idx]
             y = knots_Y[label][idx]
 
-            lineas.append(ax.plot(x, y, '.-', linewidth=0.6, alpha=0.4, label=label)[0])
+            if len(x) > 0:
+                if label == '' or label == 'None': # if it is unlabelled, do not connect it.
+                    lineas.append(ax.plot(x, y, '.', linewidth=0.6, alpha=0.4, label=label, color='black')[0])
+                else:
+                    lineas.append(ax.plot(x, y, '.-', linewidth=0.6, alpha=0.4, label=label)[0])
+            else:
+                lineas.append(None)
 
             if use_arrows:
-                if len(x) > 1:
+                if len(x) > 1 and label != '' and label != 'None':
                     flechas.append(ax.quiver(x[:-1], 
                                y[:-1], 
                                arrow_pos*(x[1:] - x[:-1]), 
@@ -316,12 +322,24 @@ def KnotsId2dGUI(mod, use_arrows=False, arrow_pos=1.0):
 
         for i, label in enumerate(knots_names):
             years = knots_jyears[label]
-            idx = (val-1.5 < years) & (years < val)
+            idx = (val-twidth < years) & (years < val)
             x = knots_X[label][idx]
             y = knots_Y[label][idx]
 
-            lineas[i].set_xdata(x)
-            lineas[i].set_ydata(y)
+            if lineas[i] is not None:
+                if len(x) > 0:
+                    lineas[i].set_xdata(x)
+                    lineas[i].set_ydata(y)
+                else:
+                    lineas[i].remove()
+                    lineas[i] = None
+            else:
+                if len(x) > 0:
+                    if label == '' or label == 'None': # if it is unlabelled, do not connect it.
+                        lineas[i] = ax.plot(x, y, '.', linewidth=0.8, alpha=0.5, label=label, color='black')[0]
+                    else:
+                        lineas[i] = ax.plot(x, y, '.-', linewidth=0.8, alpha=0.5, label=label)[0]
+                
 
             if textos[i] is not None:
                 if len(x) > 0:    
@@ -339,14 +357,14 @@ def KnotsId2dGUI(mod, use_arrows=False, arrow_pos=1.0):
                 if flechas[i] is not None:
                     flechas[i].remove()
                     flechas[i] = None
-
-                flechas[i] = ax.quiver(x[:-1], 
-                                   y[:-1], 
-                                   arrow_pos*(x[1:] - x[:-1]), 
-                                   arrow_pos*(y[1:] - y[:-1]), 
-                                   scale_units='xy', angles='xy', scale=1, 
-                                   width=0.0015, headwidth=10, headlength=10, headaxislength=6, 
-                                   alpha=0.5, color=lineas[i].get_color())
+                if len(x) > 1 and label != '' and label != 'None':
+                    flechas[i] = ax.quiver(x[:-1], 
+                                       y[:-1], 
+                                       arrow_pos*(x[1:] - x[:-1]), 
+                                       arrow_pos*(y[1:] - y[:-1]), 
+                                       scale_units='xy', angles='xy', scale=1, 
+                                       width=0.0015, headwidth=10, headlength=10, headaxislength=6, 
+                                       alpha=0.5, color=lineas[i].get_color())
 
         fig.canvas.draw_idle()
 
@@ -368,7 +386,7 @@ def KnotsId2dGUI(mod, use_arrows=False, arrow_pos=1.0):
         log.debug(f'   selected_y {selected_y}')
 
         if selected_knot is not None:        
-            mod.loc[selected_ind, 'label'] = text.upper()
+            mod.loc[selected_ind, 'label'] = text.upper().strip(' ')
 
             knots = dict(tuple(mod.groupby('label')))
             knots_names = list(knots.keys())
@@ -400,7 +418,7 @@ def KnotsId2dGUI(mod, use_arrows=False, arrow_pos=1.0):
 
         for i, label in enumerate(knots_names):
             years = knots_jyears[label]
-            idx = (slider_date.val-1.5 < years) & (years < slider_date.val)
+            idx = (slider_date.val-twidth < years) & (years < slider_date.val)
 
             if np.sum(idx) == 0:
                 continue # we did not select any component from this component, next one
@@ -563,7 +581,10 @@ def KnotsIdGUI(mod):
             x, y = knots_jyears[label], knots_fluxes[label]
 
             if len(x) > 0:
-                lineas.append(ax.plot(x, y, '.-', linewidth=0.8, alpha=0.5, label=label)[0])
+                if label == '' or label == 'None': # if it is unlabelled, do not connect it.
+                    lineas.append(ax.plot(x, y, '.', linewidth=0.8, alpha=0.5, label=label, color='black')[0])
+                else:
+                    lineas.append(ax.plot(x, y, '.-', linewidth=0.8, alpha=0.5, label=label)[0])
             else:
                 lineas.append(None)
                 
@@ -590,8 +611,11 @@ def KnotsIdGUI(mod):
                     lineas[i].remove()
                     lineas[i] = None
             else:
-                if len(x) > 0:    
-                    lineas[i] = ax.plot(x, y, '.-', linewidth=0.8, alpha=0.5, label=label)[0]
+                if len(x) > 0:
+                    if label == '' or label == 'None': # if it is unlabelled, do not connect it.
+                        lineas[i] = ax.plot(x, y, '.', linewidth=0.8, alpha=0.5, label=label, color='black')[0]
+                    else:
+                        lineas[i] = ax.plot(x, y, '.-', linewidth=0.8, alpha=0.5, label=label)[0]
         
             if textos[i] is not None:
                 if len(x) > 0:    
@@ -624,7 +648,7 @@ def KnotsIdGUI(mod):
         log.debug(f'   selected_date {selected_date}')
 
         if selected_knot is not None:        
-            mod.loc[selected_ind, 'label'] = text.upper()
+            mod.loc[selected_ind, 'label'] = text.upper().strip(' ')
 
             knots = dict(tuple(mod.groupby('label')))
             knots_names = list(knots.keys())
@@ -748,7 +772,7 @@ def KnotsIdGUI(mod):
 
 
 
-def KnotsIdReadMod(path=None, file_list=None):
+def KnotsIdReadMod_from_diffmap(path=None):
     """
         Read *_mod.mod files as printed by diffmap, return a dataframe containing all information ready
         to be worked on for labelling and to be used with these GUIs.
@@ -766,6 +790,10 @@ def KnotsIdReadMod(path=None, file_list=None):
              'label', 'date', 'X', 'Y', 'Flux (Jy)'.
     """
     
+    if path is None:
+        log.error('Path not specified')
+        raise Exception('Path not specified')
+            
     mod_dates_str = list()
     mod_dates = list()
     mod_data = list()
@@ -807,7 +835,7 @@ def KnotsIdReadMod(path=None, file_list=None):
 
 
 
-def KnotsIdSaveMod(mod, path=None):
+def KnotsIdSaveMod(mod, path=None, rewrite=False, drop_blanks=False):
     """
         Save Knots data to *_mod.mod files ready to be re-proccessed with diffmap.
         
@@ -820,6 +848,12 @@ def KnotsIdSaveMod(mod, path=None):
          path: :str:
              string containing the path to which the files are to be saved, eg:
              path = 'my_knots/'
+         rewrite: :bool:
+             If rewrite is True, path is interpreted as a regex for which files
+             to overwrite.
+         drop_blanks: :bool:
+             If True, knots without label (or whose label is a whitspace) are dropped.
+             If False (default), they are saved without label.
              
         Returns:
         --------
@@ -829,13 +863,42 @@ def KnotsIdSaveMod(mod, path=None):
     if path is None:
         log.error('Path not specified')
         raise Exception('Path not specified')
-        
-        
-    mod = mod.copy()
     
+    
+    mod = mod.copy()
+
+
+    if drop_blanks:
+        mod = mod.drop(mod[mod['label'].str.strip('') == ''].index)
+    
+
     mod_dict = dict(list(mod.groupby('date')))
     
-    for date, data in mod_dict.items():
+    
+    if rewrite:
+        file_list = list()
+        for f in glob.glob(f'{path}'):
+            match = re.findall(r'([0-9]{4}-[0-9]{2}-[0-9]{2})_mod.mod', f)
+            
+            if not len(match) > 0:
+                continue
+            
+            date = datetime.strptime(match[0], '%Y-%m-%d')
+        
+            if date not in mod_dict:
+                raise Exception('Specified regex includes files for which there are no knots')
+                
+            file_list.append(f)
+
+        if len(file_list) != len(mod_dict):
+            raise Exception(f'Specified files by path regex does not match the number of epochs ({len(file_list)} vs {len(mod_dict)})')
+    else:
+        file_list = list()
+        for date in mod_dict.keys():
+               file_list.append(f"{path}/{date.strftime('%Y-%m-%d')}_mod.mod")
+  
+        
+    for fname, (date, data) in zip(file_list, mod_dict.items()):
         data = data.copy()
         
         #data = data.drop(columns=['label'])
@@ -849,7 +912,7 @@ def KnotsIdSaveMod(mod, path=None):
         ## add previous labels in comments (so diffmap does not get stuck with it)
         data['label'] = '!' + data['label']
 
-        with open(f"{path}/{date.strftime('%Y-%m-%d')}_mod.mod", 'w') as f:
+        with open(fname, 'w') as f:
             f.write("! Generated by mutis\n"
                     "! Columns\n"
                     "! 'Flux (Jy)', 'Radius (mas)', 'Theta (deg)', 'Major FWHM (mas)', 'Axial ratio', 'Phi (deg)', 'T', 'Freq (Hz)', 'SpecIndex', '!label'\n")
@@ -952,3 +1015,86 @@ def KnotsIdSaveCSV(mod, path=None):
         #data.columns = data.columns.str.replace(' ', '')
         
         data.to_csv(f'{path}/{label}.csv', index=False)
+        
+        
+        
+def KnotsIdReadMod(path=None):
+    """
+        Read *_mod.mod files as printed by diffmap, return a dataframe containing all information ready
+        to be worked on for labelling and to be used with these GUIs.
+        
+        It detects whether the file was generated by mutis. If it was then 
+        it searchs for a hidden label column to load previous label names (unnamed labels
+   
+        Parameters:
+        -----------
+         path : :str:
+             string indicating the path to the mod files to be used, their names must end in the format
+             '%Y-%m-%d_mod.mod', for example, path = 'vlbi/ftree/*/*_mod.mod'.
+             
+        Returns:
+        -----------
+         mod : :pd.DataFrame:
+             pandas.DataFrame containing every knot, with at least columns 
+             'label', 'date', 'X', 'Y', 'Flux (Jy)'.
+    """
+    
+    if path is None:
+        log.error('Path not specified')
+        raise Exception('Path not specified')
+            
+    mod_dates_str = list()
+    mod_dates = list()
+    mod_data = list()
+
+    for f in glob.glob(f'{path}'):
+        match = re.findall(r'([0-9]{4}-[0-9]{2}-[0-9]{2})_mod.mod', f)
+        if not len(match) > 0:
+            continue
+
+        date_str = match[0]
+        date = datetime.strptime(date_str, '%Y-%m-%d')
+
+        mod_dates_str.append(date_str)
+        mod_dates.append(date)
+        
+        with open(f) as fobj:
+            firstline = fobj.readline()
+            if firstline == '! Generated by mutis\n':
+                generated_by_mutis = True
+            else:
+                generated_by_mutis = False
+                
+        if generated_by_mutis:
+            data = pd.read_csv(f, sep='\s+', 
+                               skiprows=3, 
+                               #converters={'label':(lambda l: '' if l == '' else l)}, 
+                               dtype={'label':str},
+                               names=['Flux (Jy)', 'Radius (mas)', 'Theta (deg)', 'Major FWHM (mas)', 'Axial ratio', 'Phi (deg)', 'T', 'Freq (Hz)', 'SpecIndex',
+                                      'label'])
+            data['label'] = data['label'].str.strip('!')
+        else:
+            data = pd.read_csv(f, sep='\s+', comment='!', names=['Flux (Jy)', 'Radius (mas)', 'Theta (deg)', 'Major FWHM (mas)', 'Axial ratio', 'Phi (deg)', 'T', 'Freq (Hz)', 'SpecIndex'])
+            #data.insert(0, 'label', value=None)
+            data.insert(0, 'label', value='')
+
+        data.insert(1, 'date', value=date)
+
+        data['Flux (Jy)'] = data['Flux (Jy)'].str.strip('v').astype(float)
+        data['Radius (mas)'] = data['Radius (mas)'].str.strip('v').astype(float)
+        data['Theta (deg)'] = data['Theta (deg)'].str.strip('v').astype(float)
+
+        data.insert(5, 'X', data['Radius (mas)']*np.cos(np.pi/180*(data['Theta (deg)']-90)))
+        data.insert(6, 'Y', data['Radius (mas)']*np.sin(np.pi/180*(data['Theta (deg)']-90)))
+
+        mod_data.append(data)
+             
+    # sort by date    
+    idx = np.argsort(mod_dates)
+    mod_dates_str = list(np.array(mod_dates_str, dtype=object)[idx])
+    mod_dates = list(np.array(mod_dates, dtype=object)[idx])
+    mod_data = list(np.array(mod_data, dtype=object)[idx])
+     
+    mod = pd.concat(mod_data, ignore_index=True)
+    
+    return mod
