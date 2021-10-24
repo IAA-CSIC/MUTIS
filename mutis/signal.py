@@ -56,22 +56,8 @@ class Signal:
 
         self.synth = np.empty((samples, self.times.size))
         for n in range(samples):
-            if self.fgen == "lc_gen_samp":
-                self.synth[n] = lc_gen_samp(self.values)
-            elif self.fgen == "lc_gen_psd_fft":
-                self.synth[n] = lc_gen_psd_fft(self.values)
-            elif self.fgen == "lc_gen_psd_nft":
-                self.synth[n] = lc_gen_psd_nft(self.times, self.values)
-            elif self.fgen == "lc_gen_psd_lombscargle":
-                self.synth[n] = lc_gen_psd_lombscargle(self.times, self.values)
-            elif self.fgen == "lc_gen_psd_c":
-                self.synth[n] = lc_gen_psd_c(self.times, self.values, self.times)
-            elif self.fgen == "lc_gen_ou":
-                if self.OU_theta is None or self.OU_mu is None or self.OU_sigma is None:
-                    raise Exception("You need to set the parameters for the signal")
-                self.synth[n] = lc_gen_ou(self.OU_theta, self.OU_mu, self.OU_sigma, self.times)
-            else:
-                raise Exception(f"Unknown fgen method {self.fgen}")
+            self.synth[n] = fgen_wrapper(fgen=self.fgen, t=self.times, y=self.values,
+                         fgen_params={'theta':self.OU_theta, 'mu':self.OU_mu, 'sigma':self.OU_sigma})
 
 
     def OU_fit(self, bins=None, rang=None, a=1e-5, b=100):
