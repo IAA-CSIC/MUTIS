@@ -138,6 +138,9 @@ def lc_gen_psd_lombscargle(times, values):
     b = values.mean() - a * s2.mean()
     s2 = a * s2 + b
 
+    s2 = np.real(s2)    
+    s2 = np.asarray(s2, dtype=float, order='C') # workaround for some bug in scipy lombscargle...
+    
     return s2
 
 
