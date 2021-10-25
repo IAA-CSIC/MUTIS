@@ -105,8 +105,13 @@ class Correlation:
         peak_x = xs[peak_idx]
         peak_y = ys[peak_idx]
         peak_signf1s = ys[peak_idx]/s1s_y[peak_idx]
+        
+        peak_signif_percent = list()
+        for i in range(len(peak_x)):
+            f = sp.interpolate.interp1d(self.times, self.mc_corr, axis=-1)
+            peak_signf1s.append( sp.stats.percentileofscore(f(peak_x[i]), peak_y[i]) )
 
-        return {'x':peak_x, 's':smooth_std, 'y':peak_y, 'signf1s':peak_signf1s}
+        return {'x':peak_x, 's':smooth_std, 'y':peak_y, 'signf1s':peak_signf1s, 'signif_percent':np.array(signif_percent)}
 
     def gen_synth(self, samples):
         """Generates the synthetic light curves.
@@ -246,6 +251,8 @@ class Correlation:
         self.l2s = np.percentile(mc_corr, [2.28, 97.73], axis=0)
         self.l1s = np.percentile(mc_corr, [15.865, 84.135], axis=0)
 
+        self.mc_corr = mc_corr # save them to be able to compute exact significance later...
+        
         if uncert:
             self.s3s = np.percentile(mc_sig, [0.135, 99.865], axis=0)
             self.s2s = np.percentile(mc_sig, [2.28, 97.73], axis=0)
