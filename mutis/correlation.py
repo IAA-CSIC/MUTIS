@@ -109,9 +109,9 @@ class Correlation:
         peak_signif_percent = list()
         for i in range(len(peak_x)):
             f = sp.interpolate.interp1d(self.times, self.mc_corr, axis=-1)
-            peak_signf1s.append( sp.stats.percentileofscore(f(peak_x[i]), peak_y[i]) )
+            peak_signif_percent.append( sp.stats.percentileofscore(f(peak_x[i]), peak_y[i], kind='strict') )
 
-        return {'x':peak_x, 's':smooth_std, 'y':peak_y, 'signf1s':peak_signf1s, 'signif_percent':np.array(signif_percent)}
+        return {'x':peak_x, 's':smooth_std, 'y':peak_y, 'signf1s':peak_signf1s, 'signif_percent':np.array(peak_signif_percent)}
 
     def gen_synth(self, samples):
         """Generates the synthetic light curves.
