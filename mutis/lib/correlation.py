@@ -268,7 +268,7 @@ def gen_times_rawab(t1, t2, dt0=None, ndtmax=1.0, nbinsmin=121, force=None):
     return t, dt, nb
 
 
-def gen_times_uniform(t1, t2, tmin=None, tmax=None, nbinsmin=121, n=200):
+def gen_times_uniform(t1, t2, dtm=None, tmin=None, tmax=None, nbinsmin=121, n=200):
     """Returns an uniform t, dt time binning for use with adaptative binning methods.
 
     The time interval on which the correlation is defined is split in
@@ -305,7 +305,8 @@ def gen_times_uniform(t1, t2, tmin=None, tmax=None, nbinsmin=121, n=200):
         tmin = -tmax
 
     t = np.linspace(tmin, tmax, n)
-    dtm = (tmax - tmin) / n
+    if dtm is None:
+        dtm = (tmax - tmin) / n
     dt = np.full(t.shape, dtm)
     nb = np.empty(t.shape)
     t1m, t2m = np.meshgrid(t1, t2)

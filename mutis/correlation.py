@@ -5,8 +5,12 @@ import logging
 
 import matplotlib.pyplot as plt
 import numpy as np
+import scipy as sp
 
 from mutis.lib.correlation import *
+
+from mutis.lib.utils import interp_smooth_curve
+
 
 __all__ = ["Correlation"]
 
@@ -70,6 +74,39 @@ class Correlation:
             / 2
             + self.t0_full
         )
+
+    def peak_find(self, smooth=False, smooth_std=None, Ninterp=1000):
+        """Find the peaks of the correlation, optionally smoothing with a kernel of standard deviation `s`.
+        Returns dict with peak positions and significances, ordered from closest to farthest from zero.
+        """
+        x, y = self.times, self.values
+
+        if smooth_std is None:
+            dt1 = np.mean(self.signal1.times[1:]-self.signal1.times[:-1])
+            std1 = np.std(self.signal1.times[1:]-self.signal1.times[:-1])
+            dt2 = np.mean(self.signal2.times[1:]-self.signal2.times[:-1])
+            std2 = np.std(self.signal2.times[1:]-self.signal2.times[:-1])
+
+            smooth_std = 1*np.max([dt1,dt2])
+                
+        if smooth:
+            xs, ys = interp_smooth_curve(x, y, smooth_std, Ninterp)
+        else:
+            xs, ys = x, y
+
+        idx, props = sp.signal.find_peaks(ys)
+        
+        if smooth:
+            s1s_x, s1s_y = interp_smooth_curve(x, self.l1s[1], smooth_std, Ninterp)
+        else:
+            s1s_x, s1s_y = x, self.l1s[1]
+
+        peak_idx = idx[np.argsort(np.abs(xs[idx]))]
+        peak_x = xs[peak_idx]
+        peak_y = ys[peak_idx]
+        peak_signf1s = ys[peak_idx]/s1s_y[peak_idx]
+
+        return {'x':peak_x, 's':smooth_std, 'y':peak_y, 'signf1s':peak_signf1s}
 
     def gen_synth(self, samples):
         """Generates the synthetic light curves.
@@ -308,7 +345,8 @@ class Correlation:
             ax.fill_between(x=self.times, y1=self.s1s[0], y2=self.s1s[1], color="b", alpha=0.5)
             ax.fill_between(x=self.times, y1=self.s2s[0], y2=self.s2s[1], color="b", alpha=0.3)
             ax.fill_between(x=self.times, y1=self.s3s[0], y2=self.s3s[1], color="b", alpha=0.1)
-
+            
+            
         if legend:
             ax.legend()
 
