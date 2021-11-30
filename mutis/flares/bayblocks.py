@@ -20,6 +20,8 @@ from astropy.stats import bayesian_blocks
 
 import warnings 
 
+import mutis.flares.flare as flare
+
 log = logging.getLogger(__name__)
 
 class BayesianBlocks:
@@ -179,4 +181,27 @@ both directions as long as the blocks are successively lower.```
          
         
         self.inflare = np.array(inflareL)
-            
+        
+
+    def get_flare_list(self):
+        """ Join all flares into a list of mutis.flares.flare """
+
+        groups = np.split(np.arange(len(self.inflare)), 
+                          np.where((np.abs(np.diff(np.asarray(self.inflare, dtype=int))) == 1))[0]+1)
+        
+        # (groups contains the groups of indices of self.inflare/self.values 
+        # that corresond to flares or no flares)
+        
+        #print(self.inflare)
+        #print([list(grp) for grp in groups])
+        
+        flareL = list()
+        for i, grp in enumerate(groups):
+            if np.all(self.inflare[grp]):
+                #print(grp)
+                tstart = self.edges[grp[0]]
+                tstop = self.edges[grp[-1]+1] # flare ends when no flare begins
+                
+                flareL.append(flare.Flare(tstart,tstop))
+        print(flareL)
+        return flareL
