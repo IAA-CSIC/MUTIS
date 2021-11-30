@@ -43,7 +43,7 @@ class BayesianBlocks:
         
         self.inflare = None
     
-    def plot(self, ax=None, **kwargs):
+    def plot(self, style='color.strict', ax=None, **kwargs):
         """ Plot the bayesian block representation
         
         E.g:
@@ -56,13 +56,36 @@ class BayesianBlocks:
         
         #self.signal.plot()
         
-        if self.inflare is None:
-            ax.step(self.edges[1:], self.values, 'r', where='post', **kwargs)
+        x = self.edges
+        y = self.values[np.r_[0:len(self.values),-1]]
+
+            
+        if self.inflare is None or style == 'none':
+            ax.step(x, y, 'k', where='post', **kwargs)
         else:
-            for i in range(len(self.edges)-2):
-                ax.step(self.edges[[i,i+1]], self.values[[i, i+1]], 
-                        'r' if self.inflare[i] else 'k',
-                        where='post')
+            if style == 'area':
+                ax.step(x, y, 'k', where='post', **kwargs)
+                for i in range(len(self.inflare)):
+                    if self.inflare[i]:
+                        ax.axvspan(x[i], x[i+1], facecolor='r', edgecolor=None,alpha=0.2)
+            elif style == 'color.simple':
+                for i in range(len(self.edges)-2):
+                    ax.step(self.edges[[i,i+1]], self.values[[i,i+1]], 'r' if self.inflare[i] else 'k', where='post')
+                ax.step(self.edges[[-2,-1]], self.values[[-1,-1]], 'r' if self.inflare[-1] else 'k', where='post')
+            elif style == 'color.loose':
+                for i in range(len(self.edges)-2):
+                    ax.step(self.edges[[i,i+1]], self.values[[i,i]], 'r' if self.inflare[i] else 'k', where='post')
+                    ax.step(self.edges[[i+1,i+1]], self.values[[i,i+1]], 'r' if self.inflare[i] or self.inflare[i+1] else 'k', where='post')
+                ax.step(self.edges[[-2,-1]], self.values[[-1,-1]], 'r' if self.inflare[-1] else 'k', where='post')
+            elif style == 'color.strict':
+                for i in range(len(self.edges)-2):
+                    ax.step(self.edges[[i,i+1]], self.values[[i,i]], 'r' if self.inflare[i] else 'k', where='post')
+                    ax.step(self.edges[[i+1,i+1]], self.values[[i,i+1]], 'r' if self.inflare[i] and self.inflare[i+1] else 'k', where='post')
+                ax.step(self.edges[[-2,-1]], self.values[[-1,-1]], 'r' if self.inflare[-1] else 'k', where='post')
+            else:
+                raise Exception("Unknown style. Available styles are 'none', 'area', 'color.simple', 'color.strict', 'color.loose'.")
+
+                
         
     def get_flares(self, thresh=1):
         """ Get a list of flares following the algorithm proposed in 
@@ -82,10 +105,22 @@ block that is higher than both the previous and subsequent
 blocks as a peak, and (2)proceed downward from the peak in
 both directions as long as the blocks are successively lower.```
         """
+        di_max = 5
         
         # get list of local maxima
-        imaxL = sp.signal.argrelextrema(self.values, np.greater)[0]
-
+        # bad beheaviour at 0 and -1:
+        #imaxL = sp.signal.argrelextrema(self.values, np.greater)[0]
+        imaxL = list()
+        for i in range(0,len(self.values)):
+            if i == 0 and thresh*self.values[0] > self.values[1]:
+                imaxL.append(i)
+            elif i == len(self.values)-1 and self.values[i-1] < thresh*self.values[i]:
+                imaxL.append(i)
+            elif self.values[i-1] < thresh*self.values[i] > self.values[i+1]:
+                imaxL.append(i)
+        imaxL = np.array(imaxL)
+        
+        
         inflareL = np.full(self.values.shape, False)
         
         # get list of local maxima over a threshold (flare peaks)
@@ -113,7 +148,7 @@ both directions as long as the blocks are successively lower.```
             else:
                 di = 1
                 stop = False
-                while not stop and di < 3:
+                while not stop and di < di_max:
                     if imax-di-1 < 0:
                         break
                     
@@ -130,11 +165,11 @@ both directions as long as the blocks are successively lower.```
             else:
                 di = 1
                 stop = False
-                while not stop and di < 3:
+                while not stop and di < di_max:
                     if imax+di+1 > len(self.values)-1:
                         break
                     
-                    if self.values[imax+di] > thresh*self.values[imax+di+1]:
+                    if thresh*self.values[imax+di] > self.values[imax+di+1]:
                         inflareL[imax+di] = True
                     else:
                         stop = True
