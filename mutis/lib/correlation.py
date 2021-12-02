@@ -88,8 +88,8 @@ def welsh_old(t1, d1, t2, d2, t, dt):
     return res
 
 @guvectorize([(float64[:], float64[:], float64[:], float64[:], float64[:], float64[:], float64[:])], '(n),(n),(m),(m),(c),(c)->(c)')
-def _kroedel_numba(t1, d1, t2, d2, t, dt, res):
-    """Helper function for kroedel_ab()"""
+def _kroedel_numba(t1, d1, t2, d2, t, dt, res): # pragma: no cover
+    """Helper function for kroedel()"""
     
     d1_mean = np.mean(d1)
     d2_mean = np.mean(d2)
@@ -166,8 +166,8 @@ def kroedel(t1, d1, t2, d2, t, dt):
     return _kroedel_numba(t1, d1, t2, d2, t, dt)
 
 @guvectorize([(float64[:], float64[:], float64[:], float64[:], float64[:], float64[:], float64[:])], '(n),(n),(m),(m),(c),(c)->(c)')
-def _welsh_numba(t1, d1, t2, d2, t, dt, res):
-    """Helper function for welsh_ab()"""
+def _welsh_numba(t1, d1, t2, d2, t, dt, res): # pragma: no cover
+    """Helper function for welsh()"""
 
     for k in range(len(t)):
         N=0

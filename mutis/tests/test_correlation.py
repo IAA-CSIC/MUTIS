@@ -23,6 +23,8 @@ def corr():
         "fail": Correlation(signal1, signal2, "fail"),
         "welsh": Correlation(signal1, signal2, "welsh"),
         "kroedel": Correlation(signal1, signal2, "kroedel"),
+        "welsh_old": Correlation(signal1, signal2, "welsh_old"),
+        "kroedel_old": Correlation(signal1, signal2, "kroedel_old"),
         "numpy": Correlation(signal1, signal2, "numpy"),
         "kroedel_uncert": Correlation(signal3, signal4, "kroedel"),
         "welsh_uncert": Correlation(signal3, signal4, "welsh"),
@@ -110,7 +112,25 @@ def test_gen_corr(corr):
     corr["fail"].gen_synth(10)
     with pytest.raises(Exception):
         corr["fail"].gen_corr()
+        
+    
+    # compare old implementation with new numba implementation
+    corr["welsh_old"].gen_times(dtmin=0.1, dtmax=3, nbinsmin=3)
+    corr["welsh_old"].gen_synth(10)
+    corr["welsh_old"].gen_corr()
+    assert np.shape(corr["welsh_old"].l1s) == (2, 77)
+    assert np.shape(corr["welsh_old"].l2s) == (2, 77)
+    assert np.shape(corr["welsh_old"].l3s) == (2, 77)
 
+    corr["kroedel_old"].gen_times(dtmin=0.1, dtmax=3, nbinsmin=3)
+    corr["kroedel_old"].gen_synth(10)
+    corr["kroedel_old"].gen_corr()
+    assert np.shape(corr["kroedel_old"].l1s) == (2, 77)
+    assert np.shape(corr["kroedel_old"].l2s) == (2, 77)
+    assert np.shape(corr["kroedel_old"].l3s) == (2, 77)
+
+    assert np.allclose(corr['welsh_old'].values, corr['welsh'].values, rtol=1e-5)
+    assert np.allclose(corr['kroedel_old'].values, corr['kroedel'].values, rtol=1e-5)
 
 def test_plot_corr(corr):
     corr["welsh"].gen_times(dtmin=0.1, dtmax=3, nbinsmin=3)
@@ -129,3 +149,8 @@ def test_peak_find(corr):
     corr["welsh"].gen_corr()
     corr["welsh"].plot_corr(legend=True)
     assert np.any(np.isclose(corr['welsh'].peak_find()['x'], 2*np.pi, rtol=1e-3))
+    assert np.any(np.isclose(corr['welsh'].peak_find(smooth=True)['x'], 2*np.pi, rtol=1e-2))
+    with pytest.raises(Exception):
+        assert np.any(np.isclose(corr['welsh'].peak_find(smooth=True)['x'], 2*np.pi, rtol=1e-3))
+
+

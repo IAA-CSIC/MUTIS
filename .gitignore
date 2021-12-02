@@ -25,3 +25,4 @@ docs/recipes/data
 # tests coverage
 htmlcov
 .coverage
+.hypothesis

@@ -220,6 +220,66 @@ class Correlation:
                 self.times,
                 self.dts,
             )
+        elif self.fcorr == "welsh_old": # should produce the exactly same results, but we keep it for debugs and testcov
+            for idx in range(self.samples):
+                mc_corr[idx] = welsh_old(
+                    self.signal1.times,
+                    self.signal1.synth[idx],
+                    self.signal2.times,
+                    self.signal2.synth[idx],
+                    self.times,
+                    self.dts,
+                )
+            if uncert:
+                for idx in range(dsamples):
+                    mc_sig[idx] = welsh_old(
+                        self.signal1.times,
+                        self.signal1.values
+                        + self.signal1.dvalues * np.random.randn(self.signal1.values.size),
+                        self.signal2.times,
+                        self.signal2.values
+                        + self.signal2.dvalues * np.random.randn(self.signal2.values.size),
+                        self.times,
+                        self.dts,
+                    )
+            self.values = welsh_old(
+                self.signal1.times,
+                self.signal1.values,
+                self.signal2.times,
+                self.signal2.values,
+                self.times,
+                self.dts,
+            )
+        elif self.fcorr == "kroedel_old": # should produce the exactly same results, but we keep it for debugs and testcov
+            for idx in range(self.samples):
+                mc_corr[idx] = kroedel_old(
+                    self.signal1.times,
+                    self.signal1.synth[idx],
+                    self.signal2.times,
+                    self.signal2.synth[idx],
+                    self.times,
+                    self.dts,
+                )
+            if uncert:
+                for idx in range(dsamples):
+                    mc_sig[idx] = kroedel_old(
+                        self.signal1.times,
+                        self.signal1.values
+                        + self.signal1.dvalues * np.random.randn(self.signal1.values.size),
+                        self.signal2.times,
+                        self.signal2.values
+                        + self.signal2.dvalues * np.random.randn(self.signal2.values.size),
+                        self.times,
+                        self.dts,
+                    )
+            self.values = kroedel_old(
+                self.signal1.times,
+                self.signal1.values,
+                self.signal2.times,
+                self.signal2.values,
+                self.times,
+                self.dts,
+            )
         elif self.fcorr == "numpy":
             for idx in range(self.samples):
                 mc_corr[idx] = nindcf(

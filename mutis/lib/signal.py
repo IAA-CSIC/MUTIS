@@ -51,7 +51,7 @@ def lc_gen_samp(signs):
     return np.random.choice(signs, signs.size)
 
 @jit(nopython=True)
-def lc_gen_ou(theta, mu, sigma, times, scale=None, loc=None):
+def lc_gen_ou(theta, mu, sigma, times, scale=None, loc=None): # pragma: no cover
     """Generation from an OU process integrating the stochastic differential equation."""
 
     width = 100 * times.size
