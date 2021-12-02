@@ -3,9 +3,11 @@
 
 import logging
 
-import nfft
 import numpy as np
+import nfft
 import scipy.signal as scipy_signal
+
+from numba import jit
 
 __all__ = [
     "lc_gen_samp",
@@ -34,7 +36,7 @@ def fgen_wrapper(fgen, t, y, fgen_params):
     elif fgen == "lc_gen_psd_c":
         y2 = lc_gen_psd_c(t, y, t)
     elif fgen == "lc_gen_ou":
-        if not ('theta' in fgen_params or 'mu' in fgen_params or 'sigma' in fgen_params):
+        if (fgen_params is None) or not ('theta' in fgen_params or 'mu' in fgen_params or 'sigma' in fgen_params):
             raise Exception("You need to set the parameters for the signal")
         y2 = lc_gen_ou(times=t, **fgen_params)
     else:
@@ -48,7 +50,7 @@ def lc_gen_samp(signs):
 
     return np.random.choice(signs, signs.size)
 
-
+@jit(nopython=True)
 def lc_gen_ou(theta, mu, sigma, times, scale=None, loc=None):
     """Generation from an OU process integrating the stochastic differential equation."""
 
@@ -142,7 +144,6 @@ def lc_gen_psd_lombscargle(times, values):
     s2 = np.asarray(s2, dtype=float, order='C') # workaround for some bug in scipy lombscargle...
     
     return s2
-
 
 def lc_gen_psd_nft(times, values):
     """Generation using the non-uniform FFT of synthetic signals with similar PSD, mean and std.

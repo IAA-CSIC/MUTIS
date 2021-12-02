@@ -160,9 +160,9 @@ class Correlation:
         if uncert:
             mc_sig = np.empty((dsamples, self.times.size))
 
-        if self.fcorr == "welsh_ab":
+        if self.fcorr == "welsh":
             for idx in range(self.samples):
-                mc_corr[idx] = welsh_ab(
+                mc_corr[idx] = welsh(
                     self.signal1.times,
                     self.signal1.synth[idx],
                     self.signal2.times,
@@ -172,7 +172,7 @@ class Correlation:
                 )
             if uncert:
                 for idx in range(dsamples):
-                    mc_sig[idx] = welsh_ab(
+                    mc_sig[idx] = welsh(
                         self.signal1.times,
                         self.signal1.values
                         + self.signal1.dvalues * np.random.randn(self.signal1.values.size),
@@ -182,7 +182,7 @@ class Correlation:
                         self.times,
                         self.dts,
                     )
-            self.values = welsh_ab(
+            self.values = welsh(
                 self.signal1.times,
                 self.signal1.values,
                 self.signal2.times,
@@ -190,9 +190,9 @@ class Correlation:
                 self.times,
                 self.dts,
             )
-        elif self.fcorr == "kroedel_ab":
+        elif self.fcorr == "kroedel":
             for idx in range(self.samples):
-                mc_corr[idx] = kroedel_ab(
+                mc_corr[idx] = kroedel(
                     self.signal1.times,
                     self.signal1.synth[idx],
                     self.signal2.times,
@@ -202,7 +202,7 @@ class Correlation:
                 )
             if uncert:
                 for idx in range(dsamples):
-                    mc_sig[idx] = kroedel_ab(
+                    mc_sig[idx] = kroedel(
                         self.signal1.times,
                         self.signal1.values
                         + self.signal1.dvalues * np.random.randn(self.signal1.values.size),
@@ -212,7 +212,7 @@ class Correlation:
                         self.times,
                         self.dts,
                     )
-            self.values = kroedel_ab(
+            self.values = kroedel(
                 self.signal1.times,
                 self.signal1.values,
                 self.signal2.times,

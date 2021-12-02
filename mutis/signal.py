@@ -189,6 +189,9 @@ class Signal:
 
         y2 = fgen_wrapper(fgen=fgen, t=t, y=y, fgen_params=fgen_params)
         
+        print(f"Original vs Synthethic:",
+              f"mean: {np.mean(y)} / {np.mean(y2)}",
+              f"std: {np.std(y)} / {np.std(y2)}", sep='\n')
         
         if ("ax1" not in axes) or ("ax2" not in axes) or ("ax3" not in axes):
             fig, (axes["ax1"], axes["ax2"], axes["ax3"]) = plt.subplots(
