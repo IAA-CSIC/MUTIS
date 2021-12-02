@@ -19,6 +19,7 @@ dependencies:
   - numpy
   - pandas
   - scipy
+  - numba
   - pip:
       - nfft
   # test dependencies
