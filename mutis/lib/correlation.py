@@ -5,11 +5,15 @@ import logging
 
 import numpy as np
 
+from numba import jit, float64, vectorize, guvectorize
+
 from mutis.lib.utils import get_grid
 
 __all__ = [
-    "kroedel_ab",
-    "welsh_ab",
+    "kroedel_old",
+    "welsh_old",
+    "kroedel",
+    "welsh",
     "nindcf",
     "gen_times_rawab",
     "gen_times_uniform",
@@ -19,9 +23,7 @@ __all__ = [
 log = logging.getLogger(__name__)
 
 
-def kroedel_ab_p(t1, d1, t2, d2, t, dt):
-    """Helper function for kroedel_ab()"""
-
+def _kroedel_old(t1, d1, t2, d2, t, dt):
     t1m, t2m = get_grid(t1, t2)
     d1m, d2m = np.meshgrid(d1, d2)
 
@@ -32,7 +34,83 @@ def kroedel_ab_p(t1, d1, t2, d2, t, dt):
     return np.mean(udcf[mask])
 
 
-def kroedel_ab(t1, d1, t2, d2, t, dt):
+def kroedel_old(t1, d1, t2, d2, t, dt):
+    """Krolik & Edelson (1988) correlation with adaptative binning.
+    Old version, not using numba. Kept for debugging purposes.
+    """
+
+    if t.size != dt.size:
+        log.error("Error, t and dt not the same size")
+        return False
+    if t1.size != d1.size:
+        log.error("Error, t1 and d1 not the same size")
+        return False
+    if t2.size != d2.size:
+        log.error("Error, t2 and d2 not the same size")
+        return False
+
+    res = np.empty(t.size)
+    for i in range(t.size):
+        res[i] = _kroedel_old(t1, d1, t2, d2, t[i], dt[i])
+    return res
+
+def _welsh_old(t1, d1, t2, d2, t, dt):
+    t1m, t2m = get_grid(t1, t2)
+    d1m, d2m = np.meshgrid(d1, d2)
+
+    msk = ((t - dt / 2) < (t2m - t1m)) & ((t2m - t1m) < (t + dt / 2))
+
+    udcf = (
+        (d1m - np.mean(d1m[msk])) * (d2m - np.mean(d2m[msk])) / np.std(d1m[msk]) / np.std(d2m[msk])
+    )
+
+    return np.mean(udcf[msk])
+
+def welsh_old(t1, d1, t2, d2, t, dt):
+    """Welsh (1999) correlation with adaptative binning.
+    Old version, not using numba. Kept for debugging purposes.
+    """
+
+    if t.size != dt.size:
+        log.error("Error, t and dt not the same size")
+        return False
+    if t1.size != d1.size:
+        log.error("Error, t1 and d1 not the same size")
+        return False
+    if t2.size != d2.size:
+        log.error("Error, t2 and d2 not the same size")
+        return False
+
+    # res = np.array([])
+    res = np.empty(t.size)
+    for i in range(t.size):
+        res[i] = _welsh_old(t1, d1, t2, d2, t[i], dt[i])
+    return res
+
+@guvectorize([(float64[:], float64[:], float64[:], float64[:], float64[:], float64[:], float64[:])], '(n),(n),(m),(m),(c),(c)->(c)')
+def _kroedel_numba(t1, d1, t2, d2, t, dt, res): # pragma: no cover
+    """Helper function for kroedel()"""
+    
+    d1_mean = np.mean(d1)
+    d2_mean = np.mean(d2)
+    
+    d1_std = np.std(d1)
+    d2_std = np.std(d2)
+    
+    for k in range(len(t)):
+        N = 0
+        
+        numerator = 0
+        
+        for i in range(len(t1)):
+            for j in range(len(t2)): 
+                if ((t[k] - dt[k] / 2) < (t2[j] - t1[i])) & ((t2[j] - t1[i]) < (t[k] + dt[k] / 2)):
+                    numerator = numerator + (d1[i]-d1_mean)*(d2[j]-d2_mean)
+                    N = N + 1
+
+        res[k] = numerator / N / d1_std / d2_std
+
+def kroedel(t1, d1, t2, d2, t, dt):
     """Krolik & Edelson (1988) correlation with adaptative binning.
 
     This function implements the correlation function proposed by
@@ -69,7 +147,7 @@ def kroedel_ab(t1, d1, t2, d2, t, dt):
     >>> t1 = np.linspace(1, 10, 100); s1 = np.sin(t1)
     >>> t2 = np.linspace(1, 10, 100); s2 = np.cos(t2)
     >>> t = np.linspace(1, 10, 100);  dt = np.full(t.shape, 0.1)
-    >>> kroedel_ab_p(t1, d1, t2, d2, t, dt)
+    >>> kroedel(t1, d1, t2, d2, t, dt)
 
     However, it is recommended to be used as expalined in the
     standard MUTIS' workflow notebook.
@@ -85,28 +163,45 @@ def kroedel_ab(t1, d1, t2, d2, t, dt):
         log.error("Error, t2 and d2 not the same size")
         return False
 
-    res = np.empty(t.size)
-    for i in range(t.size):
-        res[i] = kroedel_ab_p(t1, d1, t2, d2, t[i], dt[i])
-    return res
+    return _kroedel_numba(t1, d1, t2, d2, t, dt)
 
+@guvectorize([(float64[:], float64[:], float64[:], float64[:], float64[:], float64[:], float64[:])], '(n),(n),(m),(m),(c),(c)->(c)')
+def _welsh_numba(t1, d1, t2, d2, t, dt, res): # pragma: no cover
+    """Helper function for welsh()"""
 
-def welsh_ab_p(t1, d1, t2, d2, t, dt):
-    """Helper function for welsh_ab()"""
+    for k in range(len(t)):
+        N=0
+        
+        d1_M_sum = 0
+        d1_M_sq_sum = 0
+        
+        d2_M_sum = 0
+        d2_M_sq_sum = 0
+        
+        d1_d2_M_sum = 0
+        
+        for i in range(len(t1)):
+            for j in range(len(t2)): 
+                if ((t[k] - dt[k] / 2) < (t2[j] - t1[i])) & ((t2[j] - t1[i]) < (t[k] + dt[k] / 2)):
+                    d1_M_sum = d1_M_sum + d1[i]
+                    d2_M_sum = d2_M_sum + d2[j]
+                    
+                    d1_M_sq_sum = d1_M_sq_sum + d1[i]**2
+                    d2_M_sq_sum = d2_M_sq_sum + d2[j]**2
+                    
+                    d1_d2_M_sum =  d1_d2_M_sum + d1[i]*d2[j]
+                    
+                    N = N + 1
+                    
+        d1_M_mean = d1_M_sum/N
+        d2_M_mean = d2_M_sum/N
+        
+        d1_M_std = (d1_M_sq_sum / N - d1_M_mean**2)**0.5
+        d2_M_std = (d2_M_sq_sum / N - d2_M_mean**2)**0.5
 
-    t1m, t2m = get_grid(t1, t2)
-    d1m, d2m = np.meshgrid(d1, d2)
-
-    msk = ((t - dt / 2) < (t2m - t1m)) & ((t2m - t1m) < (t + dt / 2))
-
-    udcf = (
-        (d1m - np.mean(d1m[msk])) * (d2m - np.mean(d2m[msk])) / np.std(d1m[msk]) / np.std(d2m[msk])
-    )
-
-    return np.mean(udcf[msk])
-
-
-def welsh_ab(t1, d1, t2, d2, t, dt):
+        res[k] = (d1_d2_M_sum/N - d1_M_mean*d2_M_mean) / d1_M_std / d2_M_std
+                   
+def welsh(t1, d1, t2, d2, t, dt):
     """Welsh (1999) correlation with adaptative binning.
 
     This function implements the correlation function proposed
@@ -142,12 +237,12 @@ def welsh_ab(t1, d1, t2, d2, t, dt):
     >>> t1 = np.linspace(1, 10, 100); s1 = np.sin(t1)
     >>> t2 = np.linspace(1, 10, 100); s2 = np.cos(t2)
     >>> t = np.linspace(1, 10, 100);  dt = np.full(t.shape, 0.1)
-    >>> welsh_ab_p(t1, d1, t2, d2, t, dt)
+    >>> welsh(t1, d1, t2, d2, t, dt)
 
     However, it is recommended to be used as expalined in the
     standard MUTIS' workflow notebook.
     """
-
+    
     if t.size != dt.size:
         log.error("Error, t and dt not the same size")
         return False
@@ -157,13 +252,8 @@ def welsh_ab(t1, d1, t2, d2, t, dt):
     if t2.size != d2.size:
         log.error("Error, t2 and d2 not the same size")
         return False
-
-    # res = np.array([])
-    res = np.empty(t.size)
-    for i in range(t.size):
-        res[i] = welsh_ab_p(t1, d1, t2, d2, t[i], dt[i])
-    return res
-
+    
+    return _welsh_numba(t1, d1, t2, d2, t, dt)
 
 def ndcf(x, y):
     """Computes the normalised correlation of two discrete signals (ignoring times)."""
@@ -268,7 +358,7 @@ def gen_times_rawab(t1, t2, dt0=None, ndtmax=1.0, nbinsmin=121, force=None):
     return t, dt, nb
 
 
-def gen_times_uniform(t1, t2, tmin=None, tmax=None, nbinsmin=121, n=200):
+def gen_times_uniform(t1, t2, dtm=None, tmin=None, tmax=None, nbinsmin=121, n=200):
     """Returns an uniform t, dt time binning for use with adaptative binning methods.
 
     The time interval on which the correlation is defined is split in
@@ -305,7 +395,8 @@ def gen_times_uniform(t1, t2, tmin=None, tmax=None, nbinsmin=121, n=200):
         tmin = -tmax
 
     t = np.linspace(tmin, tmax, n)
-    dtm = (tmax - tmin) / n
+    if dtm is None:
+        dtm = (tmax - tmin) / n
     dt = np.full(t.shape, dtm)
     nb = np.empty(t.shape)
     t1m, t2m = np.meshgrid(t1, t2)

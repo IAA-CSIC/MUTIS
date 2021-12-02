@@ -5,8 +5,12 @@ import logging
 
 import matplotlib.pyplot as plt
 import numpy as np
+import scipy as sp
 
 from mutis.lib.correlation import *
+
+from mutis.lib.utils import interp_smooth_curve
+
 
 __all__ = ["Correlation"]
 
@@ -71,6 +75,44 @@ class Correlation:
             + self.t0_full
         )
 
+    def peak_find(self, smooth=False, smooth_std=None, Ninterp=1000):
+        """Find the peaks of the correlation, optionally smoothing with a kernel of standard deviation `s`.
+        Returns dict with peak positions and significances, ordered from closest to farthest from zero.
+        """
+        x, y = self.times, self.values
+
+        if smooth_std is None:
+            dt1 = np.mean(self.signal1.times[1:]-self.signal1.times[:-1])
+            std1 = np.std(self.signal1.times[1:]-self.signal1.times[:-1])
+            dt2 = np.mean(self.signal2.times[1:]-self.signal2.times[:-1])
+            std2 = np.std(self.signal2.times[1:]-self.signal2.times[:-1])
+
+            smooth_std = 1*np.max([dt1,dt2])
+                
+        if smooth:
+            xs, ys = interp_smooth_curve(x, y, smooth_std, Ninterp)
+        else:
+            xs, ys = x, y
+
+        idx, props = sp.signal.find_peaks(ys)
+        
+        if smooth:
+            s1s_x, s1s_y = interp_smooth_curve(x, self.l1s[1], smooth_std, Ninterp)
+        else:
+            s1s_x, s1s_y = x, self.l1s[1]
+
+        peak_idx = idx[np.argsort(np.abs(xs[idx]))]
+        peak_x = xs[peak_idx]
+        peak_y = ys[peak_idx]
+        peak_signf1s = ys[peak_idx]/s1s_y[peak_idx]
+        
+        peak_signif_percent = list()
+        for i in range(len(peak_x)):
+            f = sp.interpolate.interp1d(self.times, self.mc_corr, axis=-1)
+            peak_signif_percent.append( sp.stats.percentileofscore(f(peak_x[i]), peak_y[i], kind='strict') )
+
+        return {'x':peak_x, 's':smooth_std, 'y':peak_y, 'signf1s':peak_signf1s, 'signif_percent':np.array(peak_signif_percent)}
+
     def gen_synth(self, samples):
         """Generates the synthetic light curves.
 
@@ -118,9 +160,9 @@ class Correlation:
         if uncert:
             mc_sig = np.empty((dsamples, self.times.size))
 
-        if self.fcorr == "welsh_ab":
+        if self.fcorr == "welsh":
             for idx in range(self.samples):
-                mc_corr[idx] = welsh_ab(
+                mc_corr[idx] = welsh(
                     self.signal1.times,
                     self.signal1.synth[idx],
                     self.signal2.times,
@@ -130,7 +172,7 @@ class Correlation:
                 )
             if uncert:
                 for idx in range(dsamples):
-                    mc_sig[idx] = welsh_ab(
+                    mc_sig[idx] = welsh(
                         self.signal1.times,
                         self.signal1.values
                         + self.signal1.dvalues * np.random.randn(self.signal1.values.size),
@@ -140,7 +182,7 @@ class Correlation:
                         self.times,
                         self.dts,
                     )
-            self.values = welsh_ab(
+            self.values = welsh(
                 self.signal1.times,
                 self.signal1.values,
                 self.signal2.times,
@@ -148,9 +190,9 @@ class Correlation:
                 self.times,
                 self.dts,
             )
-        elif self.fcorr == "kroedel_ab":
+        elif self.fcorr == "kroedel":
             for idx in range(self.samples):
-                mc_corr[idx] = kroedel_ab(
+                mc_corr[idx] = kroedel(
                     self.signal1.times,
                     self.signal1.synth[idx],
                     self.signal2.times,
@@ -160,7 +202,7 @@ class Correlation:
                 )
             if uncert:
                 for idx in range(dsamples):
-                    mc_sig[idx] = kroedel_ab(
+                    mc_sig[idx] = kroedel(
                         self.signal1.times,
                         self.signal1.values
                         + self.signal1.dvalues * np.random.randn(self.signal1.values.size),
@@ -170,7 +212,67 @@ class Correlation:
                         self.times,
                         self.dts,
                     )
-            self.values = kroedel_ab(
+            self.values = kroedel(
+                self.signal1.times,
+                self.signal1.values,
+                self.signal2.times,
+                self.signal2.values,
+                self.times,
+                self.dts,
+            )
+        elif self.fcorr == "welsh_old": # should produce the exactly same results, but we keep it for debugs and testcov
+            for idx in range(self.samples):
+                mc_corr[idx] = welsh_old(
+                    self.signal1.times,
+                    self.signal1.synth[idx],
+                    self.signal2.times,
+                    self.signal2.synth[idx],
+                    self.times,
+                    self.dts,
+                )
+            if uncert:
+                for idx in range(dsamples):
+                    mc_sig[idx] = welsh_old(
+                        self.signal1.times,
+                        self.signal1.values
+                        + self.signal1.dvalues * np.random.randn(self.signal1.values.size),
+                        self.signal2.times,
+                        self.signal2.values
+                        + self.signal2.dvalues * np.random.randn(self.signal2.values.size),
+                        self.times,
+                        self.dts,
+                    )
+            self.values = welsh_old(
+                self.signal1.times,
+                self.signal1.values,
+                self.signal2.times,
+                self.signal2.values,
+                self.times,
+                self.dts,
+            )
+        elif self.fcorr == "kroedel_old": # should produce the exactly same results, but we keep it for debugs and testcov
+            for idx in range(self.samples):
+                mc_corr[idx] = kroedel_old(
+                    self.signal1.times,
+                    self.signal1.synth[idx],
+                    self.signal2.times,
+                    self.signal2.synth[idx],
+                    self.times,
+                    self.dts,
+                )
+            if uncert:
+                for idx in range(dsamples):
+                    mc_sig[idx] = kroedel_old(
+                        self.signal1.times,
+                        self.signal1.values
+                        + self.signal1.dvalues * np.random.randn(self.signal1.values.size),
+                        self.signal2.times,
+                        self.signal2.values
+                        + self.signal2.dvalues * np.random.randn(self.signal2.values.size),
+                        self.times,
+                        self.dts,
+                    )
+            self.values = kroedel_old(
                 self.signal1.times,
                 self.signal1.values,
                 self.signal2.times,
@@ -209,6 +311,8 @@ class Correlation:
         self.l2s = np.percentile(mc_corr, [2.28, 97.73], axis=0)
         self.l1s = np.percentile(mc_corr, [15.865, 84.135], axis=0)
 
+        self.mc_corr = mc_corr # save them to be able to compute exact significance later...
+        
         if uncert:
             self.s3s = np.percentile(mc_sig, [0.135, 99.865], axis=0)
             self.s2s = np.percentile(mc_sig, [2.28, 97.73], axis=0)
@@ -308,7 +412,8 @@ class Correlation:
             ax.fill_between(x=self.times, y1=self.s1s[0], y2=self.s1s[1], color="b", alpha=0.5)
             ax.fill_between(x=self.times, y1=self.s2s[0], y2=self.s2s[1], color="b", alpha=0.3)
             ax.fill_between(x=self.times, y1=self.s3s[0], y2=self.s3s[1], color="b", alpha=0.1)
-
+            
+            
         if legend:
             ax.legend()
 

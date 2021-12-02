@@ -56,22 +56,9 @@ class Signal:
 
         self.synth = np.empty((samples, self.times.size))
         for n in range(samples):
-            if self.fgen == "lc_gen_samp":
-                self.synth[n] = lc_gen_samp(self.values)
-            elif self.fgen == "lc_gen_psd_fft":
-                self.synth[n] = lc_gen_psd_fft(self.values)
-            elif self.fgen == "lc_gen_psd_nft":
-                self.synth[n] = lc_gen_psd_nft(self.times, self.values)
-            elif self.fgen == "lc_gen_psd_lombscargle":
-                self.synth[n] = lc_gen_psd_lombscargle(self.times, self.values)
-            elif self.fgen == "lc_gen_psd_c":
-                self.synth[n] = lc_gen_psd_c(self.times, self.values, self.times)
-            elif self.fgen == "lc_gen_ou":
-                if self.OU_theta is None or self.OU_mu is None or self.OU_sigma is None:
-                    raise Exception("You need to set the parameters for the signal")
-                self.synth[n] = lc_gen_ou(self.OU_theta, self.OU_mu, self.OU_sigma, self.times)
-            else:
-                raise Exception(f"Unknown fgen method {self.fgen}")
+            self.synth[n] = fgen_wrapper(fgen=self.fgen, t=self.times, y=self.values,
+                         fgen_params={'theta':self.OU_theta, 'mu':self.OU_mu, 'sigma':self.OU_sigma})
+
 
     def OU_fit(self, bins=None, rang=None, a=1e-5, b=100):
         """Fit the signal to an OU stochastic process, using several statistical approaches.
@@ -174,25 +161,38 @@ class Signal:
             res["th_est2"] = None
 
         return res
+        
+        
+    def check_gen(self, fgen=None, fgen_params=None, fpsd="lombscargle", **axes):
+        """Check the generation of synthetic signals.
 
-    def OU_check_gen(self, theta, mu, sigma, fpsd="lombscargle", **axes):
-        """Check the generation of a synthetic signal with given OU parameters.
+        This function checks the generation of a synthetic light curve.
+        
+        Parameters:
+        -----------
+        fgen: :str:
+            A valid fgen method name.
+        fgen_params: :dict:
+            Parameters for fgen (e.g. for fgen='lc_gen_ou', a dict containing
+            values for theta, mu and sigma).
 
-        This function checks the generation of a synthetic light curve through
-        an Orstein-Uhlenbeck process with given `theta`, `mu` and `sigma`, to
-        ease the discovery of the most suitable parameters to be used in the
-        generation of the synthetic light curves.
-
-        It returns three plots, on which:
-        - The first plot show both the original signal and the synthetic one.
-        - The second plot shows the histogram of the values taken by both signals.
-        - The third plot shows their PSD.
+        Returns:
+        --------
+        axes: :tuple:
+            Tuple of three axes, on which:
+            - The first plot show both the original signal and the synthetic one.
+            - The second plot shows the histogram of the values taken by both signals.
+            - The third plot shows their PSD.
         """
-        # TODO make a generic check_gen method
-
+        
         t, y = self.times, self.values
-        y2 = lc_gen_ou(theta, mu, sigma, self.times)  # , scale=np.std(self.s), loc=np.mean(self.s))
 
+        y2 = fgen_wrapper(fgen=fgen, t=t, y=y, fgen_params=fgen_params)
+        
+        print(f"Original vs Synthethic:",
+              f"mean: {np.mean(y)} / {np.mean(y2)}",
+              f"std: {np.std(y)} / {np.std(y2)}", sep='\n')
+        
         if ("ax1" not in axes) or ("ax2" not in axes) or ("ax3" not in axes):
             fig, (axes["ax1"], axes["ax2"], axes["ax3"]) = plt.subplots(
                 nrows=1, ncols=3, figsize=(20, 4)
@@ -239,31 +239,9 @@ class Signal:
         axes["ax3"].set_title("PSD")
 
         return axes
-
-    def PSD_check_gen(self, fgen=None, ax=None):
-        """Check the generation of a synthetic signal with a given `fgen` method."""
-        # TODO: make a generic check_gen method
-
-        if fgen is None:
-            fgen = self.fgen
-        if ax is None:
-            ax = plt.gca()
-
-        if fgen == "lc_gen_psd_fft":
-            s2 = lc_gen_psd_fft(self.values)
-        elif fgen == "lc_gen_psd_nft":
-            s2 = lc_gen_psd_nft(self.times, self.values)
-        elif fgen == "lc_gen_psd_lombscargle":
-            s2 = lc_gen_psd_lombscargle(self.times, self.values)
-        elif fgen == "lc_gen_psd_c":
-            s2 = lc_gen_psd_c(self.times, self.values, self.times)
-        else:
-            raise Exception("No valid fgen specified")
-
-        ax.plot(self.times, self.values, "b-", label="orig", lw=0.5, alpha=0.8)
-        ax.plot(self.times, s2, "r-", label="gen", lw=0.5, alpha=0.8)
-        ax.legend()
-
+    
+    
+        
     @staticmethod
     def pdf(xx, ll, mu):
         """Helper func to fit pdf as a curve."""

@@ -61,18 +61,13 @@ def test_ou_fit(signal):
     assert_allclose(fits["curve_fit"][0][0], 0.24649419240104922, rtol=1e-3)
 
 
-def test_psd_checks_gen(signal):
-    with pytest.raises(Exception):
-        signal["fail"].PSD_check_gen(10)
-    signal["psd_c"].PSD_check_gen()
-    signal["psd_nft"].PSD_check_gen()
-    signal["psd_fft"].PSD_check_gen()
-    signal["psd_lombscargle"].PSD_check_gen()
-
-
-def test_ou_check_gen(signal, ou_params):
-    signal["ou"].OU_check_gen(ou_params["theta"], ou_params["mu"], ou_params["sigma"])
-    signal["ou"].OU_check_gen(ou_params["theta"], ou_params["mu"], ou_params["sigma"], fpsd="other")
+def test_check_gen(signal, ou_params):
+    signal["ou"].check_gen(fgen='lc_gen_ou', fgen_params=ou_params)
+    signal["ou"].check_gen(fgen='lc_gen_ou', fgen_params=ou_params)
+    signal["psd_c"].check_gen(fgen='lc_gen_psd_c')
+    signal["psd_nft"].check_gen(fgen='lc_gen_psd_nft')
+    signal["psd_fft"].check_gen(fgen='lc_gen_psd_fft')
+    signal["psd_lombscargle"].check_gen(fgen='lc_gen_psd_lombscargle')
 
 
 def test_lc_gen_psd_c(signal):

@@ -3,9 +3,11 @@
 
 import logging
 
-import nfft
 import numpy as np
+import nfft
 import scipy.signal as scipy_signal
+
+from numba import jit
 
 __all__ = [
     "lc_gen_samp",
@@ -14,9 +16,33 @@ __all__ = [
     "lc_gen_psd_lombscargle",
     "lc_gen_psd_fft",
     "lc_gen_psd_c",
+    "fgen_wrapper",
 ]
 
 log = logging.getLogger(__name__)
+
+
+def fgen_wrapper(fgen, t, y, fgen_params):
+    """Wrapper for all lc_gen_* functions, so as not to duplicate code."""
+        
+    if fgen == "lc_gen_samp":
+        y2 = lc_gen_samp(y)
+    elif fgen == "lc_gen_psd_fft":
+        y2 = lc_gen_psd_fft(y)
+    elif fgen == "lc_gen_psd_nft":
+        y2 = lc_gen_psd_nft(t, y)
+    elif fgen == "lc_gen_psd_lombscargle":
+        y2 = lc_gen_psd_lombscargle(t, y)
+    elif fgen == "lc_gen_psd_c":
+        y2 = lc_gen_psd_c(t, y, t)
+    elif fgen == "lc_gen_ou":
+        if (fgen_params is None) or not ('theta' in fgen_params or 'mu' in fgen_params or 'sigma' in fgen_params):
+            raise Exception("You need to set the parameters for the signal")
+        y2 = lc_gen_ou(times=t, **fgen_params)
+    else:
+        raise Exception(f"Unknown fgen method {fgen}")
+        
+    return y2
 
 
 def lc_gen_samp(signs):
@@ -24,8 +50,8 @@ def lc_gen_samp(signs):
 
     return np.random.choice(signs, signs.size)
 
-
-def lc_gen_ou(theta, mu, sigma, times, scale=None, loc=None):
+@jit(nopython=True)
+def lc_gen_ou(theta, mu, sigma, times, scale=None, loc=None): # pragma: no cover
     """Generation from an OU process integrating the stochastic differential equation."""
 
     width = 100 * times.size
@@ -114,8 +140,10 @@ def lc_gen_psd_lombscargle(times, values):
     b = values.mean() - a * s2.mean()
     s2 = a * s2 + b
 
+    s2 = np.real(s2)    
+    s2 = np.asarray(s2, dtype=float, order='C') # workaround for some bug in scipy lombscargle...
+    
     return s2
-
 
 def lc_gen_psd_nft(times, values):
     """Generation using the non-uniform FFT of synthetic signals with similar PSD, mean and std.
