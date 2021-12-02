@@ -11,6 +11,7 @@ A Python package for the analysis of correlations of light curves and their stat
    :maxdepth: 1
 
    recipes/mutis_workflow.ipynb
+   recipes/Synthethic_generation_of_light_curves.ipynb
    recipes/PSD_tests.ipynb
    recipes/sin_tests.ipynb
    recipes/stochastics_tests.ipynb
