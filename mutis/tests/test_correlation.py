@@ -122,3 +122,10 @@ def test_plot_corr(corr):
     corr["kroedel_uncert"].gen_synth(10)
     corr["kroedel_uncert"].gen_corr()
     corr["kroedel_uncert"].plot_corr(legend=True)
+    
+def test_peak_find(corr):
+    corr["welsh"].gen_times(dtmin=0.1, dtmax=3, nbinsmin=3)
+    corr["welsh"].gen_synth(10)
+    corr["welsh"].gen_corr()
+    corr["welsh"].plot_corr(legend=True)
+    assert np.any(np.isclose(corr['welsh'].peak_find()['x'], 2*np.pi, rtol=1e-3))
