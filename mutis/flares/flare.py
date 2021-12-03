@@ -43,7 +43,7 @@ class Flare:
     def plot(self, ax=None, **kwargs):
         ax = plt.gca() if ax is None else ax
         
-        ax.axvspan(self.tstart, self.tstop, facecolor='r', edgecolor=None, alpha=0.2)
+        ax.axvspan(self.tstart, self.tstop, facecolor='r', edgecolor=None, alpha=0.2, **kwargs)
         
         pass
     
