@@ -63,27 +63,38 @@ class BayesianBlocks:
 
             
         if self.inflare is None or style == 'none':
+            
             ax.step(x, y, 'k', where='post', **kwargs)
+            
         else:
+            
             if style == 'area':
-                ax.step(x, y, 'k', where='post', **kwargs)
+                
+                ax.step(x, y, 'k', where='post')
                 for i in range(len(self.inflare)):
                     if self.inflare[i]:
-                        ax.axvspan(x[i], x[i+1], facecolor='r', edgecolor=None,alpha=0.2)
+                        ax.axvspan(x[i], x[i+1], facecolor='r', edgecolor=None, alpha=0.2, **kwargs)
+                        
             elif style == 'color.simple':
+                
                 for i in range(len(self.edges)-2):
-                    ax.step(self.edges[[i,i+1]], self.values[[i,i+1]], 'r' if self.inflare[i] else 'k', where='post')
-                ax.step(self.edges[[-2,-1]], self.values[[-1,-1]], 'r' if self.inflare[-1] else 'k', where='post')
+                    ax.step(self.edges[[i,i+1]], self.values[[i,i+1]], 'r' if self.inflare[i] else 'k', where='post', **kwargs)
+                ax.step(self.edges[[-2,-1]], self.values[[-1,-1]], 'r' if self.inflare[-1] else 'k', where='post', **kwargs)
+                
             elif style == 'color.loose':
+                
                 for i in range(len(self.edges)-2):
-                    ax.step(self.edges[[i,i+1]], self.values[[i,i]], 'r' if self.inflare[i] else 'k', where='post')
-                    ax.step(self.edges[[i+1,i+1]], self.values[[i,i+1]], 'r' if self.inflare[i] or self.inflare[i+1] else 'k', where='post')
-                ax.step(self.edges[[-2,-1]], self.values[[-1,-1]], 'r' if self.inflare[-1] else 'k', where='post')
+                    ax.step(self.edges[[i,i+1]], self.values[[i,i]], 'r' if self.inflare[i] else 'k', where='post', **kwargs)
+                    ax.step(self.edges[[i+1,i+1]], self.values[[i,i+1]], 'r' if self.inflare[i] or self.inflare[i+1] else 'k', where='post', **kwargs)
+                ax.step(self.edges[[-2,-1]], self.values[[-1,-1]], 'r' if self.inflare[-1] else 'k', where='post', **kwargs)
+                
             elif style == 'color.strict':
+                
                 for i in range(len(self.edges)-2):
-                    ax.step(self.edges[[i,i+1]], self.values[[i,i]], 'r' if self.inflare[i] else 'k', where='post')
-                    ax.step(self.edges[[i+1,i+1]], self.values[[i,i+1]], 'r' if self.inflare[i] and self.inflare[i+1] else 'k', where='post')
-                ax.step(self.edges[[-2,-1]], self.values[[-1,-1]], 'r' if self.inflare[-1] else 'k', where='post')
+                    ax.step(self.edges[[i,i+1]], self.values[[i,i]], 'r' if self.inflare[i] else 'k', where='post', **kwargs)
+                    ax.step(self.edges[[i+1,i+1]], self.values[[i,i+1]], 'r' if self.inflare[i] and self.inflare[i+1] else 'k', where='post', **kwargs)
+                ax.step(self.edges[[-2,-1]], self.values[[-1,-1]], 'r' if self.inflare[-1] else 'k', where='post', **kwargs)
+                
             else:
                 raise Exception("Unknown style. Available styles are 'none', 'area', 'color.simple', 'color.strict', 'color.loose'.")
 
@@ -184,7 +195,7 @@ both directions as long as the blocks are successively lower.```
         
 
     def get_flare_list(self):
-        """ Join all flares into a list of mutis.flares.flare """
+        """ Join all flares into a list of mutis.flares.Flare() """
 
         groups = np.split(np.arange(len(self.inflare)), 
                           np.where((np.abs(np.diff(np.asarray(self.inflare, dtype=int))) == 1))[0]+1)
@@ -203,5 +214,7 @@ both directions as long as the blocks are successively lower.```
                 tstop = self.edges[grp[-1]+1] # flare ends when no flare begins
                 
                 flareL.append(flare.Flare(tstart,tstop))
-        print(flareL)
+        
+        #print(flareL)
+        
         return flareL
