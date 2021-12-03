@@ -10,6 +10,8 @@ nfft
 codecov
 pytest
 pytest-cov
+# extra dependencies
+ipython
 # doc dependencies
 numpydoc
 sphinx
