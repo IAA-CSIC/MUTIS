@@ -17,7 +17,11 @@ __pycache__
 # docs
 docs/api
 docs/_build
-docs/recipes/data
+
+docs/recipes/data/*
+
+!docs/recipes/data/mm-I.dat
+!docs/recipes/data/gamma-I.dat
 
 # editor files
 .ipynb_checkpoints
