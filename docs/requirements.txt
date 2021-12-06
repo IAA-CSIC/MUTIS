@@ -11,6 +11,7 @@ codecov
 pytest
 pytest-cov
 # extra dependencies
+ipykernel
 ipython
 # doc dependencies
 numpydoc

@@ -16,6 +16,28 @@ conda activate mutis
 pip install .
 ```
 
+## Contribute
+You are welcome to use and contribute to **MUTIS**! You can create a fork and do a PR from there. Before you do so, we suggest that you install `nbstripout` (`conda install -c conda-forge nbstripout`) and add the following lines to your repo configuration:
+
+In file `.git/info/attributes` add:
+```
+*.ipynb filter=nbstripout
+*.zpln filter=nbstripout
+*.ipynb diff=ipynb
+```
+In file `.git/config` add:
+```
+[filter "nbstripout"]
+        clean = nbstripout
+        smudge = cat
+        extrakeys = metadata.kernelspec
+[diff "ipynb"]
+        textconv = nbstripout -t
+```
+Now `git` will not show cell output in diffs, and will not include cell output to commits; it will make working working with the notebooks much easier.
+
+This filters won't modify or clear the files, it will only be visible to git. If you want to clear the files also, you can use `nbstripout docs/recipes/*.ipynb --extra-keys "metadata.kernelspec"`.
+
 ### Documentation
 - https://mutis.readthedocs.io/
 
