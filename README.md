@@ -34,9 +34,9 @@ In file `.git/config` add:
 [diff "ipynb"]
         textconv = nbstripout -t
 ```
-Now `git` will not show cell output in diffs, and will not include cell output to commits; it will make working working with the notebooks much easier.
+Now `git` will not show cell output in diffs, and will not include cell output to commits; it will make working with the notebooks much easier.
 
-This filters won't modify or clear the files, it will only be visible to git. If you want to clear the files also, you can use `nbstripout docs/recipes/*.ipynb --extra-keys "metadata.kernelspec"`.
+These filters won't modify or clear the files, they will only be visible to git. If you want to clear the files also, you can use `nbstripout docs/recipes/*.ipynb --extra-keys "metadata.kernelspec"`.
 
 ### Documentation
 - https://mutis.readthedocs.io/
