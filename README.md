@@ -15,6 +15,7 @@ conda env create  -f environment.yml
 conda activate mutis
 pip install .
 ```
+Or `pip install -e .` if you want to install it in developer mode.
 
 ## Contribute
 You are welcome to use and contribute to **MUTIS**! You can create a fork and do a PR from there. Before you do so, we suggest that you install `nbstripout` (`conda install -c conda-forge nbstripout`) and add the following lines to your repo configuration:
