@@ -25,7 +25,19 @@ import mutis.flares.flare as flare
 log = logging.getLogger(__name__)
 
 class BayesianBlocks:
-    """ Return a Bayesian Block representation of the signal """
+    """ Return a Bayesian Block representation of the signal
+    
+    Attributes
+    ----------
+    edges: list
+            list of edges defining the blocks.
+    values: list
+            list of values defining the height of the blocks.
+    signal: mutis.Signal
+            the mutis.Signal() instance that this BayesianBlocks() represents.
+    inflare: list
+            list of boolean representing whether a block is in flare or not.
+    """
 
     def __init__(self, signal, p=0.1):
         edges = bayesian_blocks(signal.times, signal.values, signal.dvalues, fitness='measures', p0=p)
