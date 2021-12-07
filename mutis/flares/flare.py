@@ -29,6 +29,16 @@ log = logging.getLogger(__name__)
 
     
 class Flare:
+    """Container class for a Flare object
+    
+    Attributes
+    ----------
+    tstart: float
+            time at which the flare starts
+    tstop: float
+            time at which the flare ends
+    """
+    
     def __init__(self, tstart, tstop):
         self.tstart = tstart
         self.tstop = tstop
@@ -41,6 +51,7 @@ class Flare:
         
     
     def plot(self, ax=None, **kwargs):
+        """Plots the flare as a colored area """"
         ax = plt.gca() if ax is None else ax
         
         ax.axvspan(self.tstart, self.tstop, facecolor='r', edgecolor=None, alpha=0.2, **kwargs)
