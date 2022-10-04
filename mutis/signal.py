@@ -34,11 +34,21 @@ class Signal:
     """
 
     def __init__(self, times, values, dvalues=None, fgen=None):
-        self.times = np.array(times)
-        self.values = np.array(values)
+        
+        if times.dtype is not np.float64:
+            log.warning('times.dtype not float64, which may cause erros when using numba, casting automatically.')
+            
+        if values.dtype is not np.float64:
+            log.warning('values.dtype not float64, which It may cause erros when using numba, casting automatically.')
+   
+        if dvalues.dtype is not np.float64:
+            log.warning('dvalues.dtype not float64, which may cause erros when using numba, casting automatically.')
+        
+        self.times = np.array(times, dtype=np.float64)
+        self.values = np.array(values, dtype=np.float64)
         self.fgen = fgen
 
-        self.dvalues = np.array(dvalues) if dvalues is not None else None
+        self.dvalues = np.array(dvalues, dtype=np.float64) if dvalues is not None else None
         self.synth = None
 
         # TODO make attributes below specific of OU method / not the entire class
