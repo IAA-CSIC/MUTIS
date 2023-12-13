@@ -26,6 +26,9 @@ jobs:
       - name: install mutis
         run: |
           pip install -e .
+      - name: show the code
+        run: |
+          cat mutis/signal.py
       - name: test coverage
         run: |
           make test-cov
