@@ -213,7 +213,7 @@ both directions as long as the blocks are successively lower.```
                           np.where((np.abs(np.diff(np.asarray(self.inflare, dtype=int))) == 1))[0]+1)
         
         # (groups contains the groups of indices of self.inflare/self.values 
-        # that corresond to flares or no flares)
+        # that correspond to flares or no flares)
         
         #print(self.inflare)
         #print([list(grp) for grp in groups])
