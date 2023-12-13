@@ -9,22 +9,27 @@ on:
   pull_request:
   
 jobs:
+
   tests:
     name: test coverage
+
     strategy:
       matrix:
         include:
           - python-version: "3.11"
             os: ubuntu-latest
+
     runs-on: ${{ matrix.os }}
+
+    defaults:
+      run:
+        shell: bash -l {0}
+        
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.sha }}
-      - name: show the code 1
-        run: |
-          cat mutis/signal.py
       - name: create and activate env
         uses: conda-incubator/setup-miniconda@v3
         with:
@@ -35,24 +40,28 @@ jobs:
       - name: install mutis
         run: |
           pip install -e .
-      - name: show the code 2
-        run: |
-          cat mutis/signal.py
       - name: test coverage
         run: |
           make test-cov
           codecov -X gcov
+
   docs:
     name: docs building
+
     strategy:
       matrix:
         include:
           - python-version: "3.11"
             os: ubuntu-latest
+
     runs-on: ${{ matrix.os }}
+
+    defaults:
+      run:
+        shell: bash -l {0}
+
     steps:
-      - name: checkout repo
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.sha }}
