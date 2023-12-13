@@ -29,8 +29,25 @@ class Signal:
         Values of the time axis.
     values : :class:`numpy.ndarray` or :class:`pandas.Series`
         Values of the signal axis.
+    dvalues : :class:`numpy.ndarray` or :class:`pandas.Series`
+        Uncertainties on the values of the signal axis.
+
+    Other Attributes
+    ----------------
+
     fgen : :class:`str`
         Method to generate the synthetic signal.
+
+    synth : :class:`numpy.ndarray`
+        Synthetic signals generated with `fgen`.
+
+    OU_theta : :class:`float`
+        (For OU method) Parameter theta of the OU process.
+    OU_mu : :class:`float`
+        (For OU method) Parameter mu of the OU process.
+    OU_sigma : :class:`float`
+        (For OU method) Parameter sigma of the OU process.
+        
     """
 
     def __init__(self, times, values, dvalues=None, fgen=None):
