@@ -11,10 +11,20 @@ on:
 jobs:
   tests:
     name: test coverage
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - python-version: "3.11"
+            os: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     steps:
       - name: checkout repo
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: show the code 1
+        run: |
+          cat mutis/signal.py
       - name: create and activate env
         uses: conda-incubator/setup-miniconda@v3
         with:
@@ -23,7 +33,7 @@ jobs:
       - name: install mutis
         run: |
           pip install -e .
-      - name: show the code
+      - name: show the code 2
         run: |
           cat mutis/signal.py
       - name: test coverage
