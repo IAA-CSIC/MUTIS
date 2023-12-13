@@ -21,16 +21,33 @@ log = logging.getLogger(__name__)
 class Signal:
     """Analysis and generation of a signal.
 
-    Description goes here.
+    Class for a generic signal.
 
-    Parameters
+    Attributes
     ----------
     times : :class:`numpy.ndarray` or :class:`pandas.Series`
         Values of the time axis.
     values : :class:`numpy.ndarray` or :class:`pandas.Series`
         Values of the signal axis.
+    dvalues : :class:`numpy.ndarray` or :class:`pandas.Series`
+        Uncertainties on the values of the signal axis.
+
+    Other Attributes
+    ----------------
+
     fgen : :class:`str`
-        Method used to generate the synthetic signal.
+        Method to generate the synthetic signal.
+
+    synth : :class:`numpy.ndarray`
+        Synthetic signals generated with `fgen`.
+
+    OU_theta : :class:`float`
+        (For OU method) Parameter theta of the OU process.
+    OU_mu : :class:`float`
+        (For OU method) Parameter mu of the OU process.
+    OU_sigma : :class:`float`
+        (For OU method) Parameter sigma of the OU process.
+        
     """
 
     def __init__(self, times, values, dvalues=None, fgen=None):
@@ -62,7 +79,16 @@ class Signal:
         return ax.plot(self.times, self.values, ".-", lw=1, alpha=0.7)
 
     def gen_synth(self, samples):
-        """Description goes here."""
+        """Generate synthethic light curves for this signal.
+        
+        Generated curves are saved in `self.synth`. The times used are the same
+        of this signal.
+        
+        Parameters
+        ----------
+        samples: :int: number of samples to generate.
+        
+        """
 
         self.synth = np.empty((samples, self.times.size))
         for n in range(samples):
@@ -178,16 +204,16 @@ class Signal:
 
         This function checks the generation of a synthetic light curve.
         
-        Parameters:
-        -----------
+        Parameters
+        ----------
         fgen: :str:
             A valid fgen method name.
         fgen_params: :dict:
             Parameters for fgen (e.g. for fgen='lc_gen_ou', a dict containing
             values for theta, mu and sigma).
 
-        Returns:
-        --------
+        Returns
+        -------
         axes: :tuple:
             Tuple of three axes, on which:
             - The first plot show both the original signal and the synthetic one.
