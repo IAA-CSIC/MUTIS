@@ -267,8 +267,8 @@ def nindcf(t1, s1, t2, s2):
     """Computes the normalised correlation of two discrete signals (interpolating them)."""
 
     dt = np.max([(t1.max() - t1.min()) / t1.size, (t2.max() - t2.min()) / t2.size])
-    n1 = np.int(np.ptp(t1) / dt * 10.0)
-    n2 = np.int(np.ptp(t1) / dt * 10.0)
+    n1 = int(np.ptp(t1) / dt * 10.0)
+    n2 = int(np.ptp(t1) / dt * 10.0)
     s1i = np.interp(np.linspace(t1.min(), t1.max(), n1), t1, s1)
     s2i = np.interp(np.linspace(t2.min(), t2.max(), n2), t2, s2)
     return ndcf(s1i, s2i)
