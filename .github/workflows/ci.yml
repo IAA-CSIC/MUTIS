@@ -1,20 +1,42 @@
 name: CI
-on: [push, pull_request]
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - '**'
+  pull_request:
+  
 jobs:
+
   tests:
+    name: test coverage
+
+    strategy:
+      matrix:
+        include:
+          - python-version: "3.11"
+            os: ubuntu-latest
+
+    runs-on: ${{ matrix.os }}
+
     defaults:
       run:
         shell: bash -l {0}
-    name: test coverage
-    runs-on: ubuntu-latest
+        
     steps:
-      - name: checkout repo
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha }}
       - name: create and activate env
-        uses: conda-incubator/setup-miniconda@v2
+        uses: conda-incubator/setup-miniconda@v3
         with:
           activate-environment: mutis
           environment-file: environment.yml
+          auto-update-conda: true
+          python-version: ${{ matrix.python-version }}
       - name: install mutis
         run: |
           pip install -e .
@@ -22,20 +44,34 @@ jobs:
         run: |
           make test-cov
           codecov -X gcov
+
   docs:
+    name: docs building
+
+    strategy:
+      matrix:
+        include:
+          - python-version: "3.11"
+            os: ubuntu-latest
+
+    runs-on: ${{ matrix.os }}
+
     defaults:
       run:
         shell: bash -l {0}
-    name: docs building
-    runs-on: ubuntu-latest
+
     steps:
-      - name: checkout repo
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha }}
       - name: create and activate env
-        uses: conda-incubator/setup-miniconda@v2
+        uses: conda-incubator/setup-miniconda@v3
         with:
           activate-environment: mutis
           environment-file: environment.yml
+          auto-update-conda: true
+          python-version: ${{ matrix.python-version }}
       - name: install mutis
         run: |
           pip install -e .

@@ -47,7 +47,6 @@ class Signal:
         (For OU method) Parameter mu of the OU process.
     OU_sigma : :class:`float`
         (For OU method) Parameter sigma of the OU process.
-        
     """
 
     def __init__(self, times, values, dvalues=None, fgen=None):
@@ -123,7 +122,7 @@ class Signal:
 
         # plot histogram
         if bins is None:
-            bins = np.int(y.size ** 0.5 / 1.5)  # bins='auto'
+            bins = int(y.size ** 0.5 / 1.5)  # bins='auto'
         if rang is None:
             rang = (np.percentile(y, 0), np.percentile(y, 99))
 
@@ -138,7 +137,7 @@ class Signal:
         anchored_text = AnchoredText(
             f"mean    {np.mean(y):.2g} \n "
             f"median  {np.median(y):.2g} \n "
-            f"mode    {scipy_stats.mode(y)[0][0]:.2g} \n "
+            f"mode    {scipy_stats.mode(y)[0]:.2g} \n "
             f"std     {np.std(y):.2g} \n "
             f"var     {np.var(y):.2g}",
             loc="upper right",
@@ -242,12 +241,12 @@ class Signal:
         axes["ax1"].set_title("light curves")
 
         # plot their histogram
-        bins = "auto"  # bins = np.int(y.size**0.5/1.5) #
+        bins = "auto"  # bins = int(y.size**0.5/1.5) #
         rang = (np.percentile(y, 0), np.percentile(y, 99))
         axes["ax2"].hist(y, density=True, color="b", alpha=0.4, bins=bins, range=rang)
 
         # ax2p = ax2.twinx()
-        bins = "auto"  # bins = np.int(y.size**0.5/1.5) #
+        bins = "auto"  # bins = int(y.size**0.5/1.5) #
         rang = (np.percentile(y2, 0), np.percentile(y2, 99))
         axes["ax2"].hist(y2, density=True, color="r", alpha=0.4, bins=bins, range=rang)
 
