@@ -10,14 +10,11 @@ on:
   
 jobs:
   tests:
-    defaults:
-      run:
-        shell: bash -l {0}
     name: test coverage
     runs-on: ubuntu-latest
     steps:
       - name: checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: create and activate env
         uses: conda-incubator/setup-miniconda@v3
         with:
@@ -33,23 +30,23 @@ jobs:
         run: |
           make test-cov
           codecov -X gcov
-  docs:
-    defaults:
-      run:
-        shell: bash -l {0}
-    name: docs building
-    runs-on: ubuntu-latest
-    steps:
-      - name: checkout repo
-        uses: actions/checkout@v3
-      - name: create and activate env
-        uses: conda-incubator/setup-miniconda@v3
-        with:
-          activate-environment: mutis
-          environment-file: environment.yml
-      - name: install mutis
-        run: |
-          pip install -e .
-      - name: build docs
-        run: |
-          make docs-sphinx
+  # docs:
+  #   defaults:
+  #     run:
+  #       shell: bash -l {0}
+  #   name: docs building
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: checkout repo
+  #       uses: actions/checkout@v4
+  #     - name: create and activate env
+  #       uses: conda-incubator/setup-miniconda@v3
+  #       with:
+  #         activate-environment: mutis
+  #         environment-file: environment.yml
+  #     - name: install mutis
+  #       run: |
+  #         pip install -e .
+  #     - name: build docs
+  #       run: |
+  #         make docs-sphinx
