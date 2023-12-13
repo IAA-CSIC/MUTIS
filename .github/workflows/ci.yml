@@ -30,6 +30,8 @@ jobs:
         with:
           activate-environment: mutis
           environment-file: environment.yml
+          auto-update-conda: true
+          python-version: ${{ matrix.python-version }}
       - name: install mutis
         run: |
           pip install -e .
@@ -40,23 +42,30 @@ jobs:
         run: |
           make test-cov
           codecov -X gcov
-  # docs:
-  #   defaults:
-  #     run:
-  #       shell: bash -l {0}
-  #   name: docs building
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: checkout repo
-  #       uses: actions/checkout@v4
-  #     - name: create and activate env
-  #       uses: conda-incubator/setup-miniconda@v3
-  #       with:
-  #         activate-environment: mutis
-  #         environment-file: environment.yml
-  #     - name: install mutis
-  #       run: |
-  #         pip install -e .
-  #     - name: build docs
-  #       run: |
-  #         make docs-sphinx
+  docs:
+    name: docs building
+    strategy:
+      matrix:
+        include:
+          - python-version: "3.11"
+            os: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: create and activate env
+        uses: conda-incubator/setup-miniconda@v3
+        with:
+          activate-environment: mutis
+          environment-file: environment.yml
+          auto-update-conda: true
+          python-version: ${{ matrix.python-version }}
+      - name: install mutis
+        run: |
+          pip install -e .
+      - name: build docs
+        run: |
+          make docs-sphinx
