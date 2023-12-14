@@ -51,15 +51,6 @@ class Signal:
 
     def __init__(self, times, values, dvalues=None, fgen=None):
         
-        if times.dtype is not np.float64:
-            log.warning('times.dtype not float64, which may cause erros when using numba, casting automatically.')
-            
-        if values.dtype is not np.float64:
-            log.warning('values.dtype not float64, which It may cause erros when using numba, casting automatically.')
-   
-        if dvalues.dtype is not np.float64:
-            log.warning('dvalues.dtype not float64, which may cause erros when using numba, casting automatically.')
-        
         self.times = np.array(times, dtype=np.float64)
         self.values = np.array(values, dtype=np.float64)
         self.fgen = fgen
