@@ -152,7 +152,7 @@ def lc_gen_psd_nft(times, values):
     compute the power spectral density and to reconstruct the
     randomised signal."""
 
-    k = np.arange(-times.size // 2, times.size / 2)
+    k = np.arange(-times.size / 2, times.size / 2)
     n = k.size
 
     nft = nfft.nfft_adjoint(
